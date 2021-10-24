@@ -108,7 +108,7 @@ function snapEquals(a, b) {
 
     // handle text comparison case-insensitive.
     if (isString(x) && isString(y)) {
-        return x.toLowerCase() === y.toLowerCase();
+        return x.toUpperCase().toLowerCase() === y.toUpperCase().toLowerCase();
     }
 
     return x === y;
@@ -1329,7 +1329,7 @@ Process.prototype.evaluate = function (
 
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
-            value = 0;
+            value = null;
             if (!isNil(parms[i])) {
                 value = parms[i];
             }
@@ -1443,7 +1443,7 @@ Process.prototype.initializeFor = function (context, args) {
 
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
-            value = 0;
+            value = null;
             if (!isNil(parms[i])) {
                 value = parms[i];
             }
