@@ -9273,7 +9273,7 @@ InputSlotMorph.prototype.menuFromDict = function (
 
 InputSlotMorph.prototype.keysMenu = function () {
     return {
-        'any key' : ['any key'],
+        'any' : ['any'],
         'up arrow': ['up arrow'],
         'down arrow': ['down arrow'],
         'right arrow': ['right arrow'],
