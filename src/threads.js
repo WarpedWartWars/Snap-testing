@@ -5753,12 +5753,12 @@ Process.prototype.reportMouseY = function () {
     return 0;
 };
 
-Process.prototype.reportMouseDown = function () {
+Process.prototype.reportMouseDown = function (mouseString) {
     var world;
     if (this.homeContext.receiver) {
         world = this.homeContext.receiver.world();
         if (world) {
-            return world.hand.mouseButton === 'left';
+            return world.hand.mouseButton === mouseString[0];
         }
     }
     return false;
@@ -5770,7 +5770,7 @@ Process.prototype.reportKeyPressed = function (keyString) {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            if (this.inputOption(keyString) === 'any key') {
+            if (this.inputOption(keyString) === 'any') {
                 return Object.keys(stage.keysPressed).length > 0;
             }
             if (keyString instanceof List && this.enableHyperOps) {
