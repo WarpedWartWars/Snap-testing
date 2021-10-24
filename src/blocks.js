@@ -590,6 +590,15 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: 'keysMenu',
         react: 'updateEventUpvar'
     },
+    '%mouse': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            left: ['left'],
+            middle: ['middle'],
+            right: ['right']
+        }
+    },
     '%msg': {
         type: 'input',
         tags: 'read-only',
