@@ -6118,11 +6118,12 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
     });
 };
 
-SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
+SpriteMorph.prototype.allHatBlocksForInteraction = function (button, interaction) {
     return this.scripts.children.filter(morph => {
         if (morph.selector) {
             if (morph.selector === 'receiveInteraction') {
-                return morph.inputs()[0].evaluate()[0] === interaction;
+                return morph.inputs()[0].evaluate()[0] === button &&
+                       morph.inputs()[1].evaluate()[0] === interaction;
             }
         }
         return false;
