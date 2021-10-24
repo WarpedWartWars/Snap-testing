@@ -738,8 +738,8 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveInteraction: {
             type: 'hat',
             category: 'control',
-            spec: 'when I am %interaction',
-            defaults: ['clicked']
+            spec: 'when I am %mouse %interaction',
+            defaults: [['left'], 'clicked']
         },
         receiveMessage: {
             type: 'hat',
@@ -992,7 +992,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportMouseDown: {
             type: 'predicate',
             category: 'sensing',
-            spec: 'mouse down?'
+            spec: '%mouse mouse down?',
+            defaults: [['left']]
         },
         reportKeyPressed: {
             type: 'predicate',
@@ -6110,7 +6111,7 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
         if (morph.selector) {
             if (morph.selector === 'receiveKey') {
                 var evt = morph.inputs()[0].evaluate()[0];
-                return evt === key || evt === 'any key';
+                return evt === key || evt === 'any';
             }
         }
         return false;
