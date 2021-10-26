@@ -19,6 +19,7 @@
     * libraries no longer rely on the JSF primitive, project may need to re-import their libraries to run without having to enable JS extensions
     * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
     * hidden blocks don't appear in search results / keyboard input options
+    * codification and js-func blocks don't appear in search results unless enabled
     * made BROADCAST blocks expandable and added a second input for message receivers, default is "all"
     * migrated SEND blocks to be BROADCAST TO blocks
     * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
@@ -44,6 +45,12 @@
 * **Translation Updates:**
     * German
     * Chinese, thanks, Simon!
+
+### 2021-10-26
+* objects: don't show codification and js-func blocks in search results unless enabled
+* gui, objects: new "showingExtensions" session setting for showing extension prims in the palette
+* German translation update for "extension blocks" setting
+* widgets: r-g-b editor for custom category colors (right-click on color-field)
 
 ### 2021-10-25
 * byob: fixed #2902
