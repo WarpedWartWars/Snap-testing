@@ -6153,7 +6153,8 @@ SpriteMorph.prototype.allHatBlocksForInteraction = function (button, interaction
     return this.scripts.children.filter(morph => {
         if (morph.selector) {
             if (morph.selector === 'receiveInteraction') {
-                return morph.inputs()[0].evaluate()[0] === button &&
+                return (button === null ||
+                       morph.inputs()[0].evaluate()[0] === button) &&
                        morph.inputs()[1].evaluate()[0] === interaction;
             }
         }
@@ -6198,22 +6199,39 @@ SpriteMorph.prototype.allScripts = function () {
 // SpriteMorph events
 
 SpriteMorph.prototype.mouseClickLeft = function () {
-    return this.receiveUserInteraction('clicked');
+    return this.receiveUserInteraction('left', 'clicked');
+};
+
+SpriteMorph.prototype.mouseClickMiddle = function () {
+    return this.receiveUserInteraction('middle', 'clicked');
+};
+
+SpriteMorph.prototype.mouseClickRight = function () {
+    return this.receiveUserInteraction('right', 'clicked');
 };
 
 SpriteMorph.prototype.mouseEnter = function () {
-    return this.receiveUserInteraction('mouse-entered');
+    return this.receiveUserInteraction(null, 'mouse-entered');
 };
 
 SpriteMorph.prototype.mouseDownLeft = function () {
-    return this.receiveUserInteraction('pressed');
+    return this.receiveUserInteraction('left', 'pressed');
+};
+
+SpriteMorph.prototype.mouseDownMiddle = function () {
+    return this.receiveUserInteraction('middle', 'pressed');
+};
+
+SpriteMorph.prototype.mouseDownRight = function () {
+    return this.receiveUserInteraction('right', 'pressed');
 };
 
 SpriteMorph.prototype.mouseScroll = function (y) {
-    return this.receiveUserInteraction('scrolled-' + (y > 0 ? 'up' : 'down'));
+    return this.receiveUserInteraction(null, 'scrolled-' + (y > 0 ? 'up' : 'down'));
 };
 
 SpriteMorph.prototype.receiveUserInteraction = function (
+    button,
     interaction,
     rightAway,
     threadSafe
@@ -6222,7 +6240,7 @@ SpriteMorph.prototype.receiveUserInteraction = function (
         procs = [],
         hats;
     if (!stage) {return; } // currently dragged
-    hats = this.allHatBlocksForInteraction(interaction);
+    hats = this.allHatBlocksForInteraction(button, interaction);
     hats.forEach(block =>
         procs.push(stage.threads.startProcess(
             block,
@@ -9586,6 +9604,12 @@ StageMorph.prototype.allScripts
 StageMorph.prototype.mouseClickLeft
     = SpriteMorph.prototype.mouseClickLeft;
 
+StageMorph.prototype.mouseClickMiddle
+    = SpriteMorph.prototype.mouseClickMiddle;
+
+StageMorph.prototype.mouseClickRight
+    = SpriteMorph.prototype.mouseClickRight;
+
 StageMorph.prototype.mouseEnter
     = SpriteMorph.prototype.mouseEnter;
 
@@ -9595,6 +9619,12 @@ StageMorph.prototype.mouseLeave = function () {
 
 StageMorph.prototype.mouseDownLeft
     = SpriteMorph.prototype.mouseDownLeft;
+
+StageMorph.prototype.mouseDownMiddle
+    = SpriteMorph.prototype.mouseDownMiddle;
+
+StageMorph.prototype.mouseDownRight
+    = SpriteMorph.prototype.mouseDownRight;
 
 StageMorph.prototype.mouseScroll
     = SpriteMorph.prototype.mouseScroll;
