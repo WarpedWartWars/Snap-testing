@@ -7955,12 +7955,6 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     // immutable properties:
     this.border = null;
     this.edge = null;
-    if (this.world) {
-        if (this.world.isDevMode) {
-            this.addItem('close', this.destroy);
-            this.addLine();
-        }
-    }
 };
 
 MenuMorph.prototype.addItem = function (
@@ -8062,6 +8056,13 @@ MenuMorph.prototype.createItems = function () {
         x,
         y,
         isLine = false;
+
+    if (this.world) {
+        if (this.world.isDevMode) {
+            this.addLine();
+            this.addItem('close', this.destroy);
+        }
+    }
 
     this.children.forEach(m => m.destroy());
     this.children = [];
