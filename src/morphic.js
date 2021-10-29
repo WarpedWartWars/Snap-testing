@@ -6085,7 +6085,7 @@ SpeechBubbleMorph.prototype.init = function (
     this.contents = contents || '';
     this.padding = padding || 0; // additional vertical pixels
     this.isThought = isThought || false; // draw "think" bubble
-    this.isClickable = false;
+    this.isClickable = true;
     SpeechBubbleMorph.uber.init.call(
         this,
         edge || 6,
@@ -6110,11 +6110,11 @@ SpeechBubbleMorph.prototype.popUp = function (world, pos, isClickable) {
     world.hand.destroyTemporaries();
     world.hand.temporaries.push(this);
 
-    if (!isClickable) {
+    /*if (!isClickable) {
         this.mouseEnter = this.destroy;
     } else {
         this.isClickable = true;
-    }
+    }*/
 };
 
 // SpeechBubbleMorph drawing:
@@ -7948,13 +7948,19 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     MenuMorph.uber.init.call(this);
 
     // override inherited properties:
-    this.isDraggable = false;
+    this.isDraggable = true;
     this.noDropShadow = true;
     this.fullShadowSource = false;
 
     // immutable properties:
     this.border = null;
     this.edge = null;
+    if (this.world) {
+        if (this.world.isDevMode) {
+            this.addItem('close', this.destroy);
+            this.addLine();
+        }
+    }
 };
 
 MenuMorph.prototype.addItem = function (
@@ -8208,8 +8214,10 @@ MenuMorph.prototype.popup = function (world, pos) {
         scroller.adjustScrollBars(); // ?
      }
 
-    if (world.activeMenu) {
-        world.activeMenu.destroy();
+    if (world.isDevMode) {
+        if (world.activeMenu) {
+            world.activeMenu.destroy();
+	}
     }
     if (this.items.length < 1 && !this.title) { // don't show empty menus
         return;
