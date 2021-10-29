@@ -1409,6 +1409,13 @@ Process.prototype.fork = function (context, args) {
     stage.threads.processes.push(proc);
 };
 
+Process.prototype.doInParallel = function (actions) {
+    if (actions.length > 0) {
+        this.fork(actions[0]);
+        this.doInParallel(this.reportCDR(actions));
+    }
+};
+
 Process.prototype.initializeFor = function (context, args) {
     // used by Process.fork() and global invoke()
     if (context.isContinuation) {
