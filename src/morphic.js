@@ -11515,7 +11515,7 @@ HandMorph.prototype.processMouseMove = function (event) {
         }
     }
 
-    /*this.mouseOverBounds.forEach(old => {  // try and see if this fixes hand not being with mouse outside of screen
+    this.mouseOverBounds.forEach(old => {
         if (!contains(mouseOverBoundsNew, old)) {
             if (old.mouseLeaveBounds) {
                 old.mouseLeaveBounds(this.children[0]);
@@ -11528,7 +11528,7 @@ HandMorph.prototype.processMouseMove = function (event) {
                 newMorph.mouseEnterBounds(this.children[0]);
             }
         }
-    });*/
+    });
 
     this.mouseOverList.forEach(old => {
         if (!contains(mouseOverNew, old)) {
@@ -11567,7 +11567,7 @@ HandMorph.prototype.processMouseMove = function (event) {
         }
     });
     this.mouseOverList = mouseOverNew;
-    //this.mouseOverBounds = mouseOverBoundsNew;  // same as above
+    this.mouseOverBounds = mouseOverBoundsNew;  // same as above
 };
 
 HandMorph.prototype.processMouseScroll = function (event) {
