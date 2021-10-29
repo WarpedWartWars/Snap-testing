@@ -835,6 +835,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'launch %cmdRing %inputs'
         },
+        doInParallel: {
+            type: 'command',
+            category: 'control',
+            spec: 'launch %mult%cs'
+        },
         evaluate: {
             type: 'reporter',
             category: 'control',
@@ -1741,8 +1746,9 @@ SpriteMorph.prototype.blockAlternatives = {
         ['doForEach', 2]],
     doFor: [['doForever', -3], ['doRepeat', -2], ['doUntil', -2],
         ['doForEach', -1]],
-    // doRun: ['fork'],
-    // fork: ['doRun'],
+    doRun: ['fork', 'doInParallel'],
+    fork: ['doRun', 'doInParallel'],
+    doInParallel: ['doRun', 'fork'],
 
     // sensing:
     doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
@@ -1752,6 +1758,9 @@ SpriteMorph.prototype.blockAlternatives = {
     reportMouseY: ['reportMouseX'],
 
     // operators:
+    reifyScript: ['reifyReporter', 'reifyPredicate'],
+    reifyReporter: ['reifyPredicate', 'reifyScript'],
+    reifyPredicate: ['reifyReporter', 'reifyScript'],
     reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
         'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
         'reportMax'],
@@ -2545,6 +2554,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
+        blocks.push(block('doInParallel'));
         blocks.push(block('evaluate'));
         blocks.push('-');
         blocks.push(block('doTellTo'));
@@ -2638,13 +2648,18 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportPower'));
         blocks.push('-');
         blocks.push(block('reportModulus'));
+        blocks.push(block('reportMin'));
+        blocks.push(block('reportMax'));
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
         blocks.push(block('reportLessThan'));
+        blocks.push(block('reportLessThanOrEquals'));
         blocks.push(block('reportEquals'));
+        blocks.push(block('reportNotEquals'));
         blocks.push(block('reportGreaterThan'));
+        blocks.push(block('reportGreaterThanOrEquals'));
         blocks.push('-');
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
@@ -8927,13 +8942,18 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportPower'));
         blocks.push('-');
         blocks.push(block('reportModulus'));
+        blocks.push(block('reportMin'));
+        blocks.push(block('reportMax'));
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
         blocks.push(block('reportLessThan'));
+        blocks.push(block('reportLessThanOrEquals'));
         blocks.push(block('reportEquals'));
+        blocks.push(block('reportNotEquals'));
         blocks.push(block('reportGreaterThan'));
+        blocks.push(block('reportGreaterThanOrEquals'));
         blocks.push('-');
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
