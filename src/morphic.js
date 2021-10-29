@@ -8057,13 +8057,6 @@ MenuMorph.prototype.createItems = function () {
         y,
         isLine = false;
 
-    if (this.world) {
-        if (this.world.isDevMode) {
-            this.addLine();
-            this.addItem('close', this.destroy);
-        }
-    }
-
     this.children.forEach(m => m.destroy());
     this.children = [];
     if (!this.isListContents) {
@@ -8200,6 +8193,13 @@ MenuMorph.prototype.unselectAllItems = function () {
 MenuMorph.prototype.popup = function (world, pos) {
 	var scroller;
 
+    if (this.world) {
+        if (this.world.isDevMode) {
+            this.addLine();
+            this.addItem('close', this.destroy);
+        }
+    }
+
     this.createItems();
     this.setPosition(pos);
     this.addShadow(new Point(2, 2), 80);
@@ -8215,11 +8215,11 @@ MenuMorph.prototype.popup = function (world, pos) {
         scroller.adjustScrollBars(); // ?
      }
 
-    if (world.isDevMode) {
+    /*if (world.isDevMode) {
         if (world.activeMenu) {
             world.activeMenu.destroy();
 	}
-    }
+    }*/
     if (this.items.length < 1 && !this.title) { // don't show empty menus
         return;
     }
@@ -8249,8 +8249,8 @@ MenuMorph.prototype.popUpAtHand = function (world) {
 
 MenuMorph.prototype.popUpCenteredAtHand = function (world) {
     var wrrld = world || this.world;
-    this.fixLayout();
-    this.createItems();
+    //this.fixLayout();
+    //this.createItems();
     this.popup(
         wrrld,
         wrrld.hand.position().subtract(
@@ -8261,8 +8261,8 @@ MenuMorph.prototype.popUpCenteredAtHand = function (world) {
 
 MenuMorph.prototype.popUpCenteredInWorld = function (world) {
     var wrrld = world || this.world;
-    this.fixLayout();
-    this.createItems();
+    //this.fixLayout();
+    //this.createItems();
     this.popup(
         wrrld,
         wrrld.center().subtract(
@@ -8346,8 +8346,8 @@ MenuMorph.prototype.selectFirst = function () {
         if (items[i] instanceof MenuItemMorph) {
             this.select(items[i]);
             return;
-    	}
-	}
+        }
+    }
 };
 
 MenuMorph.prototype.selectUp = function () {
