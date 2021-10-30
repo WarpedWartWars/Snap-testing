@@ -133,7 +133,7 @@ function loadBlocks (useBigNums) {
 
             }
         };
-        CursorMorph.prototype.processInput: function (event) {
+        CursorMorph.prototype.processInput = function (event) {
             // handle content change.
             var target = this.target,
                 textarea = this.textarea,
