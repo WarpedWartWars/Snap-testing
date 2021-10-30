@@ -7949,7 +7949,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     MenuMorph.uber.init.call(this);
 
     // override inherited properties:
-    this.isDraggable = true;
+    this.isDraggable = false;
     this.noDropShadow = true;
     this.fullShadowSource = false;
 
@@ -8191,10 +8191,10 @@ MenuMorph.prototype.unselectAllItems = function () {
 
 // MenuMorph popping up
 
-MenuMorph.prototype.popup = function (world, pos) {
+MenuMorph.prototype.popup = function (world, pos, addClose) {
 	var scroller;
 
-    if (world.isDevMode) {
+    if ((addClose === false ? false : true) && world.isDevMode) {
         this.addLine();
         this.addItem('close', this.destroy);
     }
@@ -8214,13 +8214,12 @@ MenuMorph.prototype.popup = function (world, pos) {
         scroller.adjustScrollBars(); // ?
      }
 
-    /*if (world.isDevMode) {
+    if (!world.isDevMode) {
         if (world.activeMenu) {
             world.activeMenu.destroy();
 	}
-    }*/
-    if (this.items.length < 1 && !this.title) { // don't show empty menus
-        return;
+    } else if (this.items.length < 1 && !this.title) { // don't show empty menus
+            return;
     }
     world.add(this);
     world.activeMenu = this;
