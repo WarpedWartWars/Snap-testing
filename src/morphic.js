@@ -7949,7 +7949,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     MenuMorph.uber.init.call(this);
 
     // override inherited properties:
-    this.isDraggable = this.title ? this.world.isDevMode : false;
+    this.isDraggable = false // this.title ? this.world.isDevMode : false;
     this.noDropShadow = true;
     this.fullShadowSource = false;
 
@@ -8194,6 +8194,7 @@ MenuMorph.prototype.unselectAllItems = function () {
 MenuMorph.prototype.popup = function (world, pos, addClose) {
 	var scroller;
 
+    this.draggable = this.title ? world.isDevMode : false; // moved from MenuMorph.prototype.init
     if ((addClose === false ? false : true) && world.isDevMode) {
         this.addLine();
         this.addItem('close', this.destroy);
