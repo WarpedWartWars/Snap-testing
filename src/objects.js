@@ -1118,7 +1118,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportQuotient: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n / %n' // '%n \u00F7 %n'
+            spec: '%n \u00F7 %n', // '%n / %n'
+            alias: '/'
         },
         reportRound: {
             type: 'reporter',
@@ -1144,7 +1145,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportAtan2: {
             type: 'reporter',
             category: 'operators',
-            spec: 'atan2 %n ÷ %n'
+            spec: 'atan2 %n \u00F7 %n'
         },
         reportMin: {
             type: 'reporter',
@@ -1233,10 +1234,16 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'letter %idx of %s',
             defaults: [1, localize('world')]
         },
+        reportStringCDR: {
+            type: 'reporter',
+            category: 'operators',
+            spec: 'all but first letter of %s',
+            defaults: [localize('world')]
+        },
         reportStringSize: {
             type: 'reporter',
             category: 'operators',
-            spec: 'length of %s',
+            spec: 'length of text %s',
             defaults: [localize('world')]
         },
         reportUnicode: {
@@ -1414,14 +1421,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'numbers from %n to %n',
             defaults: [1, 10]
         },
-    /*
         reportListCombination: { // currently not in use
             type: 'reporter',
             category: 'lists',
             spec: '%mlfunc %lists',
             defaults: [['append']]
         },
-    */
         reportConcatenatedLists: {
             type: 'reporter',
             category: 'lists',
@@ -1438,14 +1443,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'reshape %l to %nums',
             defaults: [null, [4, 3]]
         },
-    /*
         reportSlice: { // currently not in use
             type: 'reporter',
             category: 'lists',
             spec: 'slice %l by %nums',
             defaults: [null, [2, -1]]
         },
-    */
 
         // HOFs
         reportMap: {
@@ -1658,6 +1661,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportListLength: {
             selector: 'reportListAttribute',
             inputs: [['length']],
+            offset: 1
+        },
+        reportConcatenatedLists: {
+            selector: 'reportListCombination',
+            inputs: [['append']],
             offset: 1
         },
         doSend: {
@@ -2669,6 +2677,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
+        blocks.push(block('reportStringCDR'));
         blocks.push(block('reportStringSize'));
         blocks.push('-');
         blocks.push(block('reportUnicode'));
@@ -2752,8 +2761,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportListCombination'));
         blocks.push(block('reportReshape'));
+        blocks.push(block('reportSlice'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -8963,6 +8973,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
+        blocks.push(block('reportStringCDR'));
         blocks.push(block('reportStringSize'));
         blocks.push('-');
         blocks.push(block('reportUnicode'));
@@ -9040,8 +9051,9 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportListCombination'));
         blocks.push(block('reportReshape'));
+        blocks.push(block('reportSlice'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
