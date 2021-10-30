@@ -11305,8 +11305,10 @@ HandMorph.prototype.drop = function () {
     mouse events:
 
         mouseDownLeft
+        mouseDownMiddle
         mouseDownRight
         mouseClickLeft
+        mouseClickMiddle
         mouseClickRight
         mouseDoubleClick
         mouseEnter
@@ -11368,10 +11370,13 @@ HandMorph.prototype.processMouseDown = function (event) {
         if (event.button === 2 || event.ctrlKey) {
             this.mouseButton = 'right';
             actualClick = 'mouseDownRight';
+        } else if (event.button === 1) {
+            this.mouseButton = 'middle';
+            actualClick = 'mouseDownMiddle';
         } else {
             this.mouseButton = 'left';
             actualClick = 'mouseDownLeft';
-        }
+	}
         while (!morph[actualClick]) {
             morph = morph.parent;
         }
@@ -11426,6 +11431,8 @@ HandMorph.prototype.processMouseUp = function () {
     } else {
         if (this.mouseButton === 'left') {
             expectedClick = 'mouseClickLeft';
+	} else if (this.mouseButton === 'middle') {
+            expectedClick = 'mouseClickMiddle';
         } else {
             expectedClick = 'mouseClickRight';
             if (this.mouseButton && this.contextMenuEnabled) {
@@ -11576,7 +11583,7 @@ HandMorph.prototype.processMouseMove = function (event) {
         }
     });
     this.mouseOverList = mouseOverNew;
-    this.mouseOverBounds = mouseOverBoundsNew;  // same as above
+    this.mouseOverBounds = mouseOverBoundsNew;
 };
 
 HandMorph.prototype.processMouseScroll = function (event) {
