@@ -5656,6 +5656,7 @@ CursorMorph.prototype.processInput = function (event) {
             valid = (
                 ('0' <= ch && ch <= '9') || // digits
                 (ch.toLowerCase() === 'e') || // scientific notation
+                (ch.toLowerCase() === 'n') || // native bignums
                 ((i === 0 || hasE) && ch === '-')  || // leading '-' or sc. not.
                 (ch === '.' && points === 0) // at most '.'
             );
@@ -8193,11 +8194,9 @@ MenuMorph.prototype.unselectAllItems = function () {
 MenuMorph.prototype.popup = function (world, pos) {
 	var scroller;
 
-    if (this.world) {
-        if (this.world.isDevMode) {
-            this.addLine();
-            this.addItem('close', this.destroy);
-        }
+    if (world.isDevMode) {
+        this.addLine();
+        this.addItem('close', this.destroy);
     }
 
     this.createItems();
@@ -8730,7 +8729,7 @@ StringMorph.prototype.upFrom = function (slot) {
 
 StringMorph.prototype.downFrom = function (slot) {
     // answer the slot below the given one
-    return slot;
+    return this.text.length;
 };
 
 StringMorph.prototype.startOfLine = function () {
