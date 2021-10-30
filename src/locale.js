@@ -134,10 +134,7 @@ SnapTranslator.dict.en = {
         'green flag clicked',
 
     // rewordings in English avoiding having to adjust all other translations
-    'any':
-        'random',
-    'length of %s':
-        'length of text %s',
+    // none here
 
     // long strings look-up only
     'file menu import hint':
