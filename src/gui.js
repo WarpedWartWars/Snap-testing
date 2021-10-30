@@ -236,6 +236,10 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // additional properties:
     this.cloud = new Cloud();
+    /////////////////////
+    // disable cloud
+    this.cloud.disable();
+    /////////////////////
     this.cloudMsg = null;
     this.source = null;
     this.serializer = new SnapSerializer();
@@ -1163,15 +1167,15 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
+        cloudButton.setCenter(myself.controlBar.center());
+        cloudButton.setRight(settingsButton.left() - padding);
+
         projectButton.setCenter(myself.controlBar.center());
+        projectButton.setRight(cloudButton.left() - padding);
 
         if (myself.cloud.disabled) {
+            settingsButton.setLeft(cloudButton.left());
             cloudButton.hide();
-            projectButton.setRight(settingsButton.left() - padding);
-        } else {
-            cloudButton.setCenter(myself.controlBar.center());
-            cloudButton.setRight(settingsButton.left() - padding);
-            projectButton.setRight(cloudButton.left() - padding);
         }
 
         this.refreshSlider();
