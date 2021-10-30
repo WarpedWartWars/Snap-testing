@@ -250,7 +250,7 @@ function loadBlocks (useBigNums) {
                 a = parseNumber(a);
                 b = parseNumber(b);
                 if (Number.isNaN(a) || Number.isNaN(b)) return NaN;
-                return fn['expt'](a, b);
+                return fn.exact(fn['expt'](a, b));
             },
             reportBasicModulus: function (a, b) {
                 a = parseNumber(a);
@@ -398,11 +398,11 @@ function loadBlocks (useBigNums) {
                 case 'lg':
                     return fn.log(n, '2');
                 case 'e^':
-                    return fn.exp(n);
+                    return fn.exact(fn.exp(n));
                 case '10^':
-                    return fn.expt('10', n);
+                    return fn.exact(fn.expt('10', n));
                 case '2^':
-                    return fn.expt('2', n);
+                    return fn.exact(fn.expt('2', n));
                 case 'id':
                     return n;
                 default:
@@ -448,14 +448,13 @@ function parseENotation (n) {
 function sqrt (n) {
     var fn = SchemeNumber.fn;
 
-    if (!fn['exact?'](n) || !fn['rational?'](n) || fn['<'](n,'0')) return fn.sqrt(n);
+    if (!fn['exact?'](n) || !fn['rational?'](n) || fn['<'](n,'0')) return fn.exact(fn.sqrt(n));
 
     var rootNumerator = fn['exact-integer-sqrt'](fn.numerator(n));
-    if (!fn['='](rootNumerator[1], '0')) return fn.sqrt(n);
+    if (!fn['='](rootNumerator[1], '0')) return fn.exact(fn.sqrt(n));
 
     var rootDenominator = fn['exact-integer-sqrt'](fn.denominator(n));
-    if (!fn['='](rootDenominator[1], '0')) return fn.sqrt(n);
+    if (!fn['='](rootDenominator[1], '0')) return fn.exact(fn.sqrt(n));
 
     return fn['/'](rootNumerator[0], rootDenominator[0]);
 }
-
