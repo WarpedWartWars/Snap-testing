@@ -7949,7 +7949,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     MenuMorph.uber.init.call(this);
 
     // override inherited properties:
-    this.isDraggable = false;
+    this.isDraggable = this.title ? this.world.isDevMode : false;
     this.noDropShadow = true;
     this.fullShadowSource = false;
 
@@ -8247,8 +8247,8 @@ MenuMorph.prototype.popUpAtHand = function (world) {
 
 MenuMorph.prototype.popUpCenteredAtHand = function (world) {
     var wrrld = world || this.world;
-    //this.fixLayout();
-    //this.createItems();
+    this.fixLayout();
+    this.createItems();
     this.popup(
         wrrld,
         wrrld.hand.position().subtract(
@@ -8259,8 +8259,8 @@ MenuMorph.prototype.popUpCenteredAtHand = function (world) {
 
 MenuMorph.prototype.popUpCenteredInWorld = function (world) {
     var wrrld = world || this.world;
-    //this.fixLayout();
-    //this.createItems();
+    this.fixLayout();
+    this.createItems();
     this.popup(
         wrrld,
         wrrld.center().subtract(
