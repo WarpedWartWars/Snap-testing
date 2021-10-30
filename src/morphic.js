@@ -11346,9 +11346,9 @@ HandMorph.prototype.processMouseDown = function (event) {
                     morph.allParents(),
                     this.world.activeMenu
                 )) {
-                if (this.world.isDevMode) {
+                if (!this.world.isDevMode) {
                     this.world.activeMenu.destroy();
-		}
+                }
             } else {
                 clearInterval(this.touchHoldTimeout);
             }
