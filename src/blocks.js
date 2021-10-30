@@ -9346,7 +9346,7 @@ InputSlotMorph.prototype.keysMenu = function () {
 	},
         symbols : {
             '`' : ['`'],
-            '~' : ['~'],
+            '\~' : ['\~'],
             '!' : ['!'],
             '@' : ['@'],
             '#' : ['#'],
