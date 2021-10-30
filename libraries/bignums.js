@@ -161,7 +161,7 @@ function loadBlocks (useBigNums) {
                         if (ch === '.') {
                             points += 1;
                         }
-                        if (!contains(['-', '+', '*', '/', ' '] ch)) {
+                        if (!contains(['-', '+', '*', '/', ' '], ch)) {
                             if (!isOnNum) {
                                 isOnNum = true;
                                 nums.push(ch);
