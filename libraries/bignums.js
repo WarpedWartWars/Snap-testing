@@ -153,7 +153,7 @@ function loadBlocks (useBigNums) {
                     valid = (
                         ('0' <= ch && ch <= '9') || // digits
                         (ch.toLowerCase() === 'e') || // scientific notation
-                        (contains(['-', '+', '*', '/'] ch))  || // '-' '+' '*' '/'
+                        (contains(['-', '+', '*', '/'], ch))  || // '-' '+' '*' '/'
                         (ch === '.' && points <= nums.length) // '.'
                     );
                     if (valid) {
