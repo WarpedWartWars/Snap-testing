@@ -1528,11 +1528,11 @@ ListWatcherMorph.prototype.showTableView = function () {
 
 // ListWatcherMorph events:
 
-ListWatcherMorph.prototype.mouseDoubleClick = function (pos) {
+ListWatcherMorph.prototype.mouseDoubleClickLeft = function (pos) {
     if (List.prototype.enableTables) {
         new TableDialogMorph(this.list).popUp(this.world());
     } else {
-        this.escalateEvent('mouseDoubleClick', pos);
+        this.escalateEvent('mouseDoubleClickLeft', pos);
     }
 };
 
