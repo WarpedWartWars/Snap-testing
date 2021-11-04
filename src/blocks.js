@@ -417,6 +417,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'mouse-departed' : ['mouse-departed'],
             'scrolled-up' : ['scrolled-up'],
             'scrolled-down' : ['scrolled-down'],
+            'double-clicked' : ['double-clicked'],
             'stopped' : ['stopped'] // experimental
         }
     },
