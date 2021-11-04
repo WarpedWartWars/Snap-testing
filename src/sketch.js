@@ -1876,7 +1876,7 @@ VectorPaintCanvasMorph.prototype.mouseClickLeft = function (pos) {
     editor.updateHistory();
 };
 
-VectorPaintCanvasMorph.prototype.mouseDoubleClick = function (pos) {
+VectorPaintCanvasMorph.prototype.mouseDoubleClickLeft = function (pos) {
     var editor = this.parentThatIsA(VectorPaintEditorMorph),
         shape = editor.currentShape;
 
