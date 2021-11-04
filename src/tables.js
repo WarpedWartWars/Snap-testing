@@ -445,13 +445,13 @@ TableCellMorph.prototype.isOvershooting = function () {
 
 // TableCellMorph events:
 
-TableCellMorph.prototype.mouseDoubleClick = function (pos) {
+TableCellMorph.prototype.mouseDoubleClickLeft = function (pos) {
     if (this.data instanceof Table || this.data instanceof List) {
         new TableDialogMorph(this.data).popUp(this.world());
     } else if (this.data instanceof Array && this.data[0] instanceof List) {
         new TableDialogMorph(this.data[0]).popUp(this.world());
     } else {
-        this.escalateEvent('mouseDoubleClick', pos);
+        this.escalateEvent('mouseDoubleClickLeft', pos);
     }
 };
 
@@ -958,9 +958,9 @@ TableMorph.prototype.mouseLeaveDragging = function (pos) {
         this.resizeRow = null;
 };
 
-TableMorph.prototype.mouseDoubleClick = function (pos) {
+TableMorph.prototype.mouseDoubleClickLeft = function (pos) {
     if (this.parentThatIsA(TableDialogMorph)) {
-        this.escalateEvent('mouseDoubleClick', pos);
+        this.escalateEvent('mouseDoubleClickLeft', pos);
     } else {
         new TableDialogMorph(
             this.table,
