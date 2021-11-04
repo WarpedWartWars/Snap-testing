@@ -492,8 +492,9 @@
         mouseMove(pos, button)
 
     event method has an additional optional parameter indicating the
-    currently pressed mouse button, which is either 'left' or 'right'.
-    You can use this to let users interact with 3D environments.
+    currently pressed mouse button, which is either 'left', 'middle',
+    or 'right'. You can use this to let users interact with 3D
+    environments.
 
     The
 
