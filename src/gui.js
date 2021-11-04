@@ -9441,7 +9441,7 @@ SpriteIconMorph.prototype.showSpriteOnStage = function () {
 
 // SpriteIconMorph events
 
-SpriteIconMorph.prototype.mouseDoubleClick = function () {
+SpriteIconMorph.prototype.mouseDoubleClickLeft = function () {
 	if (this.object instanceof SpriteMorph) {
     	this.object.flash();
     }
@@ -11137,7 +11137,7 @@ StageHandleMorph.prototype.mouseLeave = function () {
     this.rerender();
 };
 
-StageHandleMorph.prototype.mouseDoubleClick = function () {
+StageHandleMorph.prototype.mouseDoubleClickLeft = function () {
     this.target.parentThatIsA(IDE_Morph).toggleStageSize(true, 1);
 };
 
@@ -11222,7 +11222,7 @@ PaletteHandleMorph.prototype.mouseEnter
 PaletteHandleMorph.prototype.mouseLeave
     = StageHandleMorph.prototype.mouseLeave;
 
-PaletteHandleMorph.prototype.mouseDoubleClick = function () {
+PaletteHandleMorph.prototype.mouseDoubleClickLeft = function () {
     this.target.parentThatIsA(IDE_Morph).setPaletteWidth(200);
 };
 
