@@ -5532,7 +5532,7 @@ SpriteMorph.prototype.justDropped = function () {
     }
     this.restoreLayers();
     this.positionTalkBubble();
-    this.receiveUserInteraction('dropped');
+    this.receiveUserInteraction(null, 'dropped');
 };
 
 // SpriteMorph drawing:
@@ -6239,6 +6239,10 @@ SpriteMorph.prototype.mouseEnter = function () {
     return this.receiveUserInteraction(null, 'mouse-entered');
 };
 
+SpriteMorph.prototype.mouseLeave = function () {
+    return this.receiveUserInteraction(null, 'mouse-left');
+};
+
 SpriteMorph.prototype.mouseDownLeft = function () {
     return this.receiveUserInteraction('left', 'pressed');
 };
@@ -6281,9 +6285,19 @@ SpriteMorph.prototype.receiveUserInteraction = function (
     return procs;
 };
 
-SpriteMorph.prototype.mouseDoubleClick = function () {
-    if (this.isTemporary) {return; }
-    this.edit();
+SpriteMorph.prototype.mouseDoubleClickLeft = function () {
+    if (!this.isTemporary) {
+        this.edit();
+    }
+    return this.receiveUserInteraction('left', 'double-clicked');
+};
+
+SpriteMorph.prototype.mouseDoubleClickMiddle = function () {
+    return this.receiveUserInteraction('middle', 'double-clicked');
+};
+
+SpriteMorph.prototype.mouseDoubleClickRight = function () {
+    return this.receiveUserInteraction('right', 'double-clicked');
 };
 
 // SpriteMorph timer
@@ -8626,10 +8640,10 @@ StageMorph.prototype.fireStopAllEvent = function () {
 StageMorph.prototype.runStopScripts = function () {
     // experimental: Allow each sprite to run one last step before termination
     // usage example: Stop a robot or device associated with the sprite
-    this.receiveUserInteraction('stopped', true, true);
+    this.receiveUserInteraction(null, 'stopped', true, true);
     this.children.forEach(morph => {
         if (morph instanceof SpriteMorph) {
-            morph.receiveUserInteraction('stopped', true, true);
+            morph.receiveUserInteraction(null, 'stopped', true, true);
         }
     });
 };
@@ -9645,9 +9659,8 @@ StageMorph.prototype.mouseClickRight
 StageMorph.prototype.mouseEnter
     = SpriteMorph.prototype.mouseEnter;
 
-StageMorph.prototype.mouseLeave = function () {
-    this.receiveUserInteraction('mouse-departed');
-};
+StageMorph.prototype.mouseLeave
+    = SpriteMorph.prototype.mouseLeave;
 
 StageMorph.prototype.mouseDownLeft
     = SpriteMorph.prototype.mouseDownLeft;
@@ -11479,12 +11492,12 @@ CellMorph.prototype.mouseClickLeft = function (pos) {
     }
 };
 
-CellMorph.prototype.mouseDoubleClick = function (pos) {
+CellMorph.prototype.mouseDoubleClickLeft = function (pos) {
     if (List.prototype.enableTables &&
             this.currentValue instanceof List) {
         new TableDialogMorph(this.contents).popUp(this.world());
     } else {
-        this.escalateEvent('mouseDoubleClick', pos);
+        this.escalateEvent('mouseDoubleClickLeft', pos);
     }
 };
 
@@ -11821,12 +11834,12 @@ WatcherMorph.prototype.fixLayout = function () {
 
 // WatcherMorph events:
 
-WatcherMorph.prototype.mouseDoubleClick = function (pos) {
+WatcherMorph.prototype.mouseDoubleClickLeft = function (pos) {
     if (List.prototype.enableTables &&
             this.currentValue instanceof List) {
         new TableDialogMorph(this.currentValue).popUp(this.world());
     } else {
-        this.escalateEvent('mouseDoubleClick', pos);
+        this.escalateEvent('mouseDoubleClickLeft', pos);
     }
 };
 
