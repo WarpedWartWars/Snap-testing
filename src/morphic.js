@@ -463,10 +463,14 @@
     The Hand dispatches the following mouse events to relevant morphs:
 
         mouseDownLeft
+        mouseDownMiddle
         mouseDownRight
         mouseClickLeft
+        mouseClickMiddle
         mouseClickRight
-        mouseDoubleClick
+        mouseDoubleClickLeft
+        mouseDoubleClickMiddle
+        mouseDoubleClickRight
         mouseEnter
         mouseLeave
         mouseEnterDragging
@@ -9068,7 +9072,7 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
         }
         this.root().cursor.syncTextareaSelectionWith(this);
     } else {
-        this.escalateEvent('mouseDoubleClick', pos);
+        this.escalateEvent('mouseDoubleClickLeft', pos);
     }
 };
 
@@ -9543,7 +9547,7 @@ TextMorph.prototype.shiftClick = StringMorph.prototype.shiftClick;
 
 TextMorph.prototype.mouseClickLeft = StringMorph.prototype.mouseClickLeft;
 
-TextMorph.prototype.mouseDoubleClick = StringMorph.prototype.mouseDoubleClick;
+TextMorph.prototype.mouseDoubleClickLeft = StringMorph.prototype.mouseDoubleClickLeft;
 
 TextMorph.prototype.selectWordAt = StringMorph.prototype.selectWordAt;
 
@@ -9915,7 +9919,7 @@ TriggerMorph.prototype.mouseClickLeft = function () {
     this.trigger();
 };
 
-TriggerMorph.prototype.mouseDoubleClick = function () {
+TriggerMorph.prototype.mouseDoubleClickLeft = function () {
     this.triggerDoubleClick();
 };
 
@@ -11309,7 +11313,9 @@ HandMorph.prototype.drop = function () {
         mouseClickLeft
         mouseClickMiddle
         mouseClickRight
-        mouseDoubleClick
+        mouseDoubleClickLeft
+        mouseDoubleClickMiddle
+        mouseDoubleClickRight
         mouseEnter
         mouseLeave
         mouseEnterDragging
@@ -11464,11 +11470,18 @@ HandMorph.prototype.processDoubleClick = function () {
     if (this.children.length !== 0) {
         this.drop();
     } else {
-        while (morph && !morph.mouseDoubleClick) {
+        if (this.mouseButton === 'left') {
+            expectedClick = 'mouseDoubleClickLeft';
+	} else if (this.mouseButton === 'middle') {
+            expectedClick = 'mouseDoubleClickMiddle';
+        } else {
+            expectedClick = 'mouseDoubleClickRight';
+        }
+        while (morph && !morph[expectedClick]) {
             morph = morph.parent;
         }
         if (morph) {
-            morph.mouseDoubleClick(this.bounds.origin);
+            morph[expectedClick](this.bounds.origin);
         }
     }
     this.mouseButton = null;
