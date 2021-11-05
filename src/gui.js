@@ -4036,9 +4036,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Flat design',
         () => {
             if (MorphicPreferences.isFlat) {
-                return this.s3DDesign();
-            }
-            this.flatDesign();
+                this.s3DDesign();
+            } else {
+                this.flatDesign();
+	    }
+            if (MorphicPreferences.isLightMode) {
+                this.lightMode();
+            } else {
+                this.darkMode();
+	    }
         },
         MorphicPreferences.isFlat,
         'uncheck for default\nGUI design',
@@ -4049,9 +4055,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Light mode',
         () => {
             if (MorphicPreferences.isLightMode) {
-                return this.darkMode();
-            }
-            this.lightMode();
+                this.darkMode();
+            } else {
+                this.lightMode();
+	    }
+            if (MorphicPreferences.isFlat) {
+                this.flatDesign();
+            } else {
+                this.s3DDesign();
+	    }
         },
         MorphicPreferences.isLightMode,
         'uncheck for dark mode',
