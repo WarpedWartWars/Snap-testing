@@ -233,8 +233,8 @@ IDE_Morph.prototype.scriptsTexture = function () {
     return pic;
 };
 
-IDE_Morph.prototype.set3DDesign();
 IDE_Morph.prototype.setDarkMode();
+IDE_Morph.prototype.set3DDesign();
 
 // IDE_Morph instance creation:
 
