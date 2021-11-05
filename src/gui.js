@@ -387,7 +387,7 @@ IDE_Morph.prototype.openIn = function (world) {
         }
         if (dict.blocksZoom) {
             myself.savingPreferences = false;
-            myself.setBlocksScale(Math.max(1,Math.min(dict.blocksZoom, 12)));
+            myself.setBlocksScale(Math.max(0.1, Math.min(dict.blocksZoom, 12)));
             myself.savingPreferences = true;
         }
 
@@ -6531,10 +6531,8 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     blck.color = SpriteMorph.prototype.blockColor.operators;
     blck.setSpec(localize('blocks'));
     scrpt.bottomBlock().nextBlock(blck);
-    /*
     blck = SpriteMorph.prototype.blockForSelector('doForever');
     blck.inputs()[0].nestedBlock(scrpt);
-    */
 
     sample = new FrameMorph();
     sample.acceptsDrops = false;
@@ -6543,8 +6541,8 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         sample.cachedTexture = this.scriptsPaneTexture;
     }
     sample.setExtent(new Point(250, 180));
-    scrpt.setPosition(sample.position().add(10));
-    sample.add(scrpt);
+    blck.setPosition(sample.position().add(10));
+    sample.add(blck);
 
     shield = new Morph();
     shield.alpha = 0;
@@ -6553,11 +6551,11 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     sample.add(shield);
 
     action = (num) => {
-        scrpt.blockSequence().forEach(block => {
+        blck.blockSequence().forEach(block => {
             block.setScale(num);
             block.setSpec(block.blockSpec);
         });
-        scrpt.fullChanged();
+        blck.fullChanged();
     };
 
     dlg = new DialogBoxMorph(
@@ -6573,6 +6571,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         this.world(),
         sample, // pic
         {
+            'small (0.5x)' : 0.5,
             'normal (1x)' : 1,
             'demo (1.2x)' : 1.2,
             'presentation (1.4x)' : 1.4,
@@ -6583,7 +6582,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         },
         false, // read only?
         true, // numeric
-        1, // slider min
+        0.5, // slider min
         5, // slider max
         action // slider action
     );
