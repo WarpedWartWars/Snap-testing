@@ -6554,8 +6554,12 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         blck.blockSequence().forEach(block => {
             block.setScale(num);
             block.setSpec(block.blockSpec);
-            blck.inputs()[0].nestedBlock(scrpt);
         });
+        scrpt.blockSequence().forEach(block => {
+            block.setScale(num);
+            block.setSpec(block.blockSpec);
+        });
+        blck.inputs()[0].nestedBlock(scrpt);
         blck.fullChanged();
     };
 
