@@ -3004,14 +3004,14 @@ IDE_Morph.prototype.removeSetting = function (key) {
 };
 
 IDE_Morph.prototype.hasLocalStorage = function () {
-	// checks whether localStorage is available,
+    // checks whether localStorage is available,
     // this kludgy try/catch mechanism is needed
     // because Safari 11 is paranoid about accessing
     // localstorage from the file:// protocol
 	try {
-		return !isNil(localStorage);
+            return !isNil(localStorage);
 	} catch (err) {
-    	return false;
+            return false;
 	}
 };
 
@@ -3518,14 +3518,14 @@ IDE_Morph.prototype.snapMenu = function () {
             window.open(url, 'SnapReferenceManual');
         }
     );
-    menu.addItem(
+    /*menu.addItem(
         'Snap! website',
         () => window.open('https://snap.berkeley.edu/', 'SnapWebsite')
-    );
+    );*/
     menu.addItem(
         'Download source',
         () => window.open(
-                'https://github.com/jmoenig/Snap/releases/latest',
+                'https://github.com/WarpedWartWars/Snap-testing/',
                 'SnapSource'
             )
     );
@@ -6571,7 +6571,8 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         this.world(),
         sample, // pic
         {
-            'small (0.5x)' : 0.5,
+            'tiny (0.5x)' : 0.5,
+            'small (0.75x)' : 0.75,
             'normal (1x)' : 1,
             'demo (1.2x)' : 1.2,
             'presentation (1.4x)' : 1.4,
