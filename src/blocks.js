@@ -260,7 +260,7 @@ SyntaxElementMorph.uber = Morph.prototype;
 SyntaxElementMorph.prototype.contrast = 65;
 
 SyntaxElementMorph.prototype.setScale = function (num) {
-    var scale = Math.min(Math.max(num, 1), 25);
+    var scale = Math.min(Math.max(num, 0.1), 25);
     this.scale = scale;
     this.corner = 3 * scale;
     this.rounding = 9 * scale;
