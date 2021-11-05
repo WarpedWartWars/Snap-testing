@@ -126,6 +126,10 @@ IDE_Morph.prototype.set3DDesign = function () {
     IDE_Morph.prototype.padding = 1;
 
     SyntaxElementMorph.prototype.contrast = 65;
+
+    if (!useBlurredShadows) {
+        this.toggleBlurredShadows()
+    }
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
@@ -137,6 +141,10 @@ IDE_Morph.prototype.setFlatDesign = function () {
     IDE_Morph.prototype.padding = 1;
 
     SyntaxElementMorph.prototype.contrast = 25;
+
+    if (useBlurredShadows) {
+        this.toggleBlurredShadows()
+    }
 };
 
 IDE_Morph.prototype.setDarkMode = function () {
