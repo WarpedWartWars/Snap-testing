@@ -122,7 +122,9 @@ PushButtonMorph.prototype.color = new Color(220, 220, 220);
 PushButtonMorph.prototype.pressColor = new Color(115, 180, 240);
 PushButtonMorph.prototype.highlightColor
     = PushButtonMorph.prototype.pressColor.lighter(50);
-PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
+PushButtonMorph.prototype.outlineColor =
+    MorphicPreferences.isLightMode ? new Color(240, 240, 245) :
+                                     new Color(30, 30, 30);
 PushButtonMorph.prototype.outlineGradient = false;
 PushButtonMorph.prototype.contrast = 60;
 
