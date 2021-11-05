@@ -2929,16 +2929,16 @@ IDE_Morph.prototype.applySavedSettings = function () {
         solidshadow = this.getSetting('solidshadow');
 
     // design
-    if (design === 'flat') {
-        this.setFlatDesign();
-    } else {
-        this.set3DDesign();
-    }
-
     if (lightmode === 'light') {
         this.setLightMode();
     } else {
         this.setDarkMode();
+    }
+
+    if (design === 'flat') {
+        this.setFlatDesign();
+    } else {
+        this.set3DDesign();
     }
 
     // blocks zoom
