@@ -813,7 +813,7 @@ IDE_Morph.prototype.createLogo = function () {
             );
         gradient.addColorStop(0, 'black');
         gradient.addColorStop(0.5, myself.frameColor.toString());
-        ctx.fillStyle = MorphicPreferences.isFlat ?
+        ctx.fillStyle = MorphicPreferences.isLightMode ?
                 myself.frameColor.toString() : gradient;
         ctx.fillRect(0, 0, this.width(), this.height());
         if (this.cachedTexture) {
@@ -856,7 +856,7 @@ IDE_Morph.prototype.createControlBar = function () {
         steppingButton,
         cloudButton,
         x,
-        colors = MorphicPreferences.isFlat ? this.tabColors
+        colors = MorphicPreferences.isLightMode ? this.tabColors
         : [
             this.groupColor,
             this.frameColor.darker(50),
@@ -901,7 +901,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = MorphicPreferences.isFlat ?
+    button.labelColor = MorphicPreferences.isLightMode ?
         WHITE
         : this.buttonLabelColor;
     button.contrast = this.buttonContrast;
@@ -995,7 +995,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = new Color(
-        MorphicPreferences.isFlat ? 128 : 200,
+        MorphicPreferences.isLightMode ? 128 : 200,
         0,
         0
     );
@@ -1028,7 +1028,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = MorphicPreferences.isFlat ?
+    button.labelColor = MorphicPreferences.isLightMode ?
         new Color(220, 185, 0)
             : new Color(255, 220, 0);
     button.contrast = this.buttonContrast;
@@ -1055,7 +1055,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = new Color(
         0,
-        MorphicPreferences.isFlat ? 100 : 200,
+        MorphicPreferences.isLightMode ? 100 : 200,
         0
     );
     button.contrast = this.buttonContrast;
@@ -1330,7 +1330,7 @@ IDE_Morph.prototype.createCategories = function () {
         var labelWidth = 75,
             colors = [
                 myself.frameColor,
-                myself.frameColor.darker(MorphicPreferences.isFlat ? 5 : 50),
+                myself.frameColor.darker(MorphicPreferences.isLightMode ? 5 : 50),
                 SpriteMorph.prototype.blockColor[category]
             ],
             button;
@@ -1352,7 +1352,7 @@ IDE_Morph.prototype.createCategories = function () {
         button.labelShadowOffset = new Point(-1, -1);
         button.labelShadowColor = colors[1];
         button.labelColor = myself.buttonLabelColor;
-        if (MorphicPreferences.isFlat) {
+        if (MorphicPreferences.isLightMode) {
             button.labelPressColor = WHITE;
         }
         button.fixLayout();
@@ -1366,7 +1366,7 @@ IDE_Morph.prototype.createCategories = function () {
         var labelWidth = 168,
             colors = [
                 myself.frameColor,
-                myself.frameColor.darker(MorphicPreferences.isFlat ? 5 : 50),
+                myself.frameColor.darker(MorphicPreferences.isLightMode ? 5 : 50),
                 color
             ],
             button;
@@ -1388,7 +1388,7 @@ IDE_Morph.prototype.createCategories = function () {
         button.labelShadowOffset = new Point(-1, -1);
         button.labelShadowColor = colors[1];
         button.labelColor = myself.buttonLabelColor;
-        if (MorphicPreferences.isFlat) {
+        if (MorphicPreferences.isLightMode) {
             button.labelPressColor = WHITE;
         }
         button.fixLayout();
@@ -1768,7 +1768,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelColor = this.buttonLabelColor;
 
     tab.getPressRenderColor = function () {
-        if (MorphicPreferences.isFlat ||
+        if (MorphicPreferences.isLightMode ||
                 SyntaxElementMorph.prototype.alpha > 0.85) {
             return this.pressColor;
         }
@@ -1916,7 +1916,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         cambutton,
         trashbutton,
         myself = this,
-        colors = MorphicPreferences.isFlat ? this.tabColors
+        colors = MorphicPreferences.isLightMode ? this.tabColors
         : [
             this.groupColor,
             this.frameColor.darker(50),
@@ -2396,7 +2396,7 @@ IDE_Morph.prototype.render = function (ctx) {
         frame = this.stage.bounds.translateBy(
             this.position().neg()
         ).expandBy(2);
-        ctx.strokeStyle = (MorphicPreferences.isFlat ? this.backgroundColor
+        ctx.strokeStyle = (MorphicPreferences.isLightMode ? this.backgroundColor
             : this.groupColor).toString();
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -4778,7 +4778,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! Testing 0.3 \nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! Testing 0.4 \nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig, '
         + 'Brian Harvey, and WarpedWartWars\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu, warpedwartwars7'
@@ -5180,7 +5180,7 @@ IDE_Morph.prototype.exportProject = function (name) {
             str = this.serializer.serialize(
                 new Project(this.scenes, this.scene)
             );
-            this.setURL('#open:data:text/xml,' + encodeURIComponent(str));
+            //this.setURL('#open:data:text/xml,' + encodeURIComponent(str));
             this.saveXMLAs(str, name);
             menu.destroy();
             this.recordSavedChanges();
