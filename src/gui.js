@@ -4049,7 +4049,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Light mode',
         () => {
             if (MorphicPreferences.isLightMode) {
-                return this.DarkMode();
+                return this.darkMode();
             }
             this.lightMode();
         },
