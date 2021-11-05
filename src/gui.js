@@ -117,8 +117,31 @@ IDE_Morph.uber = Morph.prototype;
 
 // IDE_Morph preferences settings and skins
 
-IDE_Morph.prototype.setDefaultDesign = function () {
+IDE_Morph.prototype.set3DDesign = function () {
     MorphicPreferences.isFlat = false;
+
+    IDE_Morph.prototype.buttonContrast = 30;
+
+    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    IDE_Morph.prototype.padding = 1;
+
+    SyntaxElementMorph.prototype.contrast = 65;
+};
+
+IDE_Morph.prototype.setFlatDesign = function () {
+    MorphicPreferences.isFlat = true;
+
+    IDE_Morph.prototype.buttonContrast = 30;
+
+    IDE_Morph.prototype.scriptsPaneTexture = null;
+    IDE_Morph.prototype.padding = 1;
+
+    SyntaxElementMorph.prototype.contrast = 25;
+};
+
+IDE_Morph.prototype.setDarkMode = function () {
+    MorphicPreferences.isLightMode = false;
+
     SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
     StageMorph.prototype.paletteTextColor
@@ -127,7 +150,6 @@ IDE_Morph.prototype.setDefaultDesign = function () {
     SpriteMorph.prototype.sliderColor
         = SpriteMorph.prototype.paletteColor.lighter(30);
 
-    IDE_Morph.prototype.buttonContrast = 30;
     IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
@@ -142,8 +164,6 @@ IDE_Morph.prototype.setDefaultDesign = function () {
     ];
     IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
     IDE_Morph.prototype.appModeColor = BLACK;
-    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
-    IDE_Morph.prototype.padding = 1;
 
     SpriteIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
@@ -156,12 +176,12 @@ IDE_Morph.prototype.setDefaultDesign = function () {
     SceneIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
 
-    SyntaxElementMorph.prototype.contrast = 65;
     ScriptsMorph.prototype.feedbackColor = WHITE;
 };
 
-IDE_Morph.prototype.setFlatDesign = function () {
-    MorphicPreferences.isFlat = true;
+IDE_Morph.prototype.setLightMode = function () {
+    MorphicPreferences.isLightMode = true;
+
     SpriteMorph.prototype.paletteColor = WHITE;
     SpriteMorph.prototype.paletteTextColor = new Color(70, 70, 70);
     StageMorph.prototype.paletteTextColor
@@ -169,7 +189,6 @@ IDE_Morph.prototype.setFlatDesign = function () {
     StageMorph.prototype.paletteColor = SpriteMorph.prototype.paletteColor;
     SpriteMorph.prototype.sliderColor = SpriteMorph.prototype.paletteColor;
 
-    IDE_Morph.prototype.buttonContrast = 30;
     IDE_Morph.prototype.backgroundColor = new Color(220, 220, 230);
     IDE_Morph.prototype.frameColor = new Color(240, 240, 245);
 
@@ -183,8 +202,6 @@ IDE_Morph.prototype.setFlatDesign = function () {
     ];
     IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
     IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
-    IDE_Morph.prototype.scriptsPaneTexture = null;
-    IDE_Morph.prototype.padding = 1;
 
     SpriteIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
@@ -197,7 +214,6 @@ IDE_Morph.prototype.setFlatDesign = function () {
     SceneIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
 
-    SyntaxElementMorph.prototype.contrast = 25;
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
 };
 
@@ -217,7 +233,8 @@ IDE_Morph.prototype.scriptsTexture = function () {
     return pic;
 };
 
-IDE_Morph.prototype.setDefaultDesign();
+IDE_Morph.prototype.set3DDesign();
+IDE_Morph.prototype.setDarkMode();
 
 // IDE_Morph instance creation:
 
@@ -2842,8 +2859,8 @@ IDE_Morph.prototype.toggleRetina = function () {
 
 // IDE_Morph skins
 
-IDE_Morph.prototype.defaultDesign = function () {
-    this.setDefaultDesign();
+IDE_Morph.prototype.s3DDesign = function () {
+    this.set3DDesign();
     this.refreshIDE();
     this.removeSetting('design');
 };
@@ -2852,6 +2869,18 @@ IDE_Morph.prototype.flatDesign = function () {
     this.setFlatDesign();
     this.refreshIDE();
     this.saveSetting('design', 'flat');
+};
+
+IDE_Morph.prototype.darkMode = function () {
+    this.setDarkMode();
+    this.refreshIDE();
+    this.removeSetting('lightmode');
+};
+
+IDE_Morph.prototype.lightMode = function () {
+    this.setLightMode();
+    this.refreshIDE();
+    this.saveSetting('lightmode', 'light');
 };
 
 IDE_Morph.prototype.refreshIDE = function () {
@@ -2885,6 +2914,7 @@ IDE_Morph.prototype.refreshIDE = function () {
 
 IDE_Morph.prototype.applySavedSettings = function () {
     var design = this.getSetting('design'),
+        lightmode = this.getSetting('lightmode'),
         zoom = this.getSetting('zoom'),
         fade = this.getSetting('fade'),
         language = this.getSetting('language'),
@@ -2902,7 +2932,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (design === 'flat') {
         this.setFlatDesign();
     } else {
-        this.setDefaultDesign();
+        this.set3DDesign();
+    }
+
+    if (lightmode === 'light') {
+        this.setLightMode();
+    } else {
+        this.setDarkMode();
     }
 
     // blocks zoom
@@ -4000,13 +4036,26 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Flat design',
         () => {
             if (MorphicPreferences.isFlat) {
-                return this.defaultDesign();
+                return this.s3DDesign();
             }
             this.flatDesign();
         },
         MorphicPreferences.isFlat,
         'uncheck for default\nGUI design',
         'check for alternative\nGUI design',
+        false
+    );
+    addPreference(
+        'Light mode',
+        () => {
+            if (MorphicPreferences.isLightMode) {
+                return this.DarkMode();
+            }
+            this.lightMode();
+        },
+        MorphicPreferences.isLightMode,
+        'uncheck for dark mode',
+        'check for light mode',
         false
     );
     addPreference(
@@ -4119,7 +4168,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             !Process.prototype.enableLiveCoding,
         Process.prototype.enableLiveCoding,
         'EXPERIMENTAL! uncheck to disable live\ncustom control structures',
-        'EXPERIMENTAL! check to enable\n live custom control structures',
+        'EXPERIMENTAL! check to enable\nlive custom control structures',
         true
     );
     addPreference(
@@ -4156,8 +4205,8 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => SpriteMorph.prototype.useFlatLineEnds =
             !SpriteMorph.prototype.useFlatLineEnds,
         SpriteMorph.prototype.useFlatLineEnds,
-        'uncheck for round ends of lines',
-        'check for flat ends of lines'
+        'uncheck for round ends of\npen trails',
+        'check for flat ends of\npen trails'
     );
     addPreference(
         'Codification support',
@@ -4195,7 +4244,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
-        'Single palette',
+        'Unified palette',
         () => this.toggleUnifiedPalette(),
         this.scene.unifiedPalette,
         'uncheck to show only the selected category\'s blocks',
@@ -4406,7 +4455,8 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
         data;
 
     function alphabetically(x, y) {
-        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
+        return x.name.toUpperCase().toLowerCase() <
+               y.name.toUpperCase().toLowerCase() ? -1 : 1;
     }
 
     if (async) {
@@ -4708,17 +4758,17 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7 - dev -\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
-        + 'Brian Harvey\n'
-        + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
+    aboutTxt = 'Snap! Testing 0.3 \nBuild Your Own Blocks\n\n'
+        + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig, '
+        + 'Brian Harvey, and WarpedWartWars\n'
+        + 'jens@moenig.org, bh@cs.berkeley.edu, warpedwartwars7'
+        + '@gmail.com\n\n'
         + '        Snap! is developed by the University of California, '
         + 'Berkeley and SAP        \n'
         + 'with support from the National Science Foundation (NSF),\n'
         + 'MIOsoft and YC Research.\n'
         + 'The design of Snap! is influenced and inspired by Scratch,\n'
         + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'
-
         + 'for more information see https://snap.berkeley.edu';
 
     noticeTxt = localize('License')
@@ -4727,16 +4777,13 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'it under the terms of the GNU Affero General Public License as\n'
         + 'published by the Free Software Foundation, either version 3 of\n'
         + 'the License, or (at your option) any later version.\n\n'
-
         + 'This program is distributed in the hope that it will be useful,\n'
         + 'but WITHOUT ANY WARRANTY; without even the implied warranty of\n'
         + 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n'
         + 'GNU Affero General Public License for more details.\n\n'
-
         + 'You should have received a copy of the\n'
         + 'GNU Affero General Public License along with this program.\n'
         + 'If not, see http://www.gnu.org/licenses/\n\n'
-
         + 'Want to use Snap! but scared by the open-source license?\n'
         + 'Get in touch with us, we\'ll make it work.';
 
@@ -4764,7 +4811,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nLucas Karahadian: Piano Keyboard Design'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
-        + '\nJoe Otto: Morphic Testing and Debugging';
+        + '\nJoe Otto: Morphic Testing and Debugging'
+        + '\nWarpedWartWars: Turning Snap! into Snap! Testing';
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {
@@ -4988,9 +5036,9 @@ IDE_Morph.prototype.createNewCategory = function () {
         cat => this.addPaletteCategory(cat.name, cat.color),
         this
     ).promptCategory(
-        "New Palette",
+        "New Category",
         null,
-        new Color(0,116,143),
+        new Color(0,255,0),
         this.world(),
         null, // pic
         'Blocks category name:' // msg
