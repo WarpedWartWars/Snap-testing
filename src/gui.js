@@ -185,6 +185,12 @@ IDE_Morph.prototype.setDarkMode = function () {
         = IDE_Morph.prototype.buttonLabelColor;
 
     ScriptsMorph.prototype.feedbackColor = WHITE;
+
+    PushButtonMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
+    ToggleButtonMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
+    TabMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
+    ToggleMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
+    ToggleElementMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
 };
 
 IDE_Morph.prototype.setLightMode = function () {
@@ -223,6 +229,12 @@ IDE_Morph.prototype.setLightMode = function () {
         = IDE_Morph.prototype.buttonLabelColor;
 
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
+
+    PushButtonMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
+    ToggleButtonMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
+    TabMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
+    ToggleMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
+    ToggleElementMorph.prototype.outlineColor = IDE_Morph.prototype.frameColor;
 };
 
 IDE_Morph.prototype.scriptsTexture = function () {
