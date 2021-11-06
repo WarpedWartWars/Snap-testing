@@ -1452,14 +1452,14 @@ IDE_Morph.prototype.createCategories = function () {
             }
             myself.categories.add(scroller);
             myself.categories.setHeight(
-                (5 - 1) * yPadding
+                (5 + 1) * yPadding
                     + 5 * buttonHeight
                     + 4 * (yPadding + buttonHeight) + border + 2
                     + 2 * border
             );
         } else {
             myself.categories.setHeight(
-                (5 - 1) * yPadding
+                (5 + 1) * yPadding
                     + 5 * buttonHeight
                     + (more ?
                         (more * (yPadding + buttonHeight) + border + 2)
