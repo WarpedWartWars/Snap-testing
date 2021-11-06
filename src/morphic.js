@@ -7954,7 +7954,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     MenuMorph.uber.init.call(this);
 
     // override inherited properties:
-    this.isDraggable = false // this.title ? this.world.isDevMode : false;
+    this.isDraggable = false; // this.title ? this.world.isDevMode : false;
     this.noDropShadow = true;
     this.fullShadowSource = false;
 
@@ -8199,10 +8199,10 @@ MenuMorph.prototype.unselectAllItems = function () {
 MenuMorph.prototype.popup = function (world, pos, addClose) {
 	var scroller;
 
-    this.draggable = this.title ? world.isDevMode : false; // moved from MenuMorph.prototype.init
+    this.draggable = world.isDevMode;
     if ((addClose === false ? false : true) && world.isDevMode) {
         this.addLine();
-        this.addItem('close', this.destroy);
+        this.addItem('close', nop /*this.destroy*/);
     }
 
     this.createItems();
@@ -11378,7 +11378,7 @@ HandMorph.prototype.processMouseDown = function (event) {
         if (event.button === 2 || event.ctrlKey) {
             this.mouseButton = 'right';
             actualClick = 'mouseDownRight';
-        } else if (event.button === 1) {
+        } else if (event.button === 1 || event.altKey) {
             this.mouseButton = 'middle';
             actualClick = 'mouseDownMiddle';
         } else {
@@ -11439,7 +11439,7 @@ HandMorph.prototype.processMouseUp = function () {
     } else {
         if (this.mouseButton === 'left') {
             expectedClick = 'mouseClickLeft';
-	} else if (this.mouseButton === 'middle') {
+        } else if (this.mouseButton === 'middle') {
             expectedClick = 'mouseClickMiddle';
         } else {
             expectedClick = 'mouseClickRight';
@@ -11451,7 +11451,8 @@ HandMorph.prototype.processMouseUp = function () {
                     context = context.parent;
                     contextMenu = context.contextMenu();
                 }
-                if (contextMenu) {
+                if (contextMenu &&
+                    this.contextMenuEnabled) {
                     contextMenu.popUpAtHand(this.world);
                 }
             }
@@ -11607,17 +11608,31 @@ HandMorph.prototype.processMouseScroll = function (event) {
         morph = morph.parent;
     }
     if (morph) {
-        morph.mouseScroll(
-            (event.detail / -3) || (
-                Object.prototype.hasOwnProperty.call(
-                    event,
-                    'wheelDeltaY'
-                ) ?
-                        event.wheelDeltaY / 120 :
-                        event.wheelDelta / 120
-            ),
-            event.wheelDeltaX / 120 || 0
-        );
+        if (event.shiftKey) {
+            morph.mouseScroll(
+                event.wheelDeltaX / 120 || 0,
+                (event.detail / -3) || (
+                    Object.prototype.hasOwnProperty.call(
+                        event,
+                        'wheelDeltaY'
+                    ) ?
+                            event.wheelDeltaY / 120 :
+                            event.wheelDelta / 120
+                )
+            );
+        } else {
+            morph.mouseScroll(
+                (event.detail / -3) || (
+                    Object.prototype.hasOwnProperty.call(
+                        event,
+                        'wheelDeltaY'
+                    ) ?
+                            event.wheelDeltaY / 120 :
+                            event.wheelDelta / 120
+                ),
+                event.wheelDeltaX / 120 || 0
+            );
+        }
     }
 };
 
