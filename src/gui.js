@@ -2705,6 +2705,12 @@ IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
         block => block.category === category &&
                  !contains(otherCatExceptions, block.selector)
     );
+    if (firstInCategory === undefined) {
+        if (category === 'other') {
+            firstInCategory = palette.contents.children.find(block =>
+                              block.category === 'lists');
+        }
+    }
     if (firstInCategory === undefined) {return; }
     delta = palette.top() - firstInCategory.top() + palette.padding;
     if (delta === 0) {return; }
