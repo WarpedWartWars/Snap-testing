@@ -2646,6 +2646,15 @@ IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
         suffix = name.substring(name.length - 3);
 
     if (suffix.toLowerCase() !== 'ypr') {return; }
+    else {
+        this.inform(
+            'Unable to import file',
+            '.ypr BYOB files are no longer supported.\n\n' +
+            'Try importing it to Snap!, saving it, and\n' +
+            'then importing it here.'
+        );
+        return;
+    }
 
     function loadYPR(buffer, lbl) {
         var reader = new sb.Reader(),
