@@ -910,8 +910,30 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'pause all %pause'
         },
 
+        doResumeAll: {
+            dev: true,
+            type: 'command',
+            category: 'control',
+            spec: 'resume all %resume'
+        },
+
+        doStep: {
+            dev: true,
+            type: 'command',
+            category: 'control',
+            spec: 'step %step'
+        },
+
+        reportPaused: {
+            dev: true,
+            type: 'predicate',
+            category: 'control',
+            spec: 'paused? %pause'
+        },
+
         // Scenes
         doSwitchToScene: {
+            dev: true,
             type: 'command',
             category: 'control',
             spec: 'switch to scene %scn %send',
@@ -1757,6 +1779,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doRun: ['fork', 'doInParallel'],
     fork: ['doRun', 'doInParallel'],
     doInParallel: ['doRun', 'fork'],
+    doPauseAll: ['doResumeAll', 'doStep'],
+    doResumeAll: ['doPauseAll', 'doStep'],
+    doStep: ['doPauseAll', 'doResumeAll'],
 
     // sensing:
     doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
@@ -1769,55 +1794,8 @@ SpriteMorph.prototype.blockAlternatives = {
     reifyScript: ['reifyReporter', 'reifyPredicate'],
     reifyReporter: ['reifyPredicate', 'reifyScript'],
     reifyPredicate: ['reifyReporter', 'reifyScript'],
-    reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportDifference: ['reportSum', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportProduct: ['reportDifference', 'reportSum', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportQuotient: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportPower: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportModulus: ['reportAtan2', 'reportDifference', 'reportProduct',
-        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportAtan2: ['reportModulus', 'reportDifference', 'reportProduct',
-        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportMin: ['reportMax', 'reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
-    reportMax: ['reportMin', 'reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
-    reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
-        'reportNotEquals', 'reportGreaterThan', 'reportGreaterThanOrEquals'],
-    reportEquals: ['reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportNotEquals: ['reportEquals', 'reportIsIdentical', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportGreaterThan: ['reportGreaterThanOrEquals', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals'],
-    reportLessThanOrEquals: ['reportLessThan', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportGreaterThanOrEquals: ['reportGreaterThan', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals'],
-    reportIsIdentical: ['reportEquals', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportAnd: ['reportOr'],
-    reportOr: ['reportAnd'],
 
     // variables
-    doSetVar: ['doChangeVar'],
-    doChangeVar: ['doSetVar'],
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
 
@@ -2576,7 +2554,6 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('newClone'));
         blocks.push(block('removeClone'));
         blocks.push('-');
-        blocks.push(block('doPauseAll'));
         blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
@@ -2586,6 +2563,11 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(watcherToggle('getLastMessage'));
             blocks.push(block('getLastMessage'));
+            blocks.push('-')
+            blocks.push(block('doPauseAll'));
+            blocks.push(block('doResumeAll'));
+            blocks.push(block('doStep'));
+            blocks.push(block('reportPaused'));
         }
 
     } else if (category === 'sensing') {
@@ -2668,6 +2650,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportNotEquals'));
         blocks.push(block('reportGreaterThan'));
         blocks.push(block('reportGreaterThanOrEquals'));
+        blocks.push(block('reportIsIdentical'));
         blocks.push('-');
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
@@ -2682,9 +2665,10 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportUnicode'));
         blocks.push(block('reportUnicodeAsLetter'));
+        blocks.push(block('reportTextFunction'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
-        blocks.push(block('reportIsIdentical'));
+        blocks.push(block('reportTypeOf'));
 
         if (Process.prototype.enableJS) {
             blocks.push('-');
@@ -2695,11 +2679,9 @@ SpriteMorph.prototype.blockTemplates = function (
         }
         // for debugging: ///////////////
         if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('reportTypeOf'));
-            blocks.push(block('reportTextFunction'));
+            //blocks.push('-');
+            //blocks.push(this.devModeText());
+            //blocks.push('-');
         }
 
     } else if (category === 'variables') {
@@ -2729,7 +2711,6 @@ SpriteMorph.prototype.blockTemplates = function (
         }
 
         blocks.push(block('doSetVar'));
-        blocks.push(block('doChangeVar'));
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
@@ -2799,7 +2780,7 @@ SpriteMorph.prototype.blockTemplates = function (
     return blocks;
 };
 
-// Utitlies displayed in the palette
+// Utilities displayed in the palette
 SpriteMorph.prototype.makeVariableButton = function () {
     var button, myself = this;
 
@@ -8887,7 +8868,6 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));
         blocks.push('-');
-        blocks.push(block('doPauseAll'));
         blocks.push(block('doSwitchToScene'));
 
         // for debugging: ///////////////
@@ -8897,6 +8877,11 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(watcherToggle('getLastMessage'));
             blocks.push(block('getLastMessage'));
+            blocks.push('-');
+            blocks.push(block('doPauseAll'));
+            blocks.push(block('doResumeAll'));
+            blocks.push(block('doStep'));
+            blocks.push(block('reportPaused'));
         }
 
     } else if (category === 'sensing') {
@@ -8975,6 +8960,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportNotEquals'));
         blocks.push(block('reportGreaterThan'));
         blocks.push(block('reportGreaterThanOrEquals'));
+        blocks.push(block('reportIsIdentical'));
         blocks.push('-');
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
@@ -8989,9 +8975,10 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportUnicode'));
         blocks.push(block('reportUnicodeAsLetter'));
+        blocks.push(block('reportTextFunction'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
-        blocks.push(block('reportIsIdentical'));
+        blocks.push(block('reportTypeOf'));
 
         if (Process.prototype.enableJS) { // (Process.prototype.enableJS) {
             blocks.push('-');
@@ -9003,11 +8990,9 @@ StageMorph.prototype.blockTemplates = function (
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('reportTypeOf'));
-            blocks.push(block('reportTextFunction'));
+            //blocks.push('-');
+            //blocks.push(this.devModeText());
+            //blocks.push('-');
         }
 
     }
@@ -9038,7 +9023,6 @@ StageMorph.prototype.blockTemplates = function (
         }
 
         blocks.push(block('doSetVar'));
-        blocks.push(block('doChangeVar'));
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
