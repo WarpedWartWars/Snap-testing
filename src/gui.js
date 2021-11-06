@@ -1427,12 +1427,12 @@ IDE_Morph.prototype.createCategories = function () {
             i;
 
         myself.categories.children.forEach((button, i) => {
-            row = i < 10 ? i % 5 : Math.ceil(i / 2);
-            col = (i < 5 || (i > 9 && i % 2 === 1)) ? 1 : 2;
+            row = i < 8 ? i % 4 : Math.ceil(i / 2);
+            col = (i < 4 || (i > 7 && i % 2 === 1)) ? 1 : 2;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
                 t + ((row + 1) * yPadding + (row * buttonHeight) + border) +
-                    (i > 9 ? border + 2 : 0)
+                    (i > 7 ? border + 2 : 0)
             ));
         });
 
