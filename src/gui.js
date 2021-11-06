@@ -1442,24 +1442,24 @@ IDE_Morph.prototype.createCategories = function () {
             scroller.acceptsDrops = false;
             scroller.contents.acceptsDrops = false;
             scroller.setPosition(
-                new Point(0, myself.categories.children[8].top())
+                new Point(0, myself.categories.children[10].top())
             );
             scroller.setWidth(myself.paletteWidth);
             scroller.setHeight(buttonHeight * 4 + yPadding * 3);
 
             for (i = 0; i < more; i += 1) {
-                scroller.addContents(myself.categories.children[8]);
+                scroller.addContents(myself.categories.children[10]);
             }
             myself.categories.add(scroller);
             myself.categories.setHeight(
-                (5 + 1) * yPadding
+                (5 - 1) * yPadding
                     + 5 * buttonHeight
                     + 4 * (yPadding + buttonHeight) + border + 2
                     + 2 * border
             );
         } else {
             myself.categories.setHeight(
-                (5 + 1) * yPadding
+                (5 - 1) * yPadding
                     + 5 * buttonHeight
                     + (more ?
                         (more * (yPadding + buttonHeight) + border + 2)
@@ -2966,7 +2966,8 @@ IDE_Morph.prototype.applySavedSettings = function () {
         tables = this.getSetting('tables'),
         tableLines = this.getSetting('tableLines'),
         autoWrapping = this.getSetting('autowrapping'),
-        solidshadow = this.getSetting('solidshadow');
+        solidshadow = this.getSetting('solidshadow'),
+        unifiedpalette = this.getSetting('unifiedpalette');
 
     // design
     if (lightmode === 'light') {
@@ -3054,6 +3055,11 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (solidshadow) {
         window.useBlurredShadows = false;
         this.rerender();
+    }
+    
+    // unified palette
+    if (unifiedpalette) {
+        this.toggleUnifiedPalette()
     }
 };
 
@@ -5961,7 +5967,7 @@ IDE_Morph.prototype.saveFileAs = function (
     fileType,
     fileName
 ) {
-    /** Allow for downloading a file to a disk.
+    /*  Allow for downloading a file to a disk.
         This relies the FileSaver.js library which exports saveAs()
         Two utility methods saveImageAs and saveXMLAs should be used first.
     */
@@ -6089,19 +6095,20 @@ IDE_Morph.prototype.switchToDevMode = function () {
     Process.prototype.isCatchingErrors = false;
     this.controlBar.updateLabel();
     this.isAutoFill = false;
-    this.isDraggable = true;
-    this.setExtent(world.extent().subtract(100));
-    this.setPosition(world.position().add(20));
+    this.isDraggable = false;
+    this.setExtent(world.extent());
+    this.setPosition(world.position());
     this.flushBlocksCache();
     this.refreshPalette();
-    // enable non-DialogBoxMorphs to be dropped
+    // enable non-DialogBoxMorphs being dropped
     // onto the World in dev-mode
     delete world.reactToDropOf;
     this.showMessage(
         'entering development mode.\n\n'
             + 'error catching is turned off,\n'
             + 'use the browser\'s web console\n'
-            + 'to see error messages.'
+            + 'to see error messages.',
+        4
     );
 };
 
@@ -6389,6 +6396,11 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
 
 IDE_Morph.prototype.toggleUnifiedPalette = function () {
     this.setUnifiedPalette(!this.scene.unifiedPalette);
+    if (this.scene.unifiedPalette) {
+        this.saveSetting('unifiedpalette', true);
+    } else {
+        this.removeSetting('unifiedpalette');
+    }
 };
 
 IDE_Morph.prototype.setUnifiedPalette = function (bool) {
