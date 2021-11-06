@@ -326,7 +326,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.paletteWidth = 200; // initially same as logo width
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
 
-	this.wasSingleStepping = false; // for toggling to and from app mode
+    this.wasSingleStepping = false; // for toggling to and from app mode
 
     this.loadNewProject = false; // flag when starting up translated
     this.shield = null;
@@ -389,7 +389,7 @@ IDE_Morph.prototype.openIn = function (world) {
     // onto the World in user-mode
     world.reactToDropOf = (morph) => {
         if (!(morph instanceof DialogBoxMorph ||
-        		(morph instanceof MenuMorph))) {
+             (morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
                 morph.slideBackTo(world.hand.grabOrigin);
             } else {
@@ -674,11 +674,11 @@ IDE_Morph.prototype.openIn = function (world) {
                 dict.ProjectName,
                 dict.Username,
                 projectData => {
-                	myself.saveXMLAs(projectData, dict.ProjectName);
-                 	myself.showMessage(
-                  	   'Saved project\n' + dict.ProjectName,
-                      	2
-                 	);
+                    myself.saveXMLAs(projectData, dict.ProjectName);
+                    myself.showMessage(
+                       'Saved project\n' + dict.ProjectName,
+                       2
+                    );
                 },
                 this.cloudError()
             );
@@ -1521,7 +1521,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         this.palette.toolBar.labelShadowColor = new Color(140, 140, 140);
         this.palette.toolBar.fixLayout();
         this.palette.add(this.palette.toolBar);
-	    */
+        */
 
     } else {
         this.palette = this.currentSprite.palette(this.currentCategory);
@@ -2005,7 +2005,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         cambutton.labelColor = this.buttonLabelColor;
         cambutton.contrast = this.buttonContrast;
         cambutton.hint = "take a camera snapshot and\n" +
-        	"import it as a new sprite";
+            "import it as a new sprite";
         cambutton.fixLayout();
         cambutton.setCenter(this.corralBar.center());
         cambutton.setLeft(
@@ -2550,14 +2550,14 @@ IDE_Morph.prototype.loadSVG = function (anImage, name) {
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
     if (anAudio.src.indexOf('data:audio') !== 0) {
-    	// fetch and base 64 encode samples using FileReader
-    	this.getURL(
-        	anAudio.src,
+        // fetch and base 64 encode samples using FileReader
+        this.getURL(
+            anAudio.src,
             blob => {
                 var reader = new window.FileReader();
                 reader.readAsDataURL(blob);
                 reader.onloadend = () => {
-                	var base64 = reader.result;
+                    var base64 = reader.result;
                     base64 = 'data:audio/ogg;base64,' +
                         base64.split(',')[1];
                     anAudio.src = base64;
@@ -2567,9 +2567,9 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
             'blob'
         );
     } else {
-    	this.currentSprite.addSound(anAudio, name.split('.')[0]); // up to '.'
-    	this.spriteBar.tabBar.tabTo('sounds');
-    	this.hasChangedMedia = true;
+        this.currentSprite.addSound(anAudio, name.split('.')[0]); // up to '.'
+        this.spriteBar.tabBar.tabTo('sounds');
+        this.hasChangedMedia = true;
         this.recordUnsavedChanges();
     }
 };
@@ -3090,11 +3090,11 @@ IDE_Morph.prototype.hasLocalStorage = function () {
     // this kludgy try/catch mechanism is needed
     // because Safari 11 is paranoid about accessing
     // localstorage from the file:// protocol
-	try {
+    try {
             return !isNil(localStorage);
-	} catch (err) {
+    } catch (err) {
             return false;
-	}
+    }
 };
 
 // IDE_Morph recording unsaved changes
@@ -3302,7 +3302,7 @@ IDE_Morph.prototype.recordNewSound = function () {
             var sound;
             if (audio) {
                 sound = this.currentSprite.addSound(
-                	audio,
+                    audio,
                     this.newSoundName('recording')
                 );
                 this.makeSureRecordingIsMono(sound);
@@ -3502,7 +3502,7 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
 IDE_Morph.prototype.removeSprite = function (sprite) {
     var idx;
     sprite.parts.slice().forEach(part =>
-    	this.removeSprite(part)
+        this.removeSprite(part)
     );
     idx = this.sprites.asArray().indexOf(sprite) + 1;
     this.stage.threads.stopAllForReceiver(sprite);
@@ -4085,12 +4085,12 @@ IDE_Morph.prototype.settingsMenu = function () {
                 this.s3DDesign();
             } else {
                 this.flatDesign();
-	    }
+            }
             if (MorphicPreferences.isLightMode) {
                 this.lightMode();
             } else {
                 this.darkMode();
-	    }
+            }
         },
         MorphicPreferences.isFlat,
         'uncheck for default\nGUI design',
@@ -4104,12 +4104,12 @@ IDE_Morph.prototype.settingsMenu = function () {
                 this.darkMode();
             } else {
                 this.lightMode();
-	    }
+            }
             if (MorphicPreferences.isFlat) {
                 this.flatDesign();
             } else {
                 this.s3DDesign();
-	    }
+            }
         },
         MorphicPreferences.isLightMode,
         'uncheck for dark mode',
@@ -5824,7 +5824,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     scripts.adjustBounds();
     scripts.lastDroppedBlock = script;
     scripts.recordDrop(
-		{
+        {
             origin: this.palette,
             position: this.palette.center()
         }
@@ -6077,7 +6077,7 @@ IDE_Morph.prototype.switchToUserMode = function () {
     // onto the World in user-mode
     world.reactToDropOf = (morph) => {
         if (!(morph instanceof DialogBoxMorph ||
-        		(morph instanceof MenuMorph))) {
+             (morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
                 morph.slideBackTo(world.hand.grabOrigin);
             } else {
@@ -6287,10 +6287,10 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     this.isAppMode = isNil(appMode) ? !this.isAppMode : appMode;
 
     if (this.isAppMode) {
-		this.wasSingleStepping = Process.prototype.enableSingleStepping;
-		if (this.wasSingleStepping) {
-     		this.toggleSingleStepping();
-    	}
+        this.wasSingleStepping = Process.prototype.enableSingleStepping;
+        if (this.wasSingleStepping) {
+            this.toggleSingleStepping();
+        }
         this.setColor(this.appModeColor);
         this.controlBar.setColor(this.color);
         this.controlBar.appModeButton.refresh();
@@ -8262,7 +8262,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
             this.ide.nextSteps([
                 () => this.ide.openCloudDataString(clouddata)
             ]);
-			location.hash = '';
+            location.hash = '';
             if (proj.ispublic) {
                 location.hash = '#present:Username=' +
                     encodeURIComponent(this.ide.cloud.username) +
@@ -9559,8 +9559,8 @@ SpriteIconMorph.prototype.showSpriteOnStage = function () {
 // SpriteIconMorph events
 
 SpriteIconMorph.prototype.mouseDoubleClickLeft = function () {
-	if (this.object instanceof SpriteMorph) {
-    	this.object.flash();
+    if (this.object instanceof SpriteMorph) {
+        this.object.flash();
     }
 };
 
@@ -9632,7 +9632,7 @@ SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
 
 SpriteIconMorph.prototype.copyStack = function (block) {
     var sprite = this.object,
-    	dup = block.fullCopy(),
+        dup = block.fullCopy(),
         y = Math.max(
             sprite.scripts.children.map(stack =>
                 stack.fullBounds().bottom()
@@ -9649,9 +9649,9 @@ SpriteIconMorph.prototype.copyStack = function (block) {
     // delete all local custom blocks (methods) that the receiver
     // doesn't understand
     dup.allChildren().forEach(morph => {
-	    if (morph.isCustomBlock &&
+        if (morph.isCustomBlock &&
             !morph.isGlobal &&
-        		!sprite.getMethod(morph.blockSpec)
+            !sprite.getMethod(morph.blockSpec)
         ) {
             morph.deleteBlock();
         }
@@ -10255,7 +10255,7 @@ WardrobeMorph.prototype.updateList = function () {
         if (!CamSnapshotDialogMorph.prototype.enabled) {
             cambutton.disable();
             cambutton.hint =
-            	CamSnapshotDialogMorph.prototype.notSupportedMessage;
+                CamSnapshotDialogMorph.prototype.notSupportedMessage;
         }
 
         document.addEventListener(
@@ -11365,10 +11365,10 @@ CamSnapshotDialogMorph.prototype.enableCamera = true; // off while experimental
 CamSnapshotDialogMorph.prototype.enabled = true;
 
 CamSnapshotDialogMorph.prototype.notSupportedMessage =
-	'Please make sure your web browser is up to date\n' +
-	'and your camera is properly configured. \n\n' +
-	'Some browsers also require you to access Snap!\n' +
-	'through HTTPS to use the camera.\n\n' +
+    'Please make sure your web browser is up to date\n' +
+    'and your camera is properly configured. \n\n' +
+    'Some browsers also require you to access Snap!\n' +
+    'through HTTPS to use the camera.\n\n' +
     'Plase replace the "http://" part of the address\n' +
     'in your browser by "https://" and try again.';
 
@@ -11382,7 +11382,7 @@ CamSnapshotDialogMorph.prototype.init = function (
     ide,
     sprite,
     onCancel,
-	onAccept
+    onAccept
 ) {
     this.ide = ide;
     this.sprite = sprite;
@@ -11403,17 +11403,17 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
     var myself = this,
         stage = this.sprite.parentThatIsA(StageMorph);
 
-	function noCameraSupport() {
+    function noCameraSupport() {
         myself.disable();
         myself.ide.inform(
             'Camera not supported',
             CamSnapshotDialogMorph.prototype.notSupportedMessage
         );
         if (myself.videoElement) {
-        	myself.videoElement.remove();
+            myself.videoElement.remove();
         }
         myself.cancel();
-	}
+    }
 
     this.videoElement = document.createElement('video');
     this.videoElement.hidden = true;
