@@ -2740,8 +2740,8 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(block('doDeleteAttr'));
         }
+    } else if (category === 'lists') {
 
-        blocks.push('=');
         blocks.push(block('reportNewList'));
         blocks.push(block('reportNumbers'));
         blocks.push('-');
@@ -2770,6 +2770,16 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
 
+        // for debugging: ///////////////
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            blocks.push(this.devModeText());
+            blocks.push('-');
+            blocks.push(block('doShowTable'));
+        }
+
+    } else if (category === 'other') {
+
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
             blocks.push(block('doApplyExtension'));
@@ -2783,14 +2793,6 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
-        }
-
-        // for debugging: ///////////////
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
         }
     }
 
@@ -2980,7 +2982,7 @@ SpriteMorph.prototype.makeBlock = function () {
         },
         this
     );
-    if (category !== 'variables' || category !== 'unified') {
+    if (category !== 'unified') {
         dlg.category = category;
         dlg.categories.refresh();
         dlg.types.children.forEach(each => {
@@ -3110,11 +3112,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     primitives = this.getPrimitiveTemplates(category),
                     customs = this.customBlockTemplatesForCategory(category),
                     showHeader = showCategories &&
-                        !['lists', 'other'].includes(category) &&
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
-                if (!showCategories && category !== 'variables') {
+                if (!showCategories) {
                     primitives = primitives.filter(each =>
                         each !== '-' && each !== '=');
                 }
@@ -3139,10 +3140,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category !== 'unified') {
         blocks.push('=');
         blocks.push(...this.customBlockTemplatesForCategory(category));
-    }
-    if (category === 'variables') {
-        blocks.push(...this.customBlockTemplatesForCategory('lists'));
-        blocks.push(...this.customBlockTemplatesForCategory('other'));
     }
 
     blocks.forEach(block => {
@@ -9045,7 +9042,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
-        blocks.push('=');
+    }
+    if (category === 'lists') {
         blocks.push(block('reportNewList'));
         blocks.push(block('reportNumbers'));
         blocks.push('-');
@@ -9074,6 +9072,16 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
 
+        // for debugging: ///////////////
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            blocks.push(this.devModeText());
+            blocks.push('-');
+            blocks.push(block('doShowTable'));
+        }
+    }
+    if (category === 'other') {
+
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
             blocks.push(block('doApplyExtension'));
@@ -9087,14 +9095,6 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
-        }
-
-        // for debugging: ///////////////
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
         }
     }
 
