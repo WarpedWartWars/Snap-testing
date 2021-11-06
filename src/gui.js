@@ -1462,8 +1462,8 @@ IDE_Morph.prototype.createCategories = function () {
                 (5 + 1) * yPadding
                     + 5 * buttonHeight
                     + (more ?
-                        (more * (yPadding + buttonHeight) + border + 2)
-                            : 0)
+                        (Math.ceil(more / 2) * (yPadding + buttonHeight) +
+                         border + 2) : 0)
                     + 2 * border
             );
         }
