@@ -1375,7 +1375,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     function addCustomCategoryButton(category, color) {
-        var labelWidth = 168,
+        var labelWidth = 75,
             colors = [
                 myself.frameColor,
                 myself.frameColor.darker(MorphicPreferences.isLightMode ? 5 : 50),
@@ -1427,16 +1427,16 @@ IDE_Morph.prototype.createCategories = function () {
             i;
 
         myself.categories.children.forEach((button, i) => {
-            row = i < 8 ? i % 4 : i - 4;
-            col = (i < 4 || i > 7) ? 1 : 2;
+            row = i < 10 ? i % 5 : Math.ceil(i / 2);
+            col = (i < 5 || (i > 9 && i % 2 === 1)) ? 1 : 2;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
                 t + ((row + 1) * yPadding + (row * buttonHeight) + border) +
-                    (i > 7 ? border + 2 : 0)
+                    (i > 9 ? border + 2 : 0)
             ));
         });
 
-        if (more > 6) {
+        if (more > 8) {
             scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
             scroller.setColor(myself.groupColor);
             scroller.acceptsDrops = false;
@@ -1445,22 +1445,22 @@ IDE_Morph.prototype.createCategories = function () {
                 new Point(0, myself.categories.children[8].top())
             );
             scroller.setWidth(myself.paletteWidth);
-            scroller.setHeight(buttonHeight * 6 + yPadding * 5);
+            scroller.setHeight(buttonHeight * 4 + yPadding * 3);
 
             for (i = 0; i < more; i += 1) {
                 scroller.addContents(myself.categories.children[8]);
             }
             myself.categories.add(scroller);
             myself.categories.setHeight(
-                (4 + 1) * yPadding
-                    + 4 * buttonHeight
-                    + 6 * (yPadding + buttonHeight) + border + 2
+                (5 + 1) * yPadding
+                    + 5 * buttonHeight
+                    + 4 * (yPadding + buttonHeight) + border + 2
                     + 2 * border
             );
         } else {
             myself.categories.setHeight(
-                (4 + 1) * yPadding
-                    + 4 * buttonHeight
+                (5 + 1) * yPadding
+                    + 5 * buttonHeight
                     + (more ?
                         (more * (yPadding + buttonHeight) + border + 2)
                             : 0)
@@ -1470,9 +1470,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     SpriteMorph.prototype.categories.forEach(cat => {
-        if (!contains(['lists', 'other'], cat)) {
-            addCategoryButton(cat);
-        }
+        addCategoryButton(cat);
     });
 
     // sort alphabetically
@@ -2690,14 +2688,22 @@ IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
     var palette = this.palette,
         msecs = this.isAnimating ? 200 : 0,
         firstInCategory,
-        delta;
+        delta,
+        otherCatExceptions = [
+            'doWarp',
+            'reifyScript',
+            'reifyReporter',
+            'reifyPredicate',
+            'doDeclareVariables'
+        ];
 
     if (palette.isForSearching) {
         this.refreshPalette();
         palette = this.palette;
     }
     firstInCategory = palette.contents.children.find(
-        block => block.category === category
+        block => block.category === category &&
+                 !contains(otherCatExceptions, block.selector)
     );
     if (firstInCategory === undefined) {return; }
     delta = palette.top() - firstInCategory.top() + palette.padding;
@@ -2733,10 +2739,9 @@ IDE_Morph.prototype.topVisibleCategoryInPalette = function () {
             if (top instanceof RingMorph) {
                 return 'operators';
             }
-            return 'variables';
-        }
-        if (top.category === 'lists') {
-            return 'variables';
+            if (top.selector === 'doDeclareVariables') {
+                return 'variables';
+            }
         }
         return top.category;
     }
