@@ -1123,37 +1123,16 @@ SpriteMorph.prototype.initBlocks = function () {
         reportCommutativeOperator: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n %co %nums',
-            defaults: [null, ['+']]
+            spec: '%co %nums',
+            defaults: [['+']],
+            alias: ['+', '*', 'min', 'max']
         },
         reportNonCommutativeOperator: {
             type: 'reporter',
             category: 'operators',
             spec: '%n %nco %n',
-            defaults: [null, ['-']]
-        },
-        reportSum: { //deprecated
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n + %n'
-        },
-        reportDifference: { //deprecated
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n \u2212 %n',
-            alias: '-'
-        },
-        reportProduct: { //deprecated
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n \u00D7 %n',
-            alias: '*'
-        },
-        reportQuotient: { //deprecated
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n \u00F7 %n', // '%n / %n'
-            alias: '/'
+            defaults: [null, ['-']],
+            alias: ['-', '/', 'mod', '^']
         },
         reportRound: {
             type: 'reporter',
@@ -1166,30 +1145,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%fun of %n',
             defaults: [['sqrt'], 10]
         },
-        reportPower: { //deprecated
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n ^ %n'
-        },
-        reportModulus: { //deprecated
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n mod %n'
-        },
         reportAtan2: {
             type: 'reporter',
             category: 'operators',
             spec: 'atan2 %n \u00F7 %n'
-        },
-        reportMin: { //deprecated
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n min %n'
-        },
-        reportMax: { //deprecated
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n max %n'
         },
         reportRandom: {
             type: 'reporter',
@@ -1343,12 +1302,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'set %var to %s',
             defaults: [null, 0]
         },
-        doChangeVar: {
-            type: 'command',
-            category: 'variables',
-            spec: 'change %var by %n',
-            defaults: [null, 1]
-        },
         doShowVar: {
             type: 'command',
             category: 'variables',
@@ -1393,12 +1346,6 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'all but first of %l'
-        },
-        reportListLength: { // deprecated as of v6.6
-            dev: true,
-            type: 'reporter',
-            category: 'lists',
-            spec: 'length of %l'
         },
         reportListAttribute: {
             type: 'reporter',
@@ -1460,16 +1407,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: '%mlfunc %lists',
             defaults: [['append']]
-        },
-        reportConcatenatedLists: { //deprecated
-            type: 'reporter',
-            category: 'lists',
-            spec: 'append %lists'
-        },
-        reportTranspose: { // deprecated
-            type: 'reporter',
-            category: 'lists',
-            spec: 'transpose %l'
         },
         reportReshape: {
             type: 'reporter',
@@ -1601,112 +1538,7 @@ SpriteMorph.prototype.initBlocks();
 SpriteMorph.prototype.initBlockMigrations = function () {
     // change blocks in existing projects to their updated version
     SpriteMorph.prototype.blockMigrations = {
-        doStopAll: {
-            selector: 'doStopThis',
-            inputs: [['all']]
-        },
-        doStop: {
-            selector: 'doStopThis',
-            inputs: [['this script']]
-        },
-        doStopBlock: {
-            selector: 'doStopThis',
-            inputs: [['this block']]
-        },
-        doStopOthers: {
-            selector: 'doStopThis',
-            inputs: [['all']],
-            offset: 0
-        },
-        receiveClick: {
-            selector: 'receiveInteraction',
-            inputs: [['clicked']]
-        },
-        reportTrue: {
-            selector: 'reportBoolean',
-            inputs: [true]
-        },
-        reportFalse: {
-            selector: 'reportBoolean',
-            inputs: [false]
-        },
-        reportCostumes: {
-            selector: 'reportGet',
-            inputs: [['costumes']]
-        },
-        reportSounds: {
-            selector: 'reportGet',
-            inputs: [['sounds']]
-        },
-        doMapStringCode: {
-            selector: 'doMapValueCode',
-            inputs: [['String'], '<#1>'],
-            offset: 1
-        },
-        reportDistanceTo: {
-        	selector: 'reportRelationTo',
-         	inputs: [['distance']],
-            offset: 1
-        },
-        comeToFront: {
-            selector: 'goToLayer',
-            inputs: [['front']]
-        },
-        setHue: {
-            selector: 'setPenHSVA',
-            inputs: [['hue']],
-            offset: 1
-        },
-        setBrightness: {
-            selector: 'setPenHSVA',
-            inputs: [['brightness']],
-            offset: 1
-        },
-        changeHue: {
-            selector: 'changePenHSVA',
-            inputs: [['hue']],
-            offset: 1
-        },
-        changeBrightness: {
-            selector: 'changePenHSVA',
-            inputs: [['brightness']],
-            offset: 1
-        },
-        reportIsFastTracking: {
-            selector: 'reportGlobalFlag',
-            inputs: [['turbo mode']],
-            offset: 1
-        },
-        doSetFastTracking: {
-            selector: 'doSetGlobalFlag',
-            inputs: [['turbo mode']],
-            offset: 1
-        },
-        reportTableRotated: {
-            selector: 'reportListAttribute',
-            inputs: [['transpose']],
-            offset: 1
-        },
-        reportTranspose: {
-            selector: 'reportListAttribute',
-            inputs: [['transpose']],
-            offset: 1
-        },
-        reportListLength: {
-            selector: 'reportListAttribute',
-            inputs: [['length']],
-            offset: 1
-        },
-        reportConcatenatedLists: {
-            selector: 'reportListCombination',
-            inputs: [['append']],
-            offset: 1
-        },
-        doSend: {
-            selector: 'doBroadcast',
-            expand: 1,
-            offset: 0
-        }
+        // nothing here
     };
 };
 
