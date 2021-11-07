@@ -1120,24 +1120,36 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
-        reportSum: {
+        reportCommutativeOperator: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%n %co %nums',
+            defaults: [null, ['+']]
+        },
+        reportNonCommutativeOperator: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%n %nco %n',
+            defaults: [null, ['-']]
+        },
+        reportSum: { //deprecated
             type: 'reporter',
             category: 'operators',
             spec: '%n + %n'
         },
-        reportDifference: {
+        reportDifference: { //deprecated
             type: 'reporter',
             category: 'operators',
             spec: '%n \u2212 %n',
             alias: '-'
         },
-        reportProduct: {
+        reportProduct: { //deprecated
             type: 'reporter',
             category: 'operators',
             spec: '%n \u00D7 %n',
             alias: '*'
         },
-        reportQuotient: {
+        reportQuotient: { //deprecated
             type: 'reporter',
             category: 'operators',
             spec: '%n \u00F7 %n', // '%n / %n'
@@ -1154,12 +1166,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%fun of %n',
             defaults: [['sqrt'], 10]
         },
-        reportPower: {
+        reportPower: { //deprecated
             type: 'reporter',
             category: 'operators',
             spec: '%n ^ %n'
         },
-        reportModulus: {
+        reportModulus: { //deprecated
             type: 'reporter',
             category: 'operators',
             spec: '%n mod %n'
@@ -1169,12 +1181,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'atan2 %n \u00F7 %n'
         },
-        reportMin: {
+        reportMin: { //deprecated
             type: 'reporter',
             category: 'operators',
             spec: '%n min %n'
         },
-        reportMax: {
+        reportMax: { //deprecated
             type: 'reporter',
             category: 'operators',
             spec: '%n max %n'
@@ -1302,14 +1314,14 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'JavaScript function ( %mult%s ) { %code }'
         },
-        reportTypeOf: { // only in dev mode for debugging
+        reportTypeOf: {
             dev: true,
             type: 'reporter',
             category: 'operators',
             spec: 'type of %s',
             defaults: [5]
         },
-        reportTextFunction: { // only in dev mode - experimental
+        reportTextFunction: {
             dev: true,
             type: 'reporter',
             category: 'operators',
@@ -1443,13 +1455,13 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'numbers from %n to %n',
             defaults: [1, 10]
         },
-        reportListCombination: { // currently not in use
+        reportListCombination: {
             type: 'reporter',
             category: 'lists',
             spec: '%mlfunc %lists',
             defaults: [['append']]
         },
-        reportConcatenatedLists: {
+        reportConcatenatedLists: { //deprecated
             type: 'reporter',
             category: 'lists',
             spec: 'append %lists'
@@ -1465,7 +1477,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'reshape %l to %nums',
             defaults: [null, [4, 3]]
         },
-        reportSlice: { // currently not in use
+        reportSlice: {
             type: 'reporter',
             category: 'lists',
             spec: 'slice %l by %nums',
@@ -1794,6 +1806,8 @@ SpriteMorph.prototype.blockAlternatives = {
     reifyScript: ['reifyReporter', 'reifyPredicate'],
     reifyReporter: ['reifyPredicate', 'reifyScript'],
     reifyPredicate: ['reifyReporter', 'reifyScript'],
+    reportNonCommutativeOperator: ['reportAtan2'],
+    reportAtan2: ['reportNonCommutativeOperator'],
 
     // variables
     doShowVar: ['doHideVar'],
@@ -2631,15 +2645,10 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
-        blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
-        blocks.push(block('reportQuotient'));
-        blocks.push(block('reportPower'));
+        blocks.push(block('reportCommutativeOperator'));
+        blocks.push(block('reportNonCommutativeOperator'));
         blocks.push('-');
-        blocks.push(block('reportModulus'));
-        blocks.push(block('reportMin'));
-        blocks.push(block('reportMax'));
+        blocks.push(block('reportAtan2'));
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
@@ -8941,15 +8950,10 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
-        blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
-        blocks.push(block('reportQuotient'));
-        blocks.push(block('reportPower'));
+        blocks.push(block('reportCommutativeOperator'));
+        blocks.push(block('reportNonCommutativeOperator'));
         blocks.push('-');
-        blocks.push(block('reportModulus'));
-        blocks.push(block('reportMin'));
-        blocks.push(block('reportMax'));
+        blocks.push(block('reportAtan2'));
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
