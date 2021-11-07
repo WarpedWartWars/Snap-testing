@@ -108,7 +108,8 @@ function snapEquals(a, b) {
 
     // handle text comparison case-insensitive.
     if (isString(x) && isString(y)) {
-        return x.toUpperCase().toLowerCase() === y.toUpperCase().toLowerCase();
+        return x.toUpperCase().toLowerCase() ===
+               y.toUpperCase().toLowerCase();
     }
 
     return x === y;
@@ -3952,6 +3953,32 @@ Process.prototype.isMatrix = function (data) {
 };
 
 // Process math primtives - arithmetic
+
+Process.prototype.reportCommutativeOperator = function (op, list) {
+    switch (op[0]) {
+        case '+':
+            return this.reportCombine(list, this.reportSum);
+        case '\u00D7':
+            return this.reportCombine(list, this.reportProduct);
+        case 'max':
+            return this.reportCombine(list, this.reportMax);
+        case 'min':
+            return this.reportCombine(list, this.reportMin);
+    };
+};
+
+Process.prototype.reportNonCommutativeOperator = function (op, a, b) {
+    switch (op[0]) {
+        case '\u2212':
+            return this.reportDifference(a, b);
+        case '÷':
+            return this.reportQuotient(a, b);
+        case '^':
+            return this.reportPower(a, b);
+        case 'mod':
+            return this.reportModulus(a, b);
+    };
+};
 
 Process.prototype.reportSum = function (a, b) {
     return this.hyperDyadic(this.reportBasicSum, a, b);
