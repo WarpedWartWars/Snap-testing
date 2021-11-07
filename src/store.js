@@ -253,7 +253,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 7dev, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! testing 0.4, https://warpedwartwars.github.io/';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -326,7 +326,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
         scenesModel = xmlNode.childNamed('scenes'),
         project = new Project();
 
-    if (ide && app && app !== this.app.split(' ')[0]) {
+    if (ide && app && app !== this.app.split(' ').slice(0, 2)) {
         ide.inform(
             app + ' Project',
             'This project has been created by a different app:\n\n' +
