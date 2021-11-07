@@ -445,7 +445,7 @@ SnapExtensions.primitives.set(
         var slotNum = 1,
             i;
         for (i in target.expression.children) {
-            let child = target.expression.children[i];
+            var child = target.expression.children[i];
 
             if (child instanceof InputSlotMorph ||
                 child instanceof RingMorph ||
