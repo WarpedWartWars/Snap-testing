@@ -996,12 +996,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'ask %s and wait',
             defaults: [localize('what\'s your name?')]
         },
-        reportLastAnswer: { // retained for legacy compatibility
-            dev: true,
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'answer'
-        },
         getLastAnswer: {
             type: 'reporter',
             category: 'sensing',
@@ -1040,12 +1034,6 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'reset timer'
-        },
-        reportTimer: { // retained for legacy compatibility
-            dev: true,
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'timer'
         },
         getTimer: {
             type: 'reporter',
@@ -1130,8 +1118,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportNonCommutativeOperator: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n %nco %n',
-            defaults: [null, ['-']],
+            spec: '%nco %n %n',
+            defaults: [['-']],
             alias: ['-', '/', 'mod', '^']
         },
         reportRound: {
