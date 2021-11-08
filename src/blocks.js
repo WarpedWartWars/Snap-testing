@@ -620,37 +620,25 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only',
         menu: 'attributesMenu'
     },
-    '%co': {
+    '%op': {
         type: 'input',
         tags: 'read-only static',
         menu: {
             '+' : ['+'],
             '\u00D7' : ['\u00D7'],
-            max : ['max'],
-            min : ['min']
-        }
-    },
-    '%nco': {
-        type: 'input',
-        tags: 'read-only static',
-        menu: {
+            'max' : ['max'],
+            'min' : ['min'],
             '\u2212' : ['\u2212'],
             '÷' : ['÷'],
             '^' : ['^'],
-            mod : ['mod']
+            'mod' : ['mod']
         }
     },
-    '%ccomp': {
+    '%comp': {
         type: 'input',
         tags: 'read-only static',
         menu: {
-            '=' : ['=']
-        }
-    },
-    '%nccomp': {
-        type: 'input',
-        tags: 'read-only static',
-        menu: {
+            '=' : ['='],
             '\u2260' : ['\u2260'],
             '<' : ['<'],
             '\u2264' : ['\u2264'],
@@ -875,7 +863,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
     /*
         type: 'slot'
-        kind: 'object', ''
+        kind: 'object', 'list'
     */
     '%obj': {
         type: 'slot',
@@ -2435,7 +2423,7 @@ function BlockLabelMorph(
 }
 BlockLabelMorph.prototype.getRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
-    if (MorphicPreferences.isFlat) {
+    if (MorphicPreferences.isLightMode) {
         return block.alpha > 0.5 ? this.color
             : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
     }
@@ -2471,7 +2459,7 @@ function BlockSymbolMorph(name, size, color, shadowOffset, shadowColor) {
 
 BlockSymbolMorph.prototype.getRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
-    if (MorphicPreferences.isFlat) {
+    if (MorphicPreferences.isLightMode) {
         if (this.isFading) {
             return this.color.mixed(block.alpha, WHITE);
         }
@@ -2574,7 +2562,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor = function () {
     %fun    - chameleon colored rectangular drop-down for math functions
     %typ    - chameleon colored rectangular drop-down for data types
     %var    - chameleon colored rectangular drop-down for variable names
-    %shd    - Chameleon colored rectuangular drop-down for shadowed var names
+    %shd    - chameleon colored rectuangular drop-down for shadowed var names
     %b      - chameleon colored hexagonal slot (for predicates)
     %bool   - chameleon colored hexagonal slot (for predicates), static
     %l      - list icon
@@ -4736,7 +4724,7 @@ BlockMorph.prototype.mouseClickLeft = function () {
         shiftClicked = this.world().currentKey === 16,
         stage;
     if (shiftClicked && !this.isTemplate) {
-        return this.selectForEdit().focus(); // enable coopy-on-edit
+        return this.selectForEdit().focus(); // enable copy-on-edit
     }
     if (top instanceof PrototypeHatBlockMorph) {
         return; // top.mouseClickLeft();
@@ -4945,14 +4933,14 @@ BlockMorph.prototype.snap = function () {
     I inherit from BlockMorph adding the following most important
     public accessors:
 
-        nextBlock()       - set / get the block attached to my bottom
-        bottomBlock()     - answer the bottom block of my stack
-        blockSequence()   - answer an array of blocks starting with myself
+        nextBlock()         - set / get the block attached to my bottom
+        bottomBlock()       - answer the bottom block of my stack
+        blockSequence()     - answer an array of blocks starting with myself
 
     and the following "lexical awareness" indicators:
 
         partOfCustomCommand - temporary bool set by the evaluator
-        exitTag           - temporary string or number set by the evaluator
+        exitTag             - temporary string or number set by the evaluator
 */
 
 // CommandBlockMorph inherits from BlockMorph:
@@ -5278,6 +5266,12 @@ CommandBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
         this.extract(); // NOTE: no infinite recursion, because extract()
                         // doesn't call this again with a hand
         handMorph.grabOrigin.action = 'extract'; // ???
+        return;
+    }
+    // check whether the control-key is held down and if I can be duplicated
+    if (handMorph && handMorph.world.currentKey === 17 && this.nextBlock()) {
+        this.extract();
+        handMorph.grabOrigin.action = 'duplicate';
         return;
     }
 
