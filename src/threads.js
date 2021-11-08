@@ -3957,13 +3957,13 @@ Process.prototype.isMatrix = function (data) {
 Process.prototype.reportCommutativeOperator = function (op, list) {
     switch (op[0]) {
         case '+':
-            return this.reportCombine(list, this.reportSum);
+            return this.reportListAggregation(list, 'reportSum');
         case '\u00D7':
-            return this.reportCombine(list, this.reportProduct);
+            return this.reportListAggregation(list, 'reportProduct');
         case 'max':
-            return this.reportCombine(list, this.reportMax);
+            return this.reportListAggregation(list, 'reportMax');
         case 'min':
-            return this.reportCombine(list, this.reportMin);
+            return this.reportListAggregation(list, 'reportMin');
     };
 };
 
