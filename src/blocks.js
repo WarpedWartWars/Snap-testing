@@ -646,7 +646,7 @@ SyntaxElementMorph.prototype.labelParts = {
             '\u2265' : ['\u2265']
         }
     },
-    '%logic': {
+    '%gate': {
         type: 'input',
         tags: 'read-only static',
         menu: {
