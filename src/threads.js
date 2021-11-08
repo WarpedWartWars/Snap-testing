@@ -834,7 +834,48 @@ Process.prototype.reportApplyExtension = function (prim, args) {
 
 // Process: Special Forms Blocks Primitives
 
-Process.prototype.reportOr = function (block) {
+Process.prototype.reportLogicGate = function (gate, list) {
+    switch (gate[0]) {
+        case 'or':
+            return this.reportListAggregation(list, 'reportOr');
+        case 'and':
+            return this.reportListAggregation(list, 'reportAnd');
+        case 'nor':
+            return this.reportListAggregation(list, 'reportNor');
+        case 'nand':
+            return this.reportListAggregation(list, 'reportNand');
+        case 'xor':
+            return this.reportListAggregation(list, 'reportXor');
+        case 'xnor':
+            return this.reportListAggregation(list, 'reportXnor');
+    }
+};
+
+Process.prototype.reportOr = function (a, b) {
+    return !!(a || b);
+};
+
+Process.prototype.reportAnd = function (a, b) {
+    return !!(a && b);
+};
+
+Process.prototype.reportXor = function (a, b) {
+    return !!(!a ^ !b);
+};
+
+Process.prototype.reportNor = function (a, b) {
+    return !(a || b);
+};
+
+Process.prototype.reportNand = function (a, b) {
+    return !(a && b);
+};
+
+Process.prototype.reportXnor = function (a, b) {
+    return !(!a ^ !b);
+};
+
+/*Process.prototype.reportOr = function (block) {
     var inputs = this.context.inputs;
 
     if (inputs.length < 1) {
@@ -877,6 +918,78 @@ Process.prototype.reportAnd = function (block) {
         this.popContext();
     }
 };
+
+Process.prototype.reportXor = function (block) {
+    var inputs = this.context.inputs;
+
+    if (inputs.length < 2) {
+        // this.assertType(inputs[0], 'Boolean');
+        this.evaluateNextInput(block);
+    } else {
+        // this.assertType(inputs[1], 'Boolean');
+        if (this.flashContext()) {return; }
+        this.returnValueToParentContext(inputs[0] !== inputs[1]);
+        this.popContext();
+    }
+};
+
+Process.prototype.reportNor = function (block) {
+    var inputs = this.context.inputs;
+
+    if (inputs.length < 1) {
+        this.evaluateNextInput(block);
+    } else if (inputs.length === 1) {
+        // this.assertType(inputs[0], 'Boolean');
+        if (inputs[0]) {
+            if (this.flashContext()) {return; }
+            this.returnValueToParentContext(false);
+            this.popContext();
+        } else {
+            this.evaluateNextInput(block);
+        }
+    } else {
+        // this.assertType(inputs[1], 'Boolean');
+        if (this.flashContext()) {return; }
+        this.returnValueToParentContext(inputs[1] === false);
+        this.popContext();
+    }
+};
+
+Process.prototype.reportNand = function (block) {
+    var inputs = this.context.inputs;
+
+    if (inputs.length < 1) {
+        this.evaluateNextInput(block);
+    } else if (inputs.length === 1) {
+        // this.assertType(inputs[0], 'Boolean');
+        if (!inputs[0]) {
+            if (this.flashContext()) {return; }
+            this.returnValueToParentContext(true);
+            this.popContext();
+        } else {
+            this.evaluateNextInput(block);
+        }
+    } else {
+        // this.assertType(inputs[1], 'Boolean');
+        if (this.flashContext()) {return; }
+        this.returnValueToParentContext(inputs[1] === false);
+        this.popContext();
+    }
+};
+
+Process.prototype.reportXnor = function (block) {
+    var inputs = this.context.inputs;
+
+    if (inputs.length < 2) {
+        // this.assertType(inputs[0], 'Boolean');
+        this.evaluateNextInput(block);
+    } else {
+        // this.assertType(inputs[1], 'Boolean');
+        if (this.flashContext()) {return; }
+        this.returnValueToParentContext(inputs[0] === inputs[1]);
+        this.popContext();
+    }
+};*/
 
 Process.prototype.doReport = function (block) {
     var outer = this.context.outerContext;
@@ -3076,7 +3189,27 @@ Process.prototype.reportListAggregation = function (list, selector) {
             return Infinity;
         case 'reportMax':
             return -Infinity;
-        default: // reportSum
+        case 'reportSum':
+        case 'reportDifference':
+        case 'reportQuotient':
+        case 'reportPower':
+        case 'reportModulus':
+            return 0;
+        case 'reportEquals':
+        case 'reportLessThanOrEquals':
+        case 'reportGreaterThanOrEquals':
+        case 'reportAnd':
+        case 'reportNor':
+            return true;
+        case 'reportNotEquals':
+        case 'reportLessThan':
+        case 'reportGreaterThan':
+        case 'reportOr':
+        case 'reportNand':
+        case 'reportXor':
+        case 'reportXnor':
+            return false;
+        default:
             return 0;
         }
     }
@@ -3954,7 +4087,7 @@ Process.prototype.isMatrix = function (data) {
 
 // Process math primtives - arithmetic
 
-Process.prototype.reportCommutativeOperator = function (op, list) {
+Process.prototype.reportOperator = function (op, list) {
     switch (op[0]) {
         case '+':
             return this.reportListAggregation(list, 'reportSum');
@@ -3964,19 +4097,14 @@ Process.prototype.reportCommutativeOperator = function (op, list) {
             return this.reportListAggregation(list, 'reportMax');
         case 'min':
             return this.reportListAggregation(list, 'reportMin');
-    };
-};
-
-Process.prototype.reportNonCommutativeOperator = function (op, a, b) {
-    switch (op[0]) {
         case '\u2212':
-            return this.reportDifference(a, b);
+            return this.reportListAggregation(list, 'reportDifference');
         case '÷':
-            return this.reportQuotient(a, b);
+            return this.reportListAggregation(list, 'reportQuotient');
         case '^':
-            return this.reportPower(a, b);
+            return this.reportListAggregation(list, 'reportPower');
         case 'mod':
-            return this.reportModulus(a, b);
+            return this.reportListAggregation(list, 'reportModulus');
     };
 };
 
@@ -4084,6 +4212,23 @@ Process.prototype.reportBasicMax = function (a, b) {
 };
 
 // Process logic primitives - hyper-diadic / monadic where applicable
+
+Process.prototype.reportComparison = function (comp, list) {
+    switch (comp[0]) {
+        case '=':
+            return this.reportListAggregation(list, 'reportEquals');
+        case '<':
+            return this.reportListAggregation(list, 'reportLessThan');
+        case '>':
+            return this.reportListAggregation(list, 'reportGreaterThan');
+        case '\u2260':
+            return this.reportListAggregation(list, 'reportNotEquals');
+        case '\u2265':
+            return this.reportListAggregation(list, 'reportGreaterThanOrEquals');
+        case '\u2264':
+            return this.reportListAggregation(list, 'reportLessThanOrEquals');
+    }
+};
 
 Process.prototype.reportLessThan = function (a, b) {
     return this.hyperDyadic(this.reportBasicLessThan, a, b);
@@ -4215,7 +4360,7 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'abs':
         result = Math.abs(x);
         break;
-    // case '\u2212': // minus-sign
+    case '\u2212': // minus-sign
     case 'neg':
         result = n * -1;
         break;
@@ -4310,13 +4455,13 @@ Process.prototype.reportTextFunction = function (fname, string) {
     return result;
 };
 
-Process.prototype.reportJoin = function (a, b) {
+/*Process.prototype.reportJoin = function (a, b) {
     var x = (isNil(a) ? '' : a).toString(),
         y = (isNil(b) ? '' : b).toString();
     return x.concat(y);
-};
+};*/
 
-Process.prototype.reportJoinWords = function (aList) {
+Process.prototype.reportJoin = function (aList) {
     if (aList instanceof List) {
         return aList.asText();
     }
@@ -6774,7 +6919,7 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
         console.log(err.message);
-         func = reporter;
+        func = reporter;
     }
 
     // iterate over the data in a single frame:
@@ -7056,8 +7201,8 @@ function Variable(value, isTransient, isHidden) {
 }
 
 Variable.prototype.toString = function () {
-    return 'a ' + (this.isTransient ? 'transient ' : '') +
-        (this.isHidden ? 'hidden ' : '') +
+    return 'a ' + (this.isHidden ? 'hidden ' : '') +
+        (this.isTransient ? 'transient ' : '') +
         'Variable [' + this.value + ']';
 };
 
@@ -7183,7 +7328,7 @@ VariableFrame.prototype.getVar = function (name) {
         return (value === 0 ? 0
                 : value === false ? false
                         : value === '' ? ''
-                            : value || 0); // don't return null
+                            : value || ''); // don't return null
     }
     if (typeof name === 'number') {
         // empty input with a Binding-ID called without an argument
@@ -7199,7 +7344,7 @@ VariableFrame.prototype.getVar = function (name) {
 VariableFrame.prototype.addVar = function (name, value) {
     this.vars[name] = new Variable(value === 0 ? 0
               : value === false ? false
-                       : value === '' ? '' : value || 0);
+                       : value === '' ? '' : value || '');
 };
 
 VariableFrame.prototype.deleteVar = function (name) {
@@ -7224,7 +7369,7 @@ VariableFrame.prototype.names = function (includeHidden) {
 };
 
 VariableFrame.prototype.allNamesDict = function (upTo, includeHidden) {
-	// "upTo" is an optional parent frame at which to stop, e.g. globals
+    // "upTo" is an optional parent frame at which to stop, e.g. globals
     var dict = {}, current = this;
 
     function addKeysToDict(srcDict, trgtDict) {
@@ -7249,7 +7394,7 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
 /*
     only show the names of the lexical scope, hybrid scoping is
     reserved to the daring ;-)
-	"upTo" is an optional parent frame at which to stop, e.g. globals
+    "upTo" is an optional parent frame at which to stop, e.g. globals
 */
     var answer = [], each, dict = this.allNamesDict(upTo, includeHidden);
 
@@ -7264,10 +7409,10 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
 // JSCompiler /////////////////////////////////////////////////////////////////
 
 /*
-	Compile simple, side-effect free Reporters
+    Compile simple, side-effect free Reporters
     with either only explicit formal parameters or a specified number of
     implicit formal parameters mapped to empty input slots
-	*** highly experimental and heavily under construction ***
+    *** highly experimental and heavily under construction ***
 */
 
 function JSCompiler(aProcess) {
@@ -7284,12 +7429,12 @@ JSCompiler.prototype.toString = function () {
 
 JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     var block = aContext.expression,
-  		parameters = aContext.inputs,
+        parameters = aContext.inputs,
         parms = [],
         hasEmptySlots = false,
         i;
 
-	this.source = aContext;
+    this.source = aContext;
     this.implicitParams = implicitParamCount || 1;
 
 	// scan for empty input slots
@@ -7312,9 +7457,9 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
         }
         // map explicit formal parameters
         parameters.forEach((pName, idx) => {
-        	var pn = 'p' + idx;
+            var pn = 'p' + idx;
             parms.push(pn);
-        	this.gensyms[pName] = pn;
+            this.gensyms[pName] = pn;
         });
     } else if (hasEmptySlots) {
     	if (this.implicitParams > 1) {
@@ -7448,22 +7593,22 @@ JSCompiler.prototype.compileInputs = function (array) {
 };
 
 JSCompiler.prototype.compileInput = function (inp) {
-     var value, type;
+    var value, type;
 
     if (inp.isEmptySlot && inp.isEmptySlot()) {
         // implicit formal parameter
         if (this.implicitParams > 1) {
-         	if (this.paramCount < this.implicitParams) {
+             if (this.paramCount < this.implicitParams) {
             	this.paramCount += 1;
              	return 'p' + (this.paramCount - 1);
-        	}
+            }
             throw new Error(
                 localize('expecting') + ' ' + this.implicitParams + ' '
                     + localize('input(s), but getting') + ' '
                     + this.paramCount
             );
         }
-		return 'p0';
+        return 'p0';
     } else if (inp instanceof MultiArgMorph) {
         return 'new List([' + this.compileInputs(inp.inputs()) + '])';
     } else if (inp instanceof ArgLabelMorph) {
@@ -7493,14 +7638,14 @@ JSCompiler.prototype.compileInput = function (inp) {
         }
     } else if (inp instanceof BlockMorph) {
         if (inp.selector === 'reportGetVar') {
-        	if (contains(this.source.inputs, inp.blockSpec)) {
+            if (contains(this.source.inputs, inp.blockSpec)) {
             	// un-quoted gensym:
             	return this.gensyms[inp.blockSpec];
-        	}
-         	// redirect var query to process
+            }
+             // redirect var query to process
             return 'arguments[arguments.length - 1].getVarNamed("' +
-            	inp.blockSpec +
-            	'")';
+                inp.blockSpec +
+                '")';
         }
         return this.compileExpression(inp);
     } else {
