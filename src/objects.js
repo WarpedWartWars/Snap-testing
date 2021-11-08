@@ -1119,7 +1119,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'operators',
             spec: '%nco %n %n',
-            defaults: [['-']],
+            defaults: [['\u2212']],
             alias: ['-', '/', 'mod', '^']
         },
         reportRound: {
