@@ -640,6 +640,36 @@ SyntaxElementMorph.prototype.labelParts = {
             mod : ['mod']
         }
     },
+    '%ccomp': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            '=' : ['=']
+        }
+    },
+    '%nccomp': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            '\u2260' : ['\u2260'],
+            '<' : ['<'],
+            '\u2264' : ['\u2264'],
+            '>' : ['>'],
+            '\u2265' : ['\u2265']
+        }
+    },
+    '%logic': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'and' : ['and'],
+            'or' : ['or'],
+            'nand' : ['nand'],
+            'nor' : ['nor'],
+            'xor' : ['xor'],
+            'xnor' : ['xnor']
+        }
+    },
     '%fun': {
         type: 'input',
         tags: 'read-only static',
@@ -1108,6 +1138,16 @@ SyntaxElementMorph.prototype.labelParts = {
     '%nums': {
         type: 'multi',
         slots: '%n',
+        defaults: 2
+    },
+    '%bools': {
+        type: 'multi',
+        slots: '%b',
+        defaults: 2
+    },
+    '%strs': {
+        type: 'multi',
+        slots: '%s',
         defaults: 2
     },
     '%exp': {
