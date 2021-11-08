@@ -1108,19 +1108,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
-        reportCommutativeOperator: {
+        reportOperator: {
             type: 'reporter',
             category: 'operators',
-            spec: '%co %nums',
+            spec: '%op %nums',
             defaults: [['+']],
-            alias: ['+', '*', 'min', 'max']
-        },
-        reportNonCommutativeOperator: {
-            type: 'reporter',
-            category: 'operators',
-            spec: '%nco %n %n',
-            defaults: [['\u2212']],
-            alias: ['-', '/', 'mod', '^']
+            alias: '+ * min max - / mod ^'
         },
         reportRound: {
             type: 'reporter',
@@ -1144,45 +1137,15 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'pick random %n to %n',
             defaults: [1, 10]
         },
-        reportEquals: {
+        reportComparison: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s = %s'
+            spec: '%comp %strs'
         },
-        reportNotEquals: {
+        reportLogicGate: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s \u2260 %s'
-        },
-        reportLessThan: {
-            type: 'predicate',
-            category: 'operators',
-            spec: '%s < %s'
-        },
-        reportLessThanOrEquals: {
-            type: 'predicate',
-            category: 'operators',
-            spec: '%s \u2264 %s'
-        },
-        reportGreaterThan: {
-            type: 'predicate',
-            category: 'operators',
-            spec: '%s > %s'
-        },
-        reportGreaterThanOrEquals: {
-            type: 'predicate',
-            category: 'operators',
-            spec: '%s \u2265 %s'
-        },
-        reportAnd: {
-            type: 'predicate',
-            category: 'operators',
-            spec: '%b and %b'
-        },
-        reportOr: {
-            type: 'predicate',
-            category: 'operators',
-            spec: '%b or %b'
+            spec: '%gate %bools'
         },
         reportNot: {
             type: 'predicate',
@@ -1203,7 +1166,7 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [false],
             alias: 'false boolean'
         },
-        reportJoinWords: {
+        reportJoin: {
             type: 'reporter',
             category: 'operators',
             spec: 'join %words',
@@ -1224,7 +1187,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportStringSize: {
             type: 'reporter',
             category: 'operators',
-            spec: 'length of text %s',
+            spec: 'number of letters in %s',
             defaults: [localize('world')]
         },
         reportUnicode: {
@@ -1262,14 +1225,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'JavaScript function ( %mult%s ) { %code }'
         },
         reportTypeOf: {
-            dev: true,
             type: 'reporter',
             category: 'operators',
             spec: 'type of %s',
             defaults: [5]
         },
         reportTextFunction: {
-            dev: true,
             type: 'reporter',
             category: 'operators',
             spec: '%txtfun of %s',
@@ -1626,8 +1587,8 @@ SpriteMorph.prototype.blockAlternatives = {
     reifyScript: ['reifyReporter', 'reifyPredicate'],
     reifyReporter: ['reifyPredicate', 'reifyScript'],
     reifyPredicate: ['reifyReporter', 'reifyScript'],
-    reportNonCommutativeOperator: ['reportAtan2'],
-    reportAtan2: ['reportNonCommutativeOperator'],
+    reportOperator: ['reportAtan2'],
+    reportAtan2: ['reportOperator'],
 
     // variables
     doShowVar: ['doHideVar'],
@@ -2465,28 +2426,21 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportCommutativeOperator'));
-        blocks.push(block('reportNonCommutativeOperator'));
+        blocks.push(block('reportOperator'));
         blocks.push('-');
         blocks.push(block('reportAtan2'));
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
-        blocks.push(block('reportLessThan'));
-        blocks.push(block('reportLessThanOrEquals'));
-        blocks.push(block('reportEquals'));
-        blocks.push(block('reportNotEquals'));
-        blocks.push(block('reportGreaterThan'));
-        blocks.push(block('reportGreaterThanOrEquals'));
+        blocks.push(block('reportComparison'));
         blocks.push(block('reportIsIdentical'));
         blocks.push('-');
-        blocks.push(block('reportAnd'));
-        blocks.push(block('reportOr'));
+        blocks.push(block('reportLogicGate'));
         blocks.push(block('reportNot'));
         blocks.push(block('reportBoolean'));
         blocks.push('-');
-        blocks.push(block('reportJoinWords'));
+        blocks.push(block('reportJoin'));
         blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
         blocks.push(block('reportStringCDR'));
@@ -8770,28 +8724,21 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportCommutativeOperator'));
-        blocks.push(block('reportNonCommutativeOperator'));
+        blocks.push(block('reportOperator'));
         blocks.push('-');
         blocks.push(block('reportAtan2'));
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
-        blocks.push(block('reportLessThan'));
-        blocks.push(block('reportLessThanOrEquals'));
-        blocks.push(block('reportEquals'));
-        blocks.push(block('reportNotEquals'));
-        blocks.push(block('reportGreaterThan'));
-        blocks.push(block('reportGreaterThanOrEquals'));
+        blocks.push(block('reportComparison'));
         blocks.push(block('reportIsIdentical'));
         blocks.push('-');
-        blocks.push(block('reportAnd'));
-        blocks.push(block('reportOr'));
+        blocks.push(block('reportLogicGate'));
         blocks.push(block('reportNot'));
         blocks.push(block('reportBoolean'));
         blocks.push('-');
-        blocks.push(block('reportJoinWords'));
+        blocks.push(block('reportJoin'));
         blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
         blocks.push(block('reportStringCDR'));
