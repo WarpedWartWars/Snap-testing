@@ -3934,35 +3934,35 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
 
     // min/default/max
 
-    this.slots.minimumInputLabel.setPosition(
+    this.slots.minimumLengthLabel.setPosition(
         this.slots.radioButtonMultiple.label.topRight().add(new Point(5, 0))
     );
-    this.slots.minimumInputField.setCenter(
-        this.slots.minimumInputLabel.center().add(new Point(
-            this.slots.minimumInputField.width() / 2
-                + this.slots.minimumInputLabel.width() / 2 + 5,
+    this.slots.minimumLengthField.setCenter(
+        this.slots.minimumLengthLabel.center().add(new Point(
+            this.slots.minimumLengthField.width() / 2
+                + this.slots.minimumLengthLabel.width() / 2 + 5,
             0
         ))
     );
 
-    this.slots.defaultLengthInputLabel.setPosition(
-        this.slots.minimumInputField.topRight().add(new Point(5, 0))
+    this.slots.defaultLengthLabel.setPosition(
+        this.slots.minimumLengthField.topRight().add(new Point(5, 0))
     );
-    this.slots.defaultLengthInputField.setCenter(
-        this.slots.defaultLengthInputLabel.center().add(new Point(
-            this.slots.defaultLengthInputField.width() / 2
-                + this.slots.defaultLengthInputLabel.width() / 2 + 5,
+    this.slots.defaultLengthField.setCenter(
+        this.slots.defaultLengthLabel.center().add(new Point(
+            this.slots.defaultLengthField.width() / 2
+                + this.slots.defaultLengthLabel.width() / 2 + 5,
             0
         ))
     );
 
-    this.slots.maximumInputLabel.setPosition(
-        this.slots.defaultLengthInputField.topRight().add(new Point(5, 0))
+    this.slots.maximumLengthLabel.setPosition(
+        this.slots.defaultLengthField.topRight().add(new Point(5, 0))
     );
-    this.slots.maximumInputField.setCenter(
-        this.slots.maximumInputLabel.center().add(new Point(
-            this.slots.maximumInputField.width() / 2
-                + this.slots.maximumInputLabel.width() / 2 + 5,
+    this.slots.maximumLengthField.setCenter(
+        this.slots.maximumLengthLabel.center().add(new Point(
+            this.slots.maximumLengthField.width() / 2
+                + this.slots.maximumLengthLabel.width() / 2 + 5,
             0
         ))
     );
