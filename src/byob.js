@@ -1831,7 +1831,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
         colors = [
             IDE_Morph.prototype.frameColor,
             IDE_Morph.prototype.frameColor.darker
-                (MorphicPreferences.isFlat ? 5 : 50
+                (MorphicPreferences.isLightMode ? 5 : 50
             ),
             SpriteMorph.prototype.blockColorFor(category)
         ],
@@ -1863,7 +1863,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = IDE_Morph.prototype.buttonLabelColor;
-        if (MorphicPreferences.isFlat) {
+        if (MorphicPreferences.isLightMode) {
             button.labelPressColor = WHITE;
         }
     button.contrast = this.buttonContrast;
@@ -1875,11 +1875,11 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
 };
 
 BlockDialogMorph.prototype.addCustomCategoryButton = function (category, clr) {
-    var labelWidth = 172,
+    var labelWidth = 75,
         colors = [
             IDE_Morph.prototype.frameColor,
             IDE_Morph.prototype.frameColor.darker
-                (MorphicPreferences.isFlat ? 5 : 50
+                (MorphicPreferences.isLightMode ? 5 : 50
             ),
             clr
         ],
@@ -1911,7 +1911,7 @@ BlockDialogMorph.prototype.addCustomCategoryButton = function (category, clr) {
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = IDE_Morph.prototype.buttonLabelColor;
-        if (MorphicPreferences.isFlat) {
+        if (MorphicPreferences.isLightMode) {
             button.labelPressColor = WHITE;
         }
     button.contrast = this.buttonContrast;
@@ -1948,8 +1948,8 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
             row = 4;
             col = 10 - i;
         } else {
-            row = i - 5;
-            col = 1;
+            row = Math.floor(i / 2);
+            col = (i + 1) % 2;
         }
         button.setPosition(new Point(
             l + (col * xPadding + ((col - 1) * buttonWidth)),
@@ -1964,7 +1964,7 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         this.categories.edge = 0;
     }
 
-    if (more > 6) {
+    if (more > 8) {
         scroller = new ScrollFrameMorph(
             null,
             null,
@@ -1980,7 +1980,7 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
             )
         );
         scroller.setWidth(this.categories.width() - this.categories.border * 2);
-        scroller.setHeight(buttonHeight * 6 + yPadding * 5);
+        scroller.setHeight(buttonHeight * 4 + yPadding * 3);
 
         for (i = 0; i < more; i += 1) {
             scroller.addContents(this.categories.children[10]);
@@ -1989,14 +1989,14 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         this.categories.setHeight(
             (5 + 1) * yPadding
                 + 5 * buttonHeight
-                + 6 * (yPadding + buttonHeight) + border + 2
+                + 4 * (yPadding + buttonHeight) + border + 2
                 + 2 * border
         );
     } else {
         this.categories.setHeight(
             (5 + 1) * yPadding
                 + 5 * buttonHeight
-                + (more ? (more * (yPadding + buttonHeight) + border / 2) : 0)
+                + (more ? (Math.ceil(more / 2) * (yPadding + buttonHeight) + border / 2) : 0)
                 + 2 * border
         );
     }
@@ -2822,8 +2822,6 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
     if (!this.type) {return this.defSpecFragment(); }
     if (this.isUpvar()) {
         suff = ' \u2191';
-    } else if (this.isMultipleInput()) {
-        suff = '...';
     } else if (this.type === '%cs' || this.type === '%ca') {
         suff = ' \u03BB'; // ' [\u03BB'
     } else if (this.type === '%b') {
@@ -2837,18 +2835,16 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
             this.type
         )) {
         suff = ' \u03BB';
-    } else if (this.defaultValue) {
-        if (this.type === '%n') {
-            suff = ' # = ' + this.defaultValue.toString();
-        } else if (contains(['%mlt', '%code'], this.type)) {
-            suff = ' \u00B6 = ' + this.defaultValue.toString(); // pilcrow
-        } else { // 'any' or 'text'
-            suff = ' = ' + this.defaultValue.toString();
-        }
     } else if (this.type === '%n') {
         suff = ' #';
     } else if (contains(['%mlt', '%code'], this.type)) {
         suff = ' \u00B6'; // pilcrow
+    }
+    if (this.isMultipleInput()) {
+        suff = suff + '...';
+    }
+    if (this.defaultValue) {
+        suff = suff + ' = ' + this.defaultValue.toString();
     }
     return this.labelString + suff;
 };
@@ -2899,8 +2895,7 @@ BlockLabelFragment.prototype.hasExtensionMenu = function () {
 // arity
 
 BlockLabelFragment.prototype.isSingleInput = function () {
-    return !this.isMultipleInput() &&
-        (this.type !== '%upvar');
+    return !this.isMultipleInput();
 };
 
 BlockLabelFragment.prototype.isMultipleInput = function () {
@@ -2920,18 +2915,12 @@ BlockLabelFragment.prototype.isUpvar = function () {
 
 BlockLabelFragment.prototype.setToSingleInput = function () {
     if (!this.type) {return null; } // not an input at all
-    if (this.type === '%upvar') {
-        this.type = '%s';
-    } else {
-        this.type = this.singleInputType();
-    }
+    this.type = this.singleInputType();
 };
 
 BlockLabelFragment.prototype.setToMultipleInput = function () {
     if (!this.type) {return null; } // not an input at all
-    if (this.type === '%upvar') {
-        this.type = '%s';
-    } else if (this.type === '%ca') {
+    if (this.type === '%ca') {
         this.type = '%cs';
     }
     this.type = '%mult'.concat(this.singleInputType());
@@ -2943,10 +2932,8 @@ BlockLabelFragment.prototype.setToUpvar = function () {
 };
 
 BlockLabelFragment.prototype.singleInputType = function () {
-    // answer the type of my input withtou any preceding '%mult'
-    if (!this.type) {
-        return null; // not an input at all
-    }
+    // answer the type of my input without any preceding '%mult'
+    if (!this.type) {return null; } // not an input at all
     if (this.isMultipleInput()) {
         return this.type.substr(5); // everything following '%mult'
     }
@@ -3526,7 +3513,9 @@ InputSlotDialogMorph.prototype.deleteFragment = function () {
 
 InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     // populate my 'slots' area with radio buttons, labels and input fields
-    var defLabel, defInput, defSwitch, loopArrow, settingsButton;
+    var defLabel, defInput, minLabel, minInput, deflenLabel,
+        deflenInput, maxLabel, maxInput, defSwitch, loopArrow,
+        settingsButton;
 
     // slot types
     this.addSlotTypeButton('Object', '%obj');
@@ -3535,28 +3524,27 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.addSlotTypeButton('Number', '%n');
     this.addSlotTypeButton('Any type', '%s');
     this.addSlotTypeButton('Boolean (T/F)', '%b');
-    this.addSlotTypeButton('Command\n(inline)', '%cmdRing'); //'%cmd');
-    this.addSlotTypeButton('Reporter', '%repRing'); //'%r');
-    this.addSlotTypeButton('Predicate', '%predRing'); //'%p');
+    this.addSlotTypeButton('Command\n(inline)', '%cmdRing');
+    this.addSlotTypeButton('Reporter', '%repRing');
+    this.addSlotTypeButton('Predicate', '%predRing');
+    this.addSlotTypeButton('Command\n(inline) BYOB', '%cmd');
+    this.addSlotTypeButton('Reporter BYOB', '%r');
+    this.addSlotTypeButton('Predicate BYOB', '%p');
     this.addSlotTypeButton('Command\n(C-shape)', ['%cs', '%ca']);
     this.addSlotTypeButton('Any\n(unevaluated)', '%anyUE');
     this.addSlotTypeButton('Boolean\n(unevaluated)', '%boolUE');
+    this.addSlotTypeButton('Upvar', '%upvar');
 
     // arity and upvars
     this.slots.radioButtonSingle = this.addSlotArityButton(
         () => this.setSlotArity('single'),
-        "Single input.",
+        "Single input",
         () => this.fragment.isSingleInput()
     );
-    this.addSlotArityButton(
+    this.slots.radioButtonMultiple = this.addSlotArityButton(
         () => this.setSlotArity('multiple'),
         "Multiple inputs (value is list of inputs)",
         () => this.fragment.isMultipleInput()
-    );
-    this.addSlotArityButton(
-        () => this.setSlotArity('upvar'),
-        "Upvar - make internal variable visible to caller",
-        () => this.fragment.isUpvar()
     );
 
     // default values
@@ -3650,6 +3638,97 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     };
     this.slots.loopArrow = loopArrow;
     this.slots.add(loopArrow);
+
+    // min/default/max
+    minLabel = new StringMorph(localize('Minimum Length:'));
+    minLabel.fontSize = this.slots.radioButtonSingle.fontSize;
+    minLabel.setColor(WHITE);
+    minLabel.refresh = () => {
+        if (this.isExpanded &&
+            this.fragment.isMultipleInput()) {
+            minLabel.show();
+        } else {
+            minLabel.hide();
+        }
+    };
+    this.slots.minimumLengthLabel = minLabel;
+    this.slots.add(minLabel);
+
+    minInput = new InputFieldMorph(this.fragment.minimumLength);
+    minInput.contents().fontSize = minLabel.fontSize;
+    minInput.contrast = 90;
+    minInput.setWidth(15);
+    minInput.refresh = () => {
+        if (this.isExpanded &&
+            this.fragment.isMultipleInput()) {
+            minInput.show();
+            minInput.setIsNumeric(true);
+        } else {
+            minInput.hide();
+        }
+    };
+    this.slots.minimumLengthField = minInput;
+    this.slots.add(minInput);
+
+    deflenLabel = new StringMorph(localize('Default Length:'));
+    deflenLabel.fontSize = this.slots.radioButtonSingle.fontSize;
+    deflenLabel.setColor(WHITE);
+    deflenLabel.refresh = () => {
+        if (this.isExpanded &&
+            this.fragment.isMultipleInput()) {
+            deflenLabel.show();
+        } else {
+            deflenLabel.hide();
+        }
+    };
+    this.slots.defaultLengthLabel = deflenLabel;
+    this.slots.add(deflenLabel);
+
+    deflenInput = new InputFieldMorph(this.fragment.defaultLength);
+    deflenInput.contents().fontSize = deflenLabel.fontSize;
+    deflenInput.contrast = 90;
+    deflenInput.setWidth(15);
+    deflenInput.refresh = () => {
+        if (this.isExpanded &&
+            this.fragment.isMultipleInput()) {
+            deflenInput.show();
+            deflenInput.setIsNumeric(true);
+        } else {
+            deflenInput.hide();
+        }
+    };
+    this.slots.defaultLengthField = deflenInput;
+    this.slots.add(deflenInput);
+
+    maxLabel = new StringMorph(localize('Maximum Length:'));
+    maxLabel.fontSize = this.slots.radioButtonSingle.fontSize;
+    maxLabel.setColor(WHITE);
+    maxLabel.refresh = () => {
+        if (this.isExpanded &&
+            this.fragment.isMultipleInput()) {
+            maxLabel.show();
+        } else {
+            maxLabel.hide();
+        }
+    };
+    this.slots.maximumLengthLabel = maxLabel;
+    this.slots.add(maxLabel);
+
+    maxInput = new InputFieldMorph(this.fragment.maximumLength);
+    maxInput.contents().fontSize = maxLabel.fontSize;
+    maxInput.contrast = 90;
+    maxInput.setWidth(15);
+    maxInput.refresh = () => {
+        if (this.isExpanded &&
+            this.fragment.isMultipleInput()) {
+            maxInput.show();
+            maxInput.setIsNumeric(true);
+        } else {
+            maxInput.hide();
+        }
+    };
+    this.slots.maximumLengthField = maxInput;
+    this.slots.add(maxInput);
 
     // settings button
     settingsButton = new PushButtonMorph(
@@ -3853,6 +3932,41 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
         )
     );
 
+    // min/default/max
+
+    this.slots.minimumInputLabel.setPosition(
+        this.slots.radioButtonMultiple.label.topRight().add(new Point(5, 0))
+    );
+    this.slots.minimumInputField.setCenter(
+        this.slots.minimumInputLabel.center().add(new Point(
+            this.slots.minimumInputField.width() / 2
+                + this.slots.minimumInputLabel.width() / 2 + 5,
+            0
+        ))
+    );
+
+    this.slots.defaultLengthInputLabel.setPosition(
+        this.slots.minimumInputField.topRight().add(new Point(5, 0))
+    );
+    this.slots.defaultLengthInputField.setCenter(
+        this.slots.defaultLengthInputLabel.center().add(new Point(
+            this.slots.defaultLengthInputField.width() / 2
+                + this.slots.defaultLengthInputLabel.width() / 2 + 5,
+            0
+        ))
+    );
+
+    this.slots.maximumInputLabel.setPosition(
+        this.slots.defaultLengthInputField.topRight().add(new Point(5, 0))
+    );
+    this.slots.maximumInputField.setCenter(
+        this.slots.maximumInputLabel.center().add(new Point(
+            this.slots.maximumInputField.width() / 2
+                + this.slots.maximumInputLabel.width() / 2 + 5,
+            0
+        ))
+    );
+
     this.slots.changed();
 };
 
@@ -3875,6 +3989,11 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                 (this.fragment.isReadOnly ? on : off) +
                     localize('read-only'),
                 () => this.fragment.isReadOnly = !this.fragment.isReadOnly
+            );
+            menu.addItem(
+                (this.fragment.isStatic ? on : off) +
+                    localize('static'),
+                () => this.fragment.isStatic = !this.fragment.isStatic
             );
             menu.addLine();
             menu.addMenu(
@@ -3953,7 +4072,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('(none)', '');
     addSpecialOptions('messages', '§_messagesMenu');
     addSpecialOptions('objects', '§_objectsMenu');
-    // addSpecialOptions('data types', '§_typesMenu');
+    addSpecialOptions('data types', '§_typesMenu');
     addSpecialOptions('costumes', '§_costumesMenu');
     addSpecialOptions('sounds', '§_soundsMenu');
     addSpecialOptions('variables', '§_getVarNamesDict');
