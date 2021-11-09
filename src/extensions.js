@@ -541,7 +541,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'err_try(cmd, catch, err)',
     function (action, exception, errVarName, proc) {
-        proc.tryCatch(action, exception, errVarName);
+        proc.tryCatch(action, exception, errVarName || '');
     }
 );
 
