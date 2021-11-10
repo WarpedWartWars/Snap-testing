@@ -2884,7 +2884,7 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
         [
             '§_messagesMenu',
             '§_messagesReceivedMenu',    //for backward (5.0.0 - 5.0.3) support
-            '$_typesMenu'
+            '$_typesMenu',
             '§_objectsMenu',
             '§_costumesMenu',
             '§_soundsMenu',
