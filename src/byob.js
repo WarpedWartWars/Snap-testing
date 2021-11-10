@@ -3555,9 +3555,9 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.addSlotTypeButton('Command\n(C-shape)', ['%cs', '%ca']);
     this.addSlotTypeButton('Any\n(unevaluated)', '%anyUE');
     this.addSlotTypeButton('Boolean\n(unevaluated)', '%boolUE');
-    this.addSlotTypeButton('Command\n(inline) BYOB', '%cmd');
-    //this.addSlotTypeButton('Reporter BYOB', '%r');
-    //this.addSlotTypeButton('Predicate BYOB', '%p');
+    this.addSlotTypeButton('BYOB Command\n(inline)', '%cmd');
+    this.addSlotTypeButton('BYOB Reporter', '%r');
+    this.addSlotTypeButton('BYOB Predicate', '%p');
     this.addSlotTypeButton('Upvar', '%upvar');
 
     // arity and upvars
@@ -3595,6 +3595,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput = new InputFieldMorph(this.fragment.defaultValue);
     defInput.contents().fontSize = defLabel.fontSize;
     defInput.contrast = 90;
+    defInput.contents().setWidth(50);
     defInput.setWidth(50);
     defInput.refresh = () => {
         if (this.isExpanded && contains(
@@ -3682,7 +3683,8 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     minInput = new InputFieldMorph(this.fragment.minimumLength);
     minInput.contents().fontSize = minLabel.fontSize;
     minInput.contrast = 90;
-    minInput.setWidth(15);
+    minInput.contents().setWidth(20);
+    minInput.setWidth(20);
     minInput.refresh = () => {
         if (this.isExpanded &&
             this.fragment.isMultipleInput()) {
@@ -3712,7 +3714,8 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     deflenInput = new InputFieldMorph(this.fragment.defaultLength);
     deflenInput.contents().fontSize = deflenLabel.fontSize;
     deflenInput.contrast = 90;
-    deflenInput.setWidth(15);
+    deflenInput.contents().setWidth(20);
+    deflenInput.setWidth(20);
     deflenInput.refresh = () => {
         if (this.isExpanded &&
             this.fragment.isMultipleInput()) {
@@ -3742,7 +3745,8 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     maxInput = new InputFieldMorph(this.fragment.maximumLength);
     maxInput.contents().fontSize = maxLabel.fontSize;
     maxInput.contrast = 90;
-    maxInput.setWidth(15);
+    maxInput.contents().setWidth(20);
+    maxInput.setWidth(20);
     maxInput.refresh = () => {
         if (this.isExpanded &&
             this.fragment.isMultipleInput()) {
@@ -3883,7 +3887,7 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
         ypadding = 14 * scale,
         bh = (fontHeight(10) / 1.2 + 15) * scale, // slot type button height
         ah = (fontHeight(10) / 1.2 + 10) * scale, // arity button height
-        size = 14, // number slot type radio buttons
+        size = 16, // number slot type radio buttons
         cols = [
             slots.left() + xPadding,
             slots.left() + slots.width() / 3,
@@ -3897,9 +3901,10 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
             slots.top() + ypadding + bh * 4,
             slots.top() + ypadding + bh * 5,
             slots.top() + ypadding + bh * 6,
+            slots.top() + ypadding + bh * 7,
 
-            slots.top() + ypadding + bh * 6 + ah,
-            slots.top() + ypadding + bh * 6 + ah * 2
+            slots.top() + ypadding + bh * 7 + ah,
+            slots.top() + ypadding + bh * 7 + ah * 2
         ],
         idx,
         row = -1,
@@ -3919,7 +3924,7 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     // arity:
 
     col = 0;
-    row = 6;
+    row = 7;
     for (idx = size; idx < size + 2; idx += 1) {
         slots.children[idx].setPosition(new Point(
             cols[col],
@@ -4077,6 +4082,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
         );
     }
 
+    addSpecialSlotType('(none)', '');
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
     return menu;
