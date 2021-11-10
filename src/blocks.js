@@ -971,10 +971,17 @@ SyntaxElementMorph.prototype.labelParts = {
     },
 
     /*
-        type: 'command slot' // currently unused, retained for compatibility
+        type: 'command', 'reporter', or 'predicate' + ' slot'
+        // currently unused, retained for compatibility
     */
     '%cmd': {
         type: 'command slot'
+    },
+    '%r': {
+        type: 'reporter slot'
+    },
+    '%p': {
+        type: 'predicate slot'
     },
 
     /*
@@ -1715,6 +1722,12 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case 'command slot':
             part = new CommandSlotMorph();
+            break;
+        case 'reporter slot':
+            part = new ReporterSlotMorph();
+            break;
+        case 'predicate slot':
+            part = new ReporterSlotMorph(true);
             break;
         case 'ring':
             part = new RingMorph();
