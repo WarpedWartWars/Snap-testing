@@ -3559,7 +3559,10 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         () => this.fragment.isSingleInput()
     );
     this.slots.radioButtonMultiple = this.addSlotArityButton(
-        () => this.setSlotArity('multiple'),
+        () => this.setSlotArity('multiple',
+                  this.slots.minimumLengthLabel.contents().string,
+                  this.slots.defaultLengthLabel.contents().string,
+                  this.slots.maximumLengthLabel.contents().string),
         "Multiple inputs (value is list of inputs)",
         () => this.fragment.isMultipleInput()
     );
@@ -3767,11 +3770,11 @@ InputSlotDialogMorph.prototype.setSlotType = function (type) {
     this.edit();
 };
 
-InputSlotDialogMorph.prototype.setSlotArity = function (arity) {
+InputSlotDialogMorph.prototype.setSlotArity = function (arity, min, def, max) {
     if (arity === 'single') {
         this.fragment.setToSingleInput();
     } else if (arity === 'multiple') {
-        this.fragment.setToMultipleInput();
+        this.fragment.setToMultipleInput(min, def, max);
     } else if (arity === 'upvar') {
         this.fragment.setToUpvar();
         // hide other options - under construction
@@ -3793,7 +3796,7 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     slot type indicated by "spec" and the "label" text to
     its right.
     Note that you can make the slot picture interactive (turn
-    it into a ToggleElementMorph by changing the
+    it into a ToggleElementMorph by) changing the
 
         element.fullImage()
 
@@ -3875,7 +3878,7 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
         ypadding = 14 * scale,
         bh = (fontHeight(10) / 1.2 + 15) * scale, // slot type button height
         ah = (fontHeight(10) / 1.2 + 10) * scale, // arity button height
-        size = 12, // number slot type radio buttons
+        size = 14, // number slot type radio buttons
         cols = [
             slots.left() + xPadding,
             slots.left() + slots.width() / 3,
@@ -3888,9 +3891,10 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
             slots.top() + ypadding + bh * 3,
             slots.top() + ypadding + bh * 4,
             slots.top() + ypadding + bh * 5,
+            slots.top() + ypadding + bh * 6,
 
-            slots.top() + ypadding + bh * 5 + ah,
-            slots.top() + ypadding + bh * 5 + ah * 2
+            slots.top() + ypadding + bh * 6 + ah,
+            slots.top() + ypadding + bh * 6 + ah * 2
         ],
         idx,
         row = -1,
@@ -3910,8 +3914,8 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     // arity:
 
     col = 0;
-    row = 5;
-    for (idx = size; idx < size + 3; idx += 1) {
+    row = 6;
+    for (idx = size; idx < size + 2; idx += 1) {
         slots.children[idx].setPosition(new Point(
             cols[col],
             rows[row + idx - size]
@@ -3957,29 +3961,29 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     this.slots.minimumLengthField.setCenter(
         this.slots.minimumLengthLabel.center().add(new Point(
             this.slots.minimumLengthField.width() / 2
-                + this.slots.minimumLengthLabel.width() / 2 + 5,
+                + this.slots.minimumLengthLabel.width() / 2 + 2,
             0
         ))
     );
 
     this.slots.defaultLengthLabel.setPosition(
-        this.slots.minimumLengthField.topRight().add(new Point(5, 0))
+        this.slots.minimumLengthField.topRight().add(new Point(3, 0))
     );
     this.slots.defaultLengthField.setCenter(
         this.slots.defaultLengthLabel.center().add(new Point(
             this.slots.defaultLengthField.width() / 2
-                + this.slots.defaultLengthLabel.width() / 2 + 5,
+                + this.slots.defaultLengthLabel.width() / 2 + 2,
             0
         ))
     );
 
     this.slots.maximumLengthLabel.setPosition(
-        this.slots.defaultLengthField.topRight().add(new Point(5, 0))
+        this.slots.defaultLengthField.topRight().add(new Point(3, 0))
     );
     this.slots.maximumLengthField.setCenter(
         this.slots.maximumLengthLabel.center().add(new Point(
             this.slots.maximumLengthField.width() / 2
-                + this.slots.maximumLengthLabel.width() / 2 + 5,
+                + this.slots.maximumLengthLabel.width() / 2 + 2,
             0
         ))
     );
@@ -4049,8 +4053,9 @@ InputSlotDialogMorph.prototype.editSlotOptions = function () {
         null,
         localize('Enter one option per line.\n' +
             'Optionally use "=" as key/value delimiter ' +
-            'and {} for submenus. ' +
-            'e.g.\n   the answer=42')
+            'and ={} for submenus. ' +
+            'e.g.\n    the answer=42\n    a submenu' +
+            '={\n        an item\n}')
     );
 };
 
