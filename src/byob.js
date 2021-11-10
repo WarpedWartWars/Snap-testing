@@ -2801,8 +2801,12 @@ function BlockLabelFragment(labelString) {
     this.labelString = labelString || '';
     this.type = '%s';    // null for label, a spec for an input
     this.defaultValue = '';
+    this.minimumLength = null;
+    this.defaultLength = null;
+    this.maximumLength = null;
     this.options = '';
     this.isReadOnly = false; // for input slots
+    this.isStatic = false;
     this.isDeleted = false;
 }
 
@@ -2841,7 +2845,9 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         suff = ' \u00B6'; // pilcrow
     }
     if (this.isMultipleInput()) {
-        suff = suff + '...';
+        suff = suff + ' ' + this.minimumLength + '/' +
+                            this.defaultLength + '/' +
+                            this.maximumLength;
     }
     if (this.defaultValue) {
         suff = suff + ' = ' + this.defaultValue.toString();
@@ -2858,8 +2864,12 @@ BlockLabelFragment.prototype.copy = function () {
     var ans = new BlockLabelFragment(this.labelString);
     ans.type = this.type;
     ans.defaultValue = this.defaultValue;
+    ans.maximumLength = this.maximumLength;
+    ans.defaultLength = this.defaultLength;
+    ans.minimumLength = this.minimumLength;
     ans.options = this.options;
     ans.isReadOnly = this.isReadOnly;
+    ans.isStatic = this.isStatic;
     return ans;
 };
 
@@ -2874,6 +2884,7 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
         [
             '§_messagesMenu',
             '§_messagesReceivedMenu',    //for backward (5.0.0 - 5.0.3) support
+            '$_typesMenu'
             '§_objectsMenu',
             '§_costumesMenu',
             '§_soundsMenu',
@@ -2916,14 +2927,20 @@ BlockLabelFragment.prototype.isUpvar = function () {
 BlockLabelFragment.prototype.setToSingleInput = function () {
     if (!this.type) {return null; } // not an input at all
     this.type = this.singleInputType();
+    this.minimumLength = null;
+    this.defaultLength = null;
+    this.maximumLength = null;
 };
 
-BlockLabelFragment.prototype.setToMultipleInput = function () {
+BlockLabelFragment.prototype.setToMultipleInput = function (min, default_, max) {
     if (!this.type) {return null; } // not an input at all
     if (this.type === '%ca') {
         this.type = '%cs';
     }
     this.type = '%mult'.concat(this.singleInputType());
+    this.minimumLength = min || 0;
+    this.defaultLength = default_ === 0 ? 0 : default_ || 1;
+    this.maximumLength = max || 0;
 };
 
 BlockLabelFragment.prototype.setToUpvar = function () {
