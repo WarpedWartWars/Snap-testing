@@ -2932,15 +2932,12 @@ BlockLabelFragment.prototype.setToSingleInput = function () {
     this.maximumLength = null;
 };
 
-BlockLabelFragment.prototype.setToMultipleInput = function (min, default_, max) {
+BlockLabelFragment.prototype.setToMultipleInput = function () {
     if (!this.type) {return null; } // not an input at all
     if (this.type === '%ca') {
         this.type = '%cs';
     }
     this.type = '%mult'.concat(this.singleInputType());
-    this.minimumLength = min || 0;
-    this.defaultLength = default_ === 0 ? 0 : default_ || 1;
-    this.maximumLength = max || 0;
 };
 
 BlockLabelFragment.prototype.setToUpvar = function () {
@@ -3397,13 +3394,24 @@ InputSlotDialogMorph.prototype.setType = function (fragmentType) {
 };
 
 InputSlotDialogMorph.prototype.getInput = function () {
-    var lbl;
+    var lbl,
+        min,
+        default_,
+        max;
     if (this.body instanceof InputFieldMorph) {
         lbl = this.normalizeSpaces(this.body.getValue());
     }
     if (lbl) {
         this.fragment.labelString = lbl;
-        if (contains(['%b', '%boolUE'], this.fragment.type)) {
+        if (this.fragment.isMultipleInput()) {
+            min = this.slots.minimumLengthField.getValue();
+            default_ = this.slots.defaultLengthField.getValue();
+            max = this.slots.maximumLengthField.getValue();
+            this.fragment.minimumLength = min || 0;
+            this.fragment.defaultLength =
+                default_ === 0 ? 0 : default_ || 1;
+            this.fragment.maximumLength =  max || 0;
+        } else if (contains(['%b', '%boolUE'], this.fragment.type)) {
             this.fragment.defaultValue =
                 this.slots.defaultSwitch.evaluate();
         } else {
@@ -3559,10 +3567,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         () => this.fragment.isSingleInput()
     );
     this.slots.radioButtonMultiple = this.addSlotArityButton(
-        () => this.setSlotArity('multiple',
-                  this.slots.minimumLengthLabel.contents().string,
-                  this.slots.defaultLengthLabel.contents().string,
-                  this.slots.maximumLengthLabel.contents().string),
+        () => this.setSlotArity('multiple'),
         "Multiple inputs (value is list of inputs)",
         () => this.fragment.isMultipleInput()
     );
