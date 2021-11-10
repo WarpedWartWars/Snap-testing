@@ -12032,7 +12032,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         rightArrow.show();
         rightArrow.setPosition(leftArrow.topCenter());
         arrows.bounds.corner = rightArrow.bottomRight().copy();
-        if (!isNil(this.maxInputs) && inpCount > this.maxInputs - 1) {
+        if (!isNil(this.maxInputs) &&
+            this.maxInputs !== 0 &&
+            inpCount > this.maxInputs - 1) {
             // hide right arrow
             rightArrow.hide();
             arrows.setExtent(dim);
