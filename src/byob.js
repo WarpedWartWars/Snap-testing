@@ -3552,12 +3552,12 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.addSlotTypeButton('Command\n(inline)', '%cmdRing');
     this.addSlotTypeButton('Reporter', '%repRing');
     this.addSlotTypeButton('Predicate', '%predRing');
-    this.addSlotTypeButton('Command\n(inline) BYOB', '%cmd');
-    //this.addSlotTypeButton('Reporter BYOB', '%r');
-    //this.addSlotTypeButton('Predicate BYOB', '%p');
     this.addSlotTypeButton('Command\n(C-shape)', ['%cs', '%ca']);
     this.addSlotTypeButton('Any\n(unevaluated)', '%anyUE');
     this.addSlotTypeButton('Boolean\n(unevaluated)', '%boolUE');
+    this.addSlotTypeButton('Command\n(inline) BYOB', '%cmd');
+    //this.addSlotTypeButton('Reporter BYOB', '%r');
+    //this.addSlotTypeButton('Predicate BYOB', '%p');
     this.addSlotTypeButton('Upvar', '%upvar');
 
     // arity and upvars
