@@ -3970,29 +3970,37 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     this.slots.minimumLengthField.setCenter(
         this.slots.minimumLengthLabel.center().add(new Point(
             this.slots.minimumLengthField.width() / 2
-                + this.slots.minimumLengthLabel.width() / 2 + 2,
+                + this.slots.minimumLengthLabel.width() / 2,
             0
         ))
     );
 
-    this.slots.defaultLengthLabel.setPosition(
-        this.slots.minimumLengthField.topRight().add(new Point(3, 0))
+    this.slots.defaultLengthLabel.setCenter(
+        this.slots.minimumLengthField.center().add(new Point(
+            this.slots.defaultLengthLabel.width() / 2
+                + this.slots.minimumLengthField.width() / 2 + 2,
+            0
+        ))
     );
     this.slots.defaultLengthField.setCenter(
         this.slots.defaultLengthLabel.center().add(new Point(
             this.slots.defaultLengthField.width() / 2
-                + this.slots.defaultLengthLabel.width() / 2 + 2,
+                + this.slots.defaultLengthLabel.width() / 2,
             0
         ))
     );
 
-    this.slots.maximumLengthLabel.setPosition(
-        this.slots.defaultLengthField.topRight().add(new Point(3, 0))
+    this.slots.maximumLengthLabel.setCenter(
+        this.slots.defaultLengthField.center().add(new Point(
+            this.slots.maximumLengthLabel.width() / 2
+                + this.slots.defaultLengthField.width() / 2 + 2,
+            0
+        ))
     );
     this.slots.maximumLengthField.setCenter(
         this.slots.maximumLengthLabel.center().add(new Point(
             this.slots.maximumLengthField.width() / 2
-                + this.slots.maximumLengthLabel.width() / 2 + 2,
+                + this.slots.maximumLengthLabel.width() / 2,
             0
         ))
     );
