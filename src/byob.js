@@ -3595,7 +3595,6 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput = new InputFieldMorph(this.fragment.defaultValue);
     defInput.contents().fontSize = defLabel.fontSize;
     defInput.contrast = 90;
-    defInput.contents().setWidth(50);
     defInput.setWidth(50);
     defInput.refresh = () => {
         if (this.isExpanded && contains(
@@ -3683,7 +3682,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     minInput = new InputFieldMorph(this.fragment.minimumLength);
     minInput.contents().fontSize = minLabel.fontSize;
     minInput.contrast = 90;
-    minInput.contents().setWidth(20);
+    minInput.contents().minWidth = 15;
     minInput.setWidth(20);
     minInput.refresh = () => {
         if (this.isExpanded &&
@@ -3714,7 +3713,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     deflenInput = new InputFieldMorph(this.fragment.defaultLength);
     deflenInput.contents().fontSize = deflenLabel.fontSize;
     deflenInput.contrast = 90;
-    deflenInput.contents().setWidth(20);
+    deflenInput.contents().minWidth = 15;
     deflenInput.setWidth(20);
     deflenInput.refresh = () => {
         if (this.isExpanded &&
@@ -3745,7 +3744,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     maxInput = new InputFieldMorph(this.fragment.maximumLength);
     maxInput.contents().fontSize = maxLabel.fontSize;
     maxInput.contrast = 90;
-    maxInput.contents().setWidth(20);
+    maxInput.contents().minWidth = 15;
     maxInput.setWidth(20);
     maxInput.refresh = () => {
         if (this.isExpanded &&
