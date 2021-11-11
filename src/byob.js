@@ -3970,7 +3970,7 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     this.slots.minimumLengthField.setCenter(
         this.slots.minimumLengthLabel.center().add(new Point(
             this.slots.minimumLengthField.width() / 2
-                + this.slots.minimumLengthLabel.width() / 2,
+                + this.slots.minimumLengthLabel.width() / 2 - 10,
             0
         ))
     );
@@ -3985,7 +3985,7 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     this.slots.defaultLengthField.setCenter(
         this.slots.defaultLengthLabel.center().add(new Point(
             this.slots.defaultLengthField.width() / 2
-                + this.slots.defaultLengthLabel.width() / 2,
+                + this.slots.defaultLengthLabel.width() / 2 - 10,
             0
         ))
     );
@@ -4000,7 +4000,7 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     this.slots.maximumLengthField.setCenter(
         this.slots.maximumLengthLabel.center().add(new Point(
             this.slots.maximumLengthField.width() / 2
-                + this.slots.maximumLengthLabel.width() / 2,
+                + this.slots.maximumLengthLabel.width() / 2 - 10,
             0
         ))
     );
