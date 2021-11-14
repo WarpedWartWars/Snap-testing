@@ -2444,6 +2444,13 @@ Point.prototype.multiplyBy = function (other) {
     return new Point(this.x * other, this.y * other);
 };
 
+Point.prototype.raiseTo = function (other) {
+    if (other instanceof Point) {
+        return new Point(this.x ** other.x, this.y ** other.y);
+    }
+    return new Point(this.x ** other, this.y ** other);
+};
+
 Point.prototype.divideBy = function (other) {
     if (other instanceof Point) {
         return new Point(this.x / other.x, this.y / other.y);
