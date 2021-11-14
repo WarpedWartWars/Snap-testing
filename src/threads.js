@@ -4183,36 +4183,40 @@ Process.prototype.reportRandom = function (a, b) {
 Process.prototype.reportBasicRandom = function (min, max) {
     var floor = +min,
         ceil = +max;
-    if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
-        if (floor instanceof Point) {
-            if (ceil instanceof Point) {
+    if (floor instanceof Point) {
+        if (ceil instanceof Point) {
+            if ((floor.modulo(1) !== new Point(0, 0)) ||
+                (ceil.modulo(1) !== new Point(0, 0))) {
                 return new Point(
                     Math.random() * (ceil.x - floor.x) + floor.x,
                     Math.random() * (ceil.y - floor.y) + floor.y);
             }
             return new Point(
-                Math.random() * (ceil - floor.x) + floor.x,
-                Math.random() * (ceil - floor.y) + floor.y);
-        } else if (ceil instanceof Point) {
-            return new Point(
-                Math.random() * (ceil.x - floor) + floor,
-                Math.random() * (ceil.y - floor) + floor);
-        }
-        return Math.random() * (ceil - floor) + floor;
-    }
-    if (floor instanceof Point) {
-        if (ceil instanceof Point) {
-            return new Point(
                 Math.floor(Math.random() * (ceil.x - floor.x + 1)) + floor.x,
                 Math.floor(Math.random() * (ceil.y - floor.y + 1)) + floor.y);
+        }
+        if ((floor.modulo(1) !== new Point(0, 0)) ||
+            (ceil % 1 !== 0)) {
+            return new Point(
+                Math.random() * (ceil - floor.x) + floor.x,
+                Math.random() * (ceil - floor.y) + floor.y);
         }
         return new Point(
             Math.floor(Math.random() * (ceil - floor.x + 1)) + floor.x,
             Math.floor(Math.random() * (ceil - floor.y + 1)) + floor.y);
     } else if (ceil instanceof Point) {
+        if ((floor % 1 !== 0) ||
+            (ceil.modulo(1) !== new Point(0, 0))) {
+            return new Point(
+                Math.random() * (ceil.x - floor) + floor,
+                Math.random() * (ceil.y - floor) + floor);
+        }
         return new Point(
             Math.floor(Math.random() * (ceil.x - floor + 1)) + floor,
             Math.floor(Math.random() * (ceil.y - floor + 1)) + floor);
+    }
+    if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
+        return Math.random() * (ceil - floor) + floor;
     }
     return Math.floor(Math.random() * (ceil - floor + 1)) + floor;
 };
