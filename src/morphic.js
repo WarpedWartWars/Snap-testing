@@ -2467,6 +2467,13 @@ Point.prototype.floorDivideBy = function (other) {
         Math.floor(this.y / other));
 };
 
+Point.prototype.modulo = function (other) {
+    if (other instanceof Point) {
+        return new Point(this.x % other.x, this.y % other.y);
+    }
+    return new Point(this.x % other, this.y % other);
+};
+
 // Point polar coordinates:
 
 Point.prototype.r = function () {
