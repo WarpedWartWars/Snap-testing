@@ -1169,7 +1169,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportPoint: {
             type: 'reporter',
             category: 'operators',
-            spec: 'point x: %n y: %y',
+            spec: 'point x: %n y: %n',
             defaults: [3, 4]
         },
         reportJoin: {
