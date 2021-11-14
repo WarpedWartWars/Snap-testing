@@ -1166,6 +1166,12 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [false],
             alias: 'false boolean'
         },
+        reportPoint: {
+            type: 'reporter',
+            category: 'operators',
+            spec: 'point x: %n y: %y',
+            defaults: [3, 4]
+        },
         reportJoin: {
             type: 'reporter',
             category: 'operators',
@@ -2449,6 +2455,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportUnicode'));
         blocks.push(block('reportUnicodeAsLetter'));
         blocks.push(block('reportTextFunction'));
+        blocks.push('-');
+        blocks.push(block('reportPoint'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportTypeOf'));
@@ -8748,10 +8756,12 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportUnicodeAsLetter'));
         blocks.push(block('reportTextFunction'));
         blocks.push('-');
+        blocks.push(block('reportPoint'));
+        blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportTypeOf'));
 
-        if (Process.prototype.enableJS) { // (Process.prototype.enableJS) {
+        if (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
             if (Process.prototype.enableCompiling) {
