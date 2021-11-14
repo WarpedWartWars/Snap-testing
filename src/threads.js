@@ -4185,8 +4185,8 @@ Process.prototype.reportBasicRandom = function (min, max) {
         ceil = +max;
     if (floor instanceof Point) {
         if (ceil instanceof Point) {
-            if ((floor.modulo(1) !== new Point(0, 0)) ||
-                (ceil.modulo(1) !== new Point(0, 0))) {
+            if (!(floor.modulo(1).eq(new Point(0, 0))) ||
+                !(ceil.modulo(1).eq(new Point(0, 0)))) {
                 return new Point(
                     Math.random() * (ceil.x - floor.x) + floor.x,
                     Math.random() * (ceil.y - floor.y) + floor.y);
@@ -4195,7 +4195,7 @@ Process.prototype.reportBasicRandom = function (min, max) {
                 Math.floor(Math.random() * (ceil.x - floor.x + 1)) + floor.x,
                 Math.floor(Math.random() * (ceil.y - floor.y + 1)) + floor.y);
         }
-        if ((floor.modulo(1) !== new Point(0, 0)) ||
+        if (!(floor.modulo(1).eq(new Point(0, 0))) ||
             (ceil % 1 !== 0)) {
             return new Point(
                 Math.random() * (ceil - floor.x) + floor.x,
@@ -4206,7 +4206,7 @@ Process.prototype.reportBasicRandom = function (min, max) {
             Math.floor(Math.random() * (ceil - floor.y + 1)) + floor.y);
     } else if (ceil instanceof Point) {
         if ((floor % 1 !== 0) ||
-            (ceil.modulo(1) !== new Point(0, 0))) {
+            !(ceil.modulo(1).eq(new Point(0, 0)))) {
             return new Point(
                 Math.random() * (ceil.x - floor) + floor,
                 Math.random() * (ceil.y - floor) + floor);
