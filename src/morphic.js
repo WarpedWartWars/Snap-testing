@@ -2345,8 +2345,8 @@ function Point(x, y) {
 // Point string representation: e.g. '12@68'
 
 Point.prototype.toString = function () {
-    return Math.round(this.x.toString()) +
-        '@' + Math.round(this.y.toString());
+    return this.x.toString() + '@' +
+           this.y.toString();
 };
 
 // Point copying:
