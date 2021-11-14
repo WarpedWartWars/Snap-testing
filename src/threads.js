@@ -112,6 +112,9 @@ function snapEquals(a, b) {
                y.toUpperCase().toLowerCase();
     }
 
+    if (a instanceof Point && b instanceof Point) {
+        return a.eq(b)
+    }
     return x === y;
 }
 
@@ -4113,6 +4116,11 @@ Process.prototype.reportSum = function (a, b) {
 };
 
 Process.prototype.reportBasicSum = function (a, b) {
+    if (a instanceof Point) {
+        return a.add(b);
+    } else if (b instanceof Point) {
+        return b.add(a);
+    }
     return +a + (+b);
 };
 
@@ -4121,6 +4129,11 @@ Process.prototype.reportDifference = function (a, b) {
 };
 
 Process.prototype.reportBasicDifference = function (a, b) {
+    if (a instanceof Point) {
+        return a.subtract(b);
+    } else if (b instanceof Point) {
+        return b.subtract(-a);
+    }
     return +a - +b;
 };
 
@@ -4129,6 +4142,11 @@ Process.prototype.reportProduct = function (a, b) {
 };
 
 Process.prototype.reportBasicProduct = function (a, b) {
+    if (a instanceof Point) {
+        return a.multiplyBy(b);
+    } else if (b instanceof Point) {
+        return b.multiplyBy(a);
+    }
     return +a * +b;
 };
 
@@ -4137,6 +4155,11 @@ Process.prototype.reportQuotient = function (a, b) {
 };
 
 Process.prototype.reportBasicQuotient = function (a, b) {
+    if (a instanceof Point) {
+        return a.divideBy(b);
+    } else if (b instanceof Point) {
+        return b.raiseTo(-1).multiplyBy(a); // a*b^-1 = a*(1/b) = a/b
+    }
     return +a / +b;
 };
 
@@ -4145,6 +4168,11 @@ Process.prototype.reportPower = function (a, b) {
 };
 
 Process.prototype.reportBasicPower = function (a, b) {
+    if (a instanceof Point) {
+        return a.raiseTo(b);
+    } else if (b instanceof Point) {
+        return new Point(Math.pow(+a, +(b.x)), Math.pow(+a, +(b.y)));
+    }
     return Math.pow(+a, +b);
 };
 
@@ -4156,7 +4184,35 @@ Process.prototype.reportBasicRandom = function (min, max) {
     var floor = +min,
         ceil = +max;
     if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
+        if (floor instanceof Point) {
+            if (ceil instanceof Point) {
+                return new Point(
+                    Math.random() * (ceil.x - floor.x) + floor.x,
+                    Math.random() * (ceil.y - floor.y) + floor.y);
+            }
+            return new Point(
+                Math.random() * (ceil - floor.x) + floor.x,
+                Math.random() * (ceil - floor.y) + floor.y);
+        } else if (ceil instanceof Point) {
+            return new Point(
+                Math.random() * (ceil.x - floor) + floor,
+                Math.random() * (ceil.y - floor) + floor);
+        }
         return Math.random() * (ceil - floor) + floor;
+    }
+    if (floor instanceof Point) {
+        if (ceil instanceof Point) {
+            return new Point(
+                Math.floor(Math.random() * (ceil.x - floor.x + 1)) + floor.x,
+                Math.floor(Math.random() * (ceil.y - floor.y + 1)) + floor.y);
+        }
+        return new Point(
+            Math.floor(Math.random() * (ceil - floor.x + 1)) + floor.x,
+            Math.floor(Math.random() * (ceil - floor.y + 1)) + floor.y);
+    } else if (ceil instanceof Point) {
+        return new Point(
+            Math.floor(Math.random() * (ceil.x - floor + 1)) + floor,
+            Math.floor(Math.random() * (ceil.y - floor + 1)) + floor);
     }
     return Math.floor(Math.random() * (ceil - floor + 1)) + floor;
 };
@@ -4170,6 +4226,11 @@ Process.prototype.reportModulus = function (a, b) {
 Process.prototype.reportBasicModulus = function (a, b) {
     var x = +a,
         y = +b;
+    if (a instanceof Point) {
+        return a.modulo(b);
+    } else if (b instanceof Point) {
+        return new Point(+a % +(b.x), +a % +(b.y));
+    }
     return ((x % y) + y) % y;
 };
 
@@ -4178,6 +4239,17 @@ Process.prototype.reportAtan2 = function (a, b) {
 };
 
 Process.prototype.reportBasicAtan2 = function (a, b) {
+    if (a instanceof Point) {
+        if (b instanceof Point) {
+            return new Point(
+                degrees(Math.atan2(+(a.x), +(b.x))),
+                degrees(Math.atan2(+(a.y), +(b.y))));
+        }
+    } else if (b instanceof Point) {
+        return new Point(
+                degrees(Math.atan2(+a, +(b.x))),
+                degrees(Math.atan2(+a, +(b.y))));
+    }
     return degrees(Math.atan2(+a, +b));
 };
 
@@ -4193,6 +4265,11 @@ Process.prototype.reportBasicMin = function (a, b) {
         x = a;
         y = b;
     }
+    if (a instanceof Point) {
+        return a.min(b)
+    } else if (b instanceof Point) {
+        return b.min(a)
+    }
     return x < y ? x : y;
 };
 
@@ -4207,6 +4284,11 @@ Process.prototype.reportBasicMax = function (a, b) {
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
+    }
+    if (a instanceof Point) {
+        return a.max(b)
+    } else if (b instanceof Point) {
+        return b.max(a)
     }
     return x > y ? x : y;
 };
@@ -4249,6 +4331,9 @@ Process.prototype.reportBasicLessThan = function (a, b) {
         x = a;
         y = b;
     }
+    if (a instanceof Point && b instanceof Point) {
+        return a.lt(b)
+    }
     return x < y;
 };
 
@@ -4270,6 +4355,9 @@ Process.prototype.reportBasicGreaterThan = function (a, b) {
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
+    }
+    if (a instanceof Point && b instanceof Point) {
+        return a.gt(b)
     }
     return x > y;
 };
@@ -4335,6 +4423,10 @@ Process.prototype.reportBoolean = function (bool) {
     return bool;
 };
 
+Process.prototype.reportPoint = function (x, y) {
+    return new Point(x, y);
+};
+
 // Process hyper-monadic primitives
 
 Process.prototype.reportRound = function (n) {
@@ -4342,6 +4434,9 @@ Process.prototype.reportRound = function (n) {
         if (n instanceof List) {
             return n.map(each => this.reportRound(each));
         }
+    }
+    if (n instanceof Point) {
+        return n.round()
     }
     return Math.round(+n);
 };
@@ -4351,6 +4446,11 @@ Process.prototype.reportMonadic = function (fname, n) {
         if (n instanceof List) {
             return n.map(each => this.reportMonadic(fname, each));
         }
+    }
+
+    if (n instanceof Point) {
+        return new Point(this.reportMonadic(fname, n.x),
+                         this.reportMonadic(fname, n.y));
     }
 
     var x = +n,
@@ -4873,6 +4973,12 @@ Process.prototype.doGotoObject = function (name) {
                 thisObj.gotoXY(
                     name.at(1),
                     name.at(2)
+                );
+                return;
+            } else if (name instanceof Point) {
+                thisObj.gotoXY(
+                    name.x,
+                    name.y
                 );
                 return;
             }
