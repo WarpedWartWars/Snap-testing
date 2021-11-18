@@ -4841,3 +4841,129 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
 
 BlockVisibilityDialogMorph.prototype.fixLayout
     = BlockEditorMorph.prototype.fixLayout;
+
+// BlockRearrangementDialogMorph //////////////////////////////////////////////////
+
+// BlockRearrangementDialogMorph inherits from DialogBoxMorph
+// and pseudo-inherits from BlockExportDialogMorph:
+
+BlockRearrangementDialogMorph.prototype = new DialogBoxMorph();
+BlockRearrangementDialogMorph.prototype.constructor = BlockRearrangementDialogMorph;
+BlockRearrangementDialogMorph.uber = DialogBoxMorph.prototype;
+
+// BlockRearrangementDialogMorph constants:
+
+BlockRearrangementDialogMorph.prototype.key = 'blockRearrangement';
+
+// BlockRearrangementDialogMorph instance creation:
+
+function BlockRearrangementDialogMorph(target) {
+    this.init(target);
+}
+
+BlockRearrangementDialogMorph.prototype.init = function (target) {
+    // additional properties:
+    this.blocks = target.allPaletteBlocks();
+    this.selection = this.blocks;
+    this.handle = null;
+
+    // initialize inherited properties:
+    BlockRearrangementDialogMorph.uber.init.call(
+        this,
+        target,
+        () => this.rearrangeBlocks(),
+        null // environment
+    );
+
+    // override inherited properites:
+    this.labelString = localize('Rearrange blocks in palette')
+        + (name ? ': ' : '')
+        + name || '';
+    this.createLabel();
+
+    // build contents
+    this.buildContents();
+};
+
+BlockRearrangementDialogMorph.prototype.buildContents = function () {
+    var palette, x, y, dragblock, lastCat,
+        padding = 4;
+
+    // create plaette
+    palette = new ScrollFrameMorph(
+        null,
+        null,
+        SpriteMorph.prototype.sliderColor
+    );
+    palette.color = SpriteMorph.prototype.paletteColor;
+    palette.padding = padding;
+    palette.isDraggable = false;
+    palette.acceptsDrops = false;
+    palette.contents.acceptsDrops = true;
+    palette.contents.reactToDropOf = function (morph) {
+        if (!(morph instanceof BlockMorph))) {
+            if (world.hand.grabOrigin) {
+                morph.slideBackTo(world.hand.grabOrigin);
+            } else {
+                world.hand.grab(morph);
+            }
+        } else {
+            morph.setPosition(palette.left() + padding, morph.top());
+        }
+    };
+
+    // populate palette
+    x = palette.left() + padding;
+    y = palette.top() + padding;
+
+    this.blocks.forEach(block => {
+        if (lastCat && (block.category !== lastCat)) {
+            y += padding;
+        }
+        lastCat = block.category;
+
+        dragblock = block.fullImage();
+        dragblock.isDraggable = true;
+        palette.addContents(dragblock);
+        y += dragblock.fullBounds().height() + padding;
+    });
+
+    palette.scrollX(padding);
+    palette.scrollY(padding);
+    this.addBody(palette);
+
+    this.addButton('ok', 'OK');
+    this.addButton('cancel', 'Cancel');
+
+    this.setExtent(new Point(220, 300));
+    this.fixLayout();
+};
+
+BlockRearrangementDialogMorph.prototype.popUp
+    = BlockExportDialogMorph.prototype.popUp;
+
+// BlockRearrangementDialogMorph menu
+
+BlockRearrangementDialogMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this);
+    //menu.addItem('text', 'openText');
+    return menu;
+};
+
+// BlockRearrangementDialogMorph ops
+
+BlockRearrangementDialogMorph.prototype.hideBlocks = function () {
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    this.blocks.forEach(block => this.target.changeBlockPosition(
+        block,
+        true // quick - without palette update
+    ));
+    ide.flushBlocksCache();
+    ide.refreshPalette();
+    ide.recordUnsavedChanges();
+};
+
+// BlockRearrangementDialogMorph layout
+
+BlockRearrangementDialogMorph.prototype.fixLayout
+    = BlockEditorMorph.prototype.fixLayout;
