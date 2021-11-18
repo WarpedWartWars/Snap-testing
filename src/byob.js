@@ -4898,9 +4898,9 @@ BlockRearrangementDialogMorph.prototype.buildContents = function () {
     palette.color = SpriteMorph.prototype.paletteColor;
     palette.padding = padding;
     palette.isDraggable = false;
-    palette.acceptsDrops = false;
-    palette.contents.acceptsDrops = true;
-    palette.contents.reactToDropOf = function (morph) {
+    palette.acceptsDrops = true;
+    palette.contents.acceptsDrops = false;
+    palette.reactToDropOf = function (morph) {
         if (!(morph instanceof BlockMorph))) {
             if (world.hand.grabOrigin) {
                 morph.slideBackTo(world.hand.grabOrigin);
@@ -4952,7 +4952,7 @@ BlockRearrangementDialogMorph.prototype.userMenu = function () {
 
 // BlockRearrangementDialogMorph ops
 
-BlockRearrangementDialogMorph.prototype.hideBlocks = function () {
+BlockRearrangementDialogMorph.prototype.rearrangeBlocks = function () {
     var ide = this.target.parentThatIsA(IDE_Morph);
     this.blocks.forEach(block => this.target.changeBlockPosition(
         block,
