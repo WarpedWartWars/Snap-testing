@@ -2857,7 +2857,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
             '^F'
         );
         menu.addItem(
-            'hide blocks...',
+            'show/hide blocks...',
             () => new BlockVisibilityDialogMorph(myself).popUp(myself.world())
         );
         menu.addLine();
@@ -2871,6 +2871,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 () => this.parentThatIsA(IDE_Morph).deleteUserCategory()
             );
         }
+        menu.addLine();
+        menu.addItem(
+            'rearrange blocks...',
+            () => new BlockRearrangementDialogMorph(myself).popup(myself.world())
+        );
         return menu;
     };
 
