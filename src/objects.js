@@ -83,7 +83,7 @@ SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows,
-BlockVisibilityDialogMorph*/
+BlockVisibilityDialogMorph, BlockRearrangementDialogMorph*/
 
 /*jshint esversion: 6*/
 
@@ -3041,9 +3041,43 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
         doDeclareVariables: 'variables'
     };
     cat = dict[aBlock.selector] || aBlock.category;
-    if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
+};
+
+// SpriteMorph blocks rearranging
+
+SpriteMorph.prototype.changeBlockPosition = function (aBlock, position, quick) {
+    var ide, dict, cat;
+    if (aBlock.selector === 'reportGetVar') {
+        +StageMorph.prototype.blockPositions[
+            this.variables.find(
+                aBlock.blockSpec
+            ).vars[aBlock.blockSpec]] = +position;
+    } else {
+        StageMorph.prototype.blockPositions[aBlock.selector] = +position;
+    }
+    if (quick) {return; }
+    dict = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    };
+    cat = dict[aBlock.selector] || aBlock.category;
+    ide.flushBlocksCache(cat);
+    ide.refreshPalette();
+};
+
+SpriteMorph.prototype.blockPosition = function (aBlock) {
+    if (aBlock.selector === 'reportGetVar') {
+        return +StageMorph.prototype.blockPositions[
+            this.variables.find(
+                aBlock.blockSpec
+            ).vars[aBlock.blockSpec]];
+    }
+    return +StageMorph.prototype.blockPositions[aBlock.selector];
 };
 
 // SpriteMorph blocks searching
@@ -7580,6 +7614,7 @@ StageMorph.prototype.paletteTextColor
     = SpriteMorph.prototype.paletteTextColor;
 
 StageMorph.prototype.hiddenPrimitives = {};
+StageMorph.prototype.blockPositions = {};
 StageMorph.prototype.codeMappings = {};
 StageMorph.prototype.codeHeaders = {};
 StageMorph.prototype.enableCodeMapping = false;
@@ -7623,7 +7658,7 @@ StageMorph.prototype.init = function (globals) {
     // frequency player, experimental
     this.freqPlayer = null; // Note, to be lazily initialized
 
-    this.watcherUpdateFrequency = 2;
+    this.watcherUpdateFrequency = 10;
     this.lastWatcherUpdate = Date.now();
 
     this.scale = 1; // for display modes, do not persist
@@ -8198,45 +8233,47 @@ StageMorph.prototype.processKeyUp = function (event) {
 };
 
 StageMorph.prototype.processKeyEvent = function (event, action) {
-    var keyName;
+    var keyName,
+        ctrlshiftmod = function (key) {
+            return (event.ctrlKey ? ('ctrl' +
+                                (event.shiftKey ||
+                                 !(key === 'Control' ||
+                                   key === 'Meta') ? ' ' : ''))
+                    : '') + (event.shiftKey ? 'shift' +
+                                  (!(key === 'Control' ||
+                                     key === 'Meta') ? ' ' : '')
+                    : '') + (!(key === 'Control' ||
+                               key === 'Meta') ? key : '');
+        };
 
     // this.inspectKeyEvent(event);
     switch (event.keyCode) {
-    case 13:
-        keyName = 'enter';
-        if (event.ctrlKey || event.metaKey) {
-            keyName = 'ctrl enter';
-        } else if (event.shiftKey) {
-            keyName = 'shift enter';
-        }
-        break;
-    case 27:
-        keyName = 'esc';
-        break;
-    case 32:
-        keyName = 'space';
-        break;
-    case 37:
-        keyName = 'left arrow';
-        break;
-    case 39:
-        keyName = 'right arrow';
-        break;
-    case 38:
-        keyName = 'up arrow';
-        break;
-    case 40:
-        keyName = 'down arrow';
-        break;
-    default:
-        keyName = event.key || String.fromCharCode(
-            event.keyCode || event.charCode
-        );
-        if (event.ctrlKey || event.metaKey) {
-            keyName =
-                (keyName === 'Control' || keyName === 'Meta' ? '' : 'ctrl ') +
-                    (event.shiftKey ? 'shift ' : '') + keyName;
-        }
+        case 13:
+            keyName = ctrlshiftmod('enter');
+            break;
+        case 27:
+            keyName = ctrlshiftmod('esc');
+            break;
+        case 32:
+            keyName = ctrlshiftmod('space');
+            break;
+        case 37:
+            keyName = ctrlshiftmod('left arrow');
+            break;
+        case 39:
+            keyName = ctrlshiftmod('right arrow');
+            break;
+        case 38:
+            keyName = ctrlshiftmod('up arrow');
+            break;
+        case 40:
+            keyName = ctrlshiftmod('down arrow');
+            break;
+        default:
+            keyName = ctrlshiftmod(event.key ||
+                String.fromCharCode(
+                    event.keyCode || event.charCode
+                ));
     }
     action.call(this, keyName);
 };
