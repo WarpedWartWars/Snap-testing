@@ -3050,7 +3050,7 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
 SpriteMorph.prototype.changeBlockPosition = function (aBlock, position, quick) {
     var ide, dict, cat;
     if (aBlock.selector === 'reportGetVar') {
-        +StageMorph.prototype.blockPositions[
+        StageMorph.prototype.blockPositions[
             this.variables.find(
                 aBlock.blockSpec
             ).vars[aBlock.blockSpec]] = +position;
