@@ -12362,6 +12362,10 @@ WorldMorph.prototype.mouseDownLeft = nop;
 
 WorldMorph.prototype.mouseClickLeft = nop;
 
+WorldMorph.prototype.mouseDownMiddle = nop;
+
+WorldMorph.prototype.mouseClickMiddle = nop;
+
 WorldMorph.prototype.mouseDownRight = nop;
 
 WorldMorph.prototype.mouseClickRight = nop;
