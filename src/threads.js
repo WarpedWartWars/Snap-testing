@@ -565,11 +565,11 @@ Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 Process.prototype.enableHyperOps = true; // experimental hyper operations
-Process.prototype.enableLiveCoding = false; // experimental
+Process.prototype.enableLiveCoding = true; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
-Process.prototype.enableCompiling = false; // experimental
+Process.prototype.enableCompiling = true; // experimental
 Process.prototype.flashTime = 0; // experimental
-Process.prototype.enableJS = false;
+Process.prototype.enableJS = true;
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.topBlock = topBlock || null;
