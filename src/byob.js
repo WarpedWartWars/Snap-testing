@@ -4901,7 +4901,7 @@ BlockRearrangementDialogMorph.prototype.buildContents = function () {
     palette.acceptsDrops = true;
     palette.contents.acceptsDrops = false;
     palette.reactToDropOf = function (morph) {
-        if (!(morph instanceof BlockMorph))) {
+        if (!(morph instanceof BlockMorph)) {
             if (world.hand.grabOrigin) {
                 morph.slideBackTo(world.hand.grabOrigin);
             } else {
