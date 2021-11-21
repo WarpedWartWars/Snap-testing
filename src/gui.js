@@ -2963,6 +2963,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
         plainprototype = this.getSetting('plainprototype'),
         tableLines = this.getSetting('tableLines'),
         unifiedpalette = this.getSetting('unifiedpalette'),
+        showcats = this.getSetting('showcats'),
         kickreporters = this.getSetting('kickeporters'),
         livecoding = this.getSetting('livecoding');
 
@@ -3023,6 +3024,12 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // unified palette
     if (unifiedpalette) {
         this.toggleUnifiedPalette();
+    }
+    
+    if (showcats) {
+        this.scene.showCategories = true;
+    } else {
+        this.scene.showCategories = false;
     }
     
     // kick reporters
@@ -4091,6 +4098,22 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to disable\nsupport for just-in-time\ncompiling',
         'check to enable\nsupport for just-in-time\ncompiling'
     );
+    addPreference(
+        'Unified palette',
+        () => this.toggleUnifiedPalette(),
+        this.scene.unifiedPalette,
+        'uncheck to show only\nthe selected category\'s\nblocks',
+        'check to show all blocks\nin a single palette'
+    );
+    if (this.scene.unifiedPalette) {
+        addPreference(
+            'Show categories',
+            () => this.toggleCategoryNames(),
+            this.scene.showCategories,
+            'uncheck to hide\ncategory names\nin the palette',
+            'check to show\ncategory names\nin the palette'
+        );
+    }
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -4127,22 +4150,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to disable\nblock to text mapping features',
         'check for block\nto text mapping features'
     );
-    addPreference(
-        'Unified palette',
-        () => this.toggleUnifiedPalette(),
-        this.scene.unifiedPalette,
-        'uncheck to show only\nthe selected category\'s\nblocks',
-        'check to show all blocks\nin a single palette'
-    );
-    if (this.scene.unifiedPalette) {
-        addPreference(
-            'Show categories',
-            () => this.toggleCategoryNames(),
-            this.scene.showCategories,
-            'uncheck to hide\ncategory names\nin the palette',
-            'check to show\ncategory names\nin the palette'
-        );
-    }
     menu.popup(world, pos);
 };
 
@@ -6238,6 +6245,11 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
 
 IDE_Morph.prototype.toggleCategoryNames = function () {
     this.scene.showCategories = !this.scene.showCategories;
+    if (this.scene.showCategories) {
+        this.saveSetting('showcats', true);
+    } else {
+        this.removeSetting('showcats');
+    }
     this.flushBlocksCache();
     this.refreshPalette();
     this.recordUnsavedChanges();
