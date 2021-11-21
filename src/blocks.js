@@ -10862,7 +10862,7 @@ BooleanSlotMorph.uber = ArgMorph.prototype;
 
 // BooleanSlotMorph preferences settings
 
-BooleanSlotMorph.prototype.isTernary = false;
+BooleanSlotMorph.prototype.isTernary = true;
 
 // BooleanSlotMorph instance creation:
 
