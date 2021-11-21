@@ -6029,6 +6029,7 @@ IDE_Morph.prototype.togglePreferEmptySlotDrops = function () {
         this.saveSetting('kickreporters', true);
     } else {
         this.removeSetting('kickreporters');
+    }
 };
 
 IDE_Morph.prototype.toggleVirtualKeyboard = function () {
