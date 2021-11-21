@@ -266,6 +266,12 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
+    // scenes
+    this.scenes = new List([new Scene()]);
+    this.scene = this.scenes.at(1);
+    this.isAddingScenes = false;
+    this.isAddingNextScene = false;
+
     // restore saved user preferences
     this.userLanguage = null; // user language preference for startup
     this.projectsInURLs = false;
@@ -280,12 +286,6 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.cloudMsg = null;
     this.source = null;
     this.serializer = new SnapSerializer();
-
-    // scenes
-    this.scenes = new List([new Scene()]);
-    this.scene = this.scenes.at(1);
-    this.isAddingScenes = false;
-    this.isAddingNextScene = false;
 
     // editor
     this.globalVariables = this.scene.globalVariables;
