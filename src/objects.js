@@ -5392,6 +5392,14 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     }
 };
 
+SpriteMorph.prototype.beginFill = function () { // to be made later
+    nop();
+};
+
+SpriteMorph.prototype.endFill = function () { // to be made later
+    nop();
+};
+
 SpriteMorph.prototype.floodFill = function () {
     if (!this.parent.bounds.containsPoint(this.rotationCenter())) {
         return;
