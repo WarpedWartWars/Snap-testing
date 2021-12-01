@@ -3023,7 +3023,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
     
     // unified palette
     if (unifiedpalette) {
-        this.toggleUnifiedPalette();
+        this.setUnifiedPalette(true, false);
     }
     
     if (showcats) {
@@ -3038,11 +3038,11 @@ IDE_Morph.prototype.applySavedSettings = function () {
     }
     
     // live coding
-    /*if (livecoding) {
+    if (livecoding) {
         Process.prototype.enableLiveCoding = true;
     } else {
         Process.prototype.enableLiveCoding = false;
-    }*/
+    }
 };
 
 IDE_Morph.prototype.saveSetting = function (key, value) {
@@ -6222,7 +6222,7 @@ IDE_Morph.prototype.toggleUnifiedPalette = function () {
     }
 };
 
-IDE_Morph.prototype.setUnifiedPalette = function (bool) {
+IDE_Morph.prototype.setUnifiedPalette = function (bool, fixLayout_) {
     // answer true or false indicating whether the palette
     // has already been refreshed by this operation
     if (this.scene.unifiedPalette === bool &&
@@ -6235,7 +6235,7 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
     this.createCategories();
     this.createPaletteHandle();
     this.categories.fixLayout();
-    this.fixLayout();
+    if (isNil(fixLayout_) || fixLayout_) {this.fixLayout(); }
     this.flushBlocksCache();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
