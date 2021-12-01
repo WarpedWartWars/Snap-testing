@@ -1140,12 +1140,14 @@ SpriteMorph.prototype.initBlocks = function () {
         reportComparison: {
             type: 'predicate',
             category: 'operators',
-            spec: '%comp %strs'
+            spec: '%comp %strs',
+            defaults: ['=']
         },
         reportLogicGate: {
             type: 'predicate',
             category: 'operators',
-            spec: '%gate %bools'
+            spec: '%gate %bools',
+            defaults: ['and']
         },
         reportNot: {
             type: 'predicate',
