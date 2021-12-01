@@ -2302,25 +2302,25 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             txt,
             this.fontSize
         );
-        morphToShow.mouseClickLeft = morphToShow.edit;
+        morphToShow.isEditable = true;
     } else if (value === null) {
         morphToShow = new TextMorph(
             '',
             this.fontSize
         );
-        morphToShow.mouseClickLeft = morphToShow.edit;
+        morphToShow.isEditable = true;
     } else if (value === 0) {
         morphToShow = new TextMorph(
             '0',
             this.fontSize
         );
-        morphToShow.mouseClickLeft = morphToShow.edit;
+        morphToShow.isEditable = true;
     } else if (value.toString) {
         morphToShow = new TextMorph(
             value.toString(),
             this.fontSize
         );
-        morphToShow.mouseClickLeft = morphToShow.edit;
+        morphToShow.isEditable = true;
     }
     if (ide && (ide.currentSprite !== target)) {
         if (target instanceof StageMorph) {
