@@ -6130,11 +6130,11 @@ SpeechBubbleMorph.prototype.popUp = function (world, pos, isClickable) {
     world.hand.destroyTemporaries();
     world.hand.temporaries.push(this);
 
-    /*if (!isClickable) {
+    if (!isClickable) {
         this.mouseEnter = this.destroy;
     } else {
         this.isClickable = true;
-    }*/
+    }
 };
 
 // SpeechBubbleMorph drawing:
