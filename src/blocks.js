@@ -2227,7 +2227,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         txt,
         img,
         morphToShow,
-        isClickable = false,
+        isClickable = true,
         ide = this.parentThatIsA(IDE_Morph) || target.parentThatIsA(IDE_Morph),
         anchor = this,
         pos = this.rightCenter().add(new Point(2, 0)),
@@ -2302,21 +2302,29 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             txt,
             this.fontSize
         );
+        morphToShow.customContextMenu = new MenuMorph();
+        morphToShow.customContextMenu.addItem('edit', morphToShow.edit);
     } else if (value === null) {
         morphToShow = new TextMorph(
             '',
             this.fontSize
         );
+        morphToShow.customContextMenu = new MenuMorph();
+        morphToShow.customContextMenu.addItem('edit', morphToShow.edit);
     } else if (value === 0) {
         morphToShow = new TextMorph(
             '0',
             this.fontSize
         );
+        morphToShow.customContextMenu = new MenuMorph();
+        morphToShow.customContextMenu.addItem('edit', morphToShow.edit);
     } else if (value.toString) {
         morphToShow = new TextMorph(
             value.toString(),
             this.fontSize
         );
+        morphToShow.customContextMenu = new MenuMorph();
+        morphToShow.customContextMenu.addItem('edit', morphToShow.edit);
     }
     if (ide && (ide.currentSprite !== target)) {
         if (target instanceof StageMorph) {
