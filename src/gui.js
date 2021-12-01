@@ -6235,8 +6235,10 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool, fixLayout_) {
     this.createCategories();
     this.createPaletteHandle();
     this.categories.fixLayout();
-    if (isNil(fixLayout_) || fixLayout_) {this.fixLayout(); }
-    this.flushBlocksCache();
+    if (isNil(fixLayout_) || fixLayout_) {
+        this.fixLayout();
+        this.flushBlocksCache();
+    }
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
     this.recordUnsavedChanges();
