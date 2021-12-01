@@ -3022,9 +3022,9 @@ IDE_Morph.prototype.applySavedSettings = function () {
     }
     
     // unified palette
-    if (unifiedpalette) {
+    /*if (unifiedpalette) {
         this.setUnifiedPalette(true, false);
-    }
+    }*/
     
     if (showcats) {
         this.scene.showCategories = true;
