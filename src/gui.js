@@ -3038,11 +3038,11 @@ IDE_Morph.prototype.applySavedSettings = function () {
     }
     
     // live coding
-    if (livecoding) {
+    /*if (livecoding) {
         Process.prototype.enableLiveCoding = true;
     } else {
         Process.prototype.enableLiveCoding = false;
-    }
+    }*/
 };
 
 IDE_Morph.prototype.saveSetting = function (key, value) {
