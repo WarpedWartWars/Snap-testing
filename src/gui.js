@@ -6238,8 +6238,8 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool, fixLayout_) {
     if (isNil(fixLayout_) || fixLayout_) {
         this.fixLayout();
         this.flushBlocksCache();
+        this.currentSprite.palette(this.currentCategory);
     }
-    this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
     this.recordUnsavedChanges();
     return true;
