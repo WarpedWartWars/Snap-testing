@@ -2771,6 +2771,21 @@ Process.prototype.doUntil = function (goalCondition, body) {
     this.pushContext();
 };
 
+Process.prototype.doWhile = function (goalCondition, body) {
+    // this.assertType(goalCondition, ['Boolean']);
+    if (!goalCondition) {
+        this.popContext();
+        this.pushContext('doYield');
+        return null;
+    }
+    this.context.inputs = [];
+    this.pushContext('doYield');
+    if (body) {
+        this.pushContext(body.blockSequence());
+    }
+    this.pushContext();
+};
+
 Process.prototype.doWaitUntil = function (goalCondition) {
     // this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
