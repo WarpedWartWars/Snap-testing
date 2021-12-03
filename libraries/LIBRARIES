@@ -1,4 +1,4 @@
-iteration-composition.xml	IterTools	Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.
+itertools.xml	IterTools	Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.
 list-utilities.xml	List HOFs	Some standard functions on lists (reverse, sort, etc.)
 colors.xml	Colors and Crayons	Incorporates the former crayon and set RGB libraries.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.
 bignumbers.xml	Bignums	The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.
