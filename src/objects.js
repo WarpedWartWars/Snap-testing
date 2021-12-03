@@ -346,28 +346,28 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'say %s for %n secs',
+            spec: 'say %mlt for %n secs',
             defaults: [localize('Hello!'), 2]
         },
         bubble: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'say %s',
+            spec: 'say %mlt',
             defaults: [localize('Hello!')]
         },
         doThinkFor: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'think %s for %n secs',
+            spec: 'think %mlt for %n secs',
             defaults: [localize('Hmm...'), 2]
         },
         doThink: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'think %s',
+            spec: 'think %mlt',
             defaults: [localize('Hmm...')]
         },
         changeEffect: {
@@ -1182,7 +1182,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportJoin: {
             type: 'reporter',
             category: 'operators',
-            spec: 'join %words',
+            spec: 'join %multmlt',
             defaults: [localize('hello') + ' ', localize('world')]
         },
         reportLetter: {
@@ -1500,7 +1500,9 @@ SpriteMorph.prototype.initBlocks();
 SpriteMorph.prototype.initBlockMigrations = function () {
     // change blocks in existing projects to their updated version
     SpriteMorph.prototype.blockMigrations = {
-        // nothing here
+        reportJoinWords: {
+            selector: 'reportJoin'
+        },
     };
 };
 
