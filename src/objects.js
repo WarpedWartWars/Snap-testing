@@ -798,6 +798,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'repeat until %b %loop'
         },
+        doWhile: {
+            type: 'command',
+            category: 'control',
+            spec: 'repeat while %b %loop'
+        },
         doFor: {
             type: 'command',
             category: 'control',
@@ -1571,7 +1576,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doIf: ['doIfElse', 'doUntil'],
     doIfElse: ['doIf', 'doUntil'],
     doRepeat: ['doUntil', ['doForever', -1], ['doFor', 2], ['doForEach', 1]],
-    doUntil: ['doRepeat', 'doIf', ['doForever', -1], ['doFor', 2],
+    doUntil: ['doRepeat', 'doIf', 'doWhile', ['doForever', -1], ['doFor', 2],
+        ['doForEach', 1]],
+    doWhile: ['doRepeat', 'doIf', ['doForever', -1], ['doFor', 2],
         ['doForEach', 1]],
     doForever: [['doUntil', 1], ['doRepeat', 1], ['doFor', 3],
         ['doForEach', 2]],
@@ -2331,7 +2338,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
-        blocks.push(block('doUntil'));
+        blocks.push(block('doWhile'));
         blocks.push(block('doFor'));
         blocks.push('-');
         blocks.push(block('doIf'));
@@ -3234,7 +3241,7 @@ SpriteMorph.prototype.searchBlocks = function (
         if (focus) {focus.destroy(); }
         if (!selection || !scriptFocus) {return; }
         focus = selection.outline(
-            MorphicPreferences.isFlat ? new Color(150, 200, 255) : WHITE,
+            MorphicPreferences.isLightMode ? new Color(150, 200, 255) : WHITE,
             2
         );
         searchPane.contents.add(focus);
@@ -8688,7 +8695,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
-        blocks.push(block('doUntil'));
+        blocks.push(block('doWhile'));
         blocks.push(block('doFor'));
         blocks.push('-');
         blocks.push(block('doIf'));
