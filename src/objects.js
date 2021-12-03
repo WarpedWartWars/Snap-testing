@@ -1573,16 +1573,12 @@ SpriteMorph.prototype.blockAlternatives = {
     // control:
     doBroadcast: ['doBroadcastAndWait'],
     doBroadcastAndWait: ['doBroadcast'],
-    doIf: ['doIfElse', 'doUntil'],
-    doIfElse: ['doIf', 'doUntil'],
-    doRepeat: ['doUntil', ['doForever', -1], ['doFor', 2], ['doForEach', 1]],
-    doUntil: ['doRepeat', 'doIf', 'doWhile', ['doForever', -1], ['doFor', 2],
+    doIf: ['doIfElse', 'doWhile'],
+    doIfElse: ['doIf', 'doWhile'],
+    doRepeat: ['doWhile', ['doFor', 2], ['doForEach', 1]],
+    doWhile: ['doRepeat', 'doIf', ['doFor', 2],
         ['doForEach', 1]],
-    doWhile: ['doRepeat', 'doIf', ['doForever', -1], ['doFor', 2],
-        ['doForEach', 1]],
-    doForever: [['doUntil', 1], ['doRepeat', 1], ['doFor', 3],
-        ['doForEach', 2]],
-    doFor: [['doForever', -3], ['doRepeat', -2], ['doUntil', -2],
+    doFor: [['doRepeat', -2], ['doWhile', -2],
         ['doForEach', -1]],
     doRun: ['fork', 'doInParallel'],
     fork: ['doRun', 'doInParallel'],
@@ -1613,8 +1609,8 @@ SpriteMorph.prototype.blockAlternatives = {
     reportMap: ['reportKeep', 'reportFindFirst'],
     reportKeep: ['reportFindFirst', 'reportMap'],
     reportFindFirst: ['reportKeep', 'reportMap'],
-    doForEach: [['doFor', 1], ['doForever', -2], ['doRepeat', -1],
-        ['doUntil', -1]]
+    doForEach: [['doFor', 1], ['doRepeat', -1],
+        ['doWhile', -1]]
 };
 
 // SpriteMorph instance creation
@@ -2336,7 +2332,6 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doWait'));
         blocks.push(block('doWaitUntil'));
         blocks.push('-');
-        blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
         blocks.push(block('doWhile'));
         blocks.push(block('doFor'));
@@ -8693,7 +8688,6 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doWait'));
         blocks.push(block('doWaitUntil'));
         blocks.push('-');
-        blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
         blocks.push(block('doWhile'));
         blocks.push(block('doFor'));
