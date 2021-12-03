@@ -1120,9 +1120,9 @@ SyntaxElementMorph.prototype.labelParts = {
         slots: '%t',
         label: 'input names:'
     },
-    '%words': {
+    '%multmlt': {
         type: 'multi',
-        slots: '%s',
+        slots: '%mlt',
         defaults: 2
     },
     '%lists': {
