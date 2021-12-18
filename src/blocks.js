@@ -1012,7 +1012,6 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'ring slot'
         tags: 'static',
         kind: 'command', 'reporter', 'predicate'
-
     */
     '%rc': {
         type: 'ring slot',
@@ -1060,9 +1059,9 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi'
         slots: a slot spec string
         label: (optional) text label before actual inputs
-        tags: 'widget' // doesn't count as "empty" slot implicit parameter
-        min: (optional) number of minimum inputs) or zero
-        max: (optional) number of maximum inputs) or zero
+        tags: 'widget' doesn't count as "empty" slot implicit parameter
+        min: (optional) number of minimum inputs or zero
+        max: (optional) number of maximum inputs or zero
         defaults: (optional) number of visible slots to begin with or zero
     */
     '%inputs': {
@@ -1120,11 +1119,14 @@ SyntaxElementMorph.prototype.labelParts = {
         slots: '%t',
         label: 'input names:'
     },
+    // commented out, see #6
+    /*
     '%multmlt': {
         type: 'multi',
         slots: '%mlt',
         defaults: 2
     },
+    */
     '%lists': {
         type: 'multi',
         slots: '%l',
