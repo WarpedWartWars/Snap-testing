@@ -1182,8 +1182,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportJoin: {
             type: 'reporter',
             category: 'operators',
-            spec: 'join %multmlt',
-            defaults: [localize('hello') + ' ', localize('world')]
+            spec: 'join %mult%mlt',
+            defaults: [localize('hello') + ' ' + localize('world')]
         },
         reportLetter: {
             type: 'reporter',
