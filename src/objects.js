@@ -2461,8 +2461,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportUnicode'));
         blocks.push(block('reportUnicodeAsLetter'));
         blocks.push(block('reportTextFunction'));
-        blocks.push('-');
-        blocks.push(block('reportPoint'));
+        //blocks.push('-');
+        //blocks.push(block('reportPoint'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportTypeOf'));
@@ -8810,8 +8810,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportUnicode'));
         blocks.push(block('reportUnicodeAsLetter'));
         blocks.push(block('reportTextFunction'));
-        blocks.push('-');
-        blocks.push(block('reportPoint'));
+        //blocks.push('-');
+        //blocks.push(block('reportPoint'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportTypeOf'));
