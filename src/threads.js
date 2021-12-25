@@ -4580,11 +4580,11 @@ Process.prototype.reportTextFunction = function (fname, string) {
     return x.concat(y);
 };*/
 
-Process.prototype.reportJoin = function (aList) {
+Process.prototype.reportJoin = function (aList, sep) {
     if (aList instanceof List) {
-        return aList.asText();
+        return aList.asArray().join(sep);
     }
-    return (aList || '').toString();
+    return null;
 };
 
 // Process string ops - hyper-monadic/dyadic
