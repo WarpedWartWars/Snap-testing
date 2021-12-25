@@ -4582,7 +4582,7 @@ Process.prototype.reportTextFunction = function (fname, string) {
 
 Process.prototype.reportJoin = function (aList, sep) {
     if (aList instanceof List) {
-        return aList.asArray().join(sep);
+        return aList.itemsArray().join(sep);
     }
     return null;
 };
