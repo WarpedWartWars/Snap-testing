@@ -350,7 +350,7 @@ SnapExtensions.primitives.set(
                     break;
             };
         } finally {ide.savingPreferences = true; };
-    };
+    }
 );
 
 SnapExtensions.primitives.set(
@@ -394,6 +394,7 @@ SnapExtensions.primitives.set(
                     break;
             };
         } finally {ide.savingPreferences = true; };
+    }
 );
 
 // script building (scb_):
