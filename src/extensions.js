@@ -193,6 +193,209 @@ var SnapExtensions = {
 
 // Primitives
 
+// getters and setters (gst_):
+
+SnapExtensions.primitives.set(
+    'gst_get(which)',
+    function (which) {
+        var stage = this.parentThatIsA(StageMorph),
+            ide = stage.parentThatIsA(IDE_Morph),
+            world = stage.parentThatIsA(WorldMorph);
+
+        switch (which) {
+            case 'Project notes':
+                return ide.projectNotes;
+            case 'Project name':
+                return ide.projectName;
+            case 'User':
+                return ide.cloud.username;
+            case 'Presentation mode':
+                return ide.isAppMode;
+            case 'Language':
+                return SnapTranslator.language;
+            case 'Zoom blocks':
+                return SyntaxElementMorph.prototype.scale;
+            case 'Stage size':
+                return new List([StageMorph.prototype.dimensions.x,
+                                 StageMorph.prototype.dimensions.y]);
+            case 'Stage scale':
+               return stage.scale;
+            case 'Retina display support':
+                return isRetinaEnabled();
+            case 'Long form input dialog':
+                return InputSlotDialogMorph.prototype.isLaunchingExpanded;
+            case 'Plain prototype labels':
+                return BlockLabelPlaceHolderMorph.prototype.plainLabel;
+            case 'Input sliders':
+                return MorphicPreferences.useSliderForInput;
+            case 'Execute on slider change':
+                return ArgMorph.prototype.executeOnSliderEdit;
+            case 'Clicking sound':
+                return !!BlockMorph.prototype.snapSound;
+            case 'Turbo mode':
+                return stage.isFastTracked;
+            case 'Flat design':
+                return MorphicPreferences.isFlat;
+            case 'Light mode':
+                return MorphicPreferences.isLightMode;
+            case 'Keyboard editing':
+                return !!this.scripts.focus;
+            case 'Visible stepping':
+                return Process.prototype.enableSingleStepping;
+            case 'Thread safe scripts':
+                return stage.isThreadSafe;
+            case 'Prefer smooth animations':
+                return StageMorph.prototype.frameRate > 0;
+            case 'Flat line ends':
+                return SpriteMorph.prototype.useFlatLineEnds;
+            case 'Codification support':
+                return StageMorph.prototype.enableCodeMapping;
+            case 'Inheritance support':
+                return StageMorph.prototype.enableInheritance;
+            case 'Hyper blocks support':
+                return Process.prototype.enableHyperOps;
+            case 'Visible palette':
+                return ide.currentCategory;
+            default: return which;
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'gst_setFlag(which, tf)',
+    function (which, tf) {
+        var stage = this.parentThatIsA(StageMorph),
+            ide = stage.parentThatIsA(IDE_Morph),
+            world = stage.parentThatIsA(WorldMorph),
+            thisObj = this;
+        
+        if (tf !== !!tf) {return; }
+        
+        try {
+            ide.savingPreferences = false;
+
+            switch (which) {
+                case 'Presentation mode':
+                    if (tf !== ide.isAppMode) {ide.toggleAppMode(); }
+                    break;
+                case 'Long form input dialog':
+                    if (tf !== InputSlotDialogMorph.prototype.isLaunchingExpanded) {
+                        ide.toggleLongFormInputDialog();
+                    }
+                    break;
+                case 'Plain prototype labels':
+                    if (tf !== BlockLabelPlaceHolderMorph.prototype.plainLabel) {
+                        ide.togglePlainPrototypeLabels();
+                    }
+                    break;
+                case 'Input sliders':
+                    MorphicPreferences.useSliderForInput = tf;
+                    break;
+                case 'Execute on slider change':
+                    ArgMorph.prototype.executeOnSliderEdit = tf;
+                    break;
+                case 'Turbo mode':
+                    if (tf !== stage.isFastTracked) {
+                        ide.toggleFastTracking();
+                    }
+                    break;
+                case 'Flat design':
+                    if (tf === MorphicPreferences.isFlat) {break; }
+                    if (MorphicPreferences.isFlat) {
+                        this.s3DDesign();
+                    } else {
+                        this.flatDesign();
+                    }
+                    if (MorphicPreferences.isLightMode) {
+                        this.lightMode();
+                    } else {
+                        this.darkMode();
+                    }
+                    break;
+                case 'Light mode':
+                    if (tf === MorphicPreferences.isLightMode) {break; }
+                    if (MorphicPreferences.isLightMode) {
+                        this.darkMode();
+                    } else {
+                        this.lightMode();
+                    }
+                    if (MorphicPreferences.isFlat) {
+                        this.flatDesign();
+                    } else {
+                        this.s3DDesign();
+                    }
+                case 'Visible stepping':
+                    if (tf !== Process.prototype.enableSingleStepping) {
+                        ide.toggleSingleStepping(); 
+                    }
+                    break;
+                case 'Thread safe scripts':
+                    stage.isThreadSafe = tf;
+                    break;
+                case 'Prefer smooth animations':
+                    if (tf !== (StageMorph.prototype.frameRate > 0)) {
+                        ide.toggleVariableFrameRate();
+                    }
+                    break;
+                case 'Flat line ends':
+                    SpriteMorph.prototype.useFlatLineEnds = tf;
+                    break;
+                case 'Codification support':
+                    if (tf !== StageMorph.prototype.enableCodeMapping) {
+                        StageMorph.prototype.enableCodeMapping = tf;
+                        ide.currentSprite.blocksCache.variables = null;
+                        ide.currentSprite.paletteCache.variables = null;
+                        ide.refreshPalette();
+                    }
+                    break;
+            };
+        } finally {ide.savingPreferences = true; };
+    };
+);
+
+SnapExtensions.primitives.set(
+    'gst_setValue(which, value)',
+    function (which, value) {
+        var stage = this.parentThatIsA(StageMorph),
+            ide = stage.parentThatIsA(IDE_Morph),
+            world = stage.parentThatIsA(WorldMorph);
+        
+        try {
+            ide.savingPreferences = false;
+
+            switch (which) {
+                case 'Project notes':
+                    ide.projectNotes = value;
+                    break;
+                case 'Project name':
+                    ide.setProjectName(value);
+                    break;
+                case 'Language':
+                    ide.setLanguage(value);
+                    break;
+                case 'Zoom blocks':
+                    if (!isNaN(value)) {ide.setBlocksScale(Math.min(value, 12)); }
+                    break;
+                case 'Stage size':
+                    if ((value instanceof List) && value.length()==2
+                                   && !isNaN(value.at(1)) && !isNaN(value.at(2))) {
+                        ide.setStageExtent(new Point(value.at(1), value.at(2)));
+                    }
+                    break;
+                case 'Stage scale':
+                    ide.toggleStageSize(value != 1, Math.max(0.1, value));
+                    break;
+                case 'Visible palette':
+                    ide.currentCategory = value.toLowerCase();
+                    ide.categories.children.forEach(function (each) {
+                            each.refresh();
+                    });
+                    ide.refreshPalette(true);
+                    break;
+            };
+        } finally {ide.savingPreferences = true; };
+);
+
 // script building (scb_):
 
 SnapExtensions.primitives.set(
