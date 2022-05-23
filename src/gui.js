@@ -4271,8 +4271,25 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-
     menu.addItem(
+        localize('Examples') + '...',
+        () => {
+            if (location.protocol === 'file:') {
+                this.importLocalFile();
+                return;
+            }
+            this.getURL(
+                this.resourceURL('examples', 'EXAMPLES'),
+                txt => {
+                    var examples = this.parseResourceFile(txt);
+                    new ExampleImportDialogMorph(this, examples).popUp();
+                }
+            );
+        },
+        'Select an example project'
+    );
+
+    /*menu.addItem(
         localize(graphicsName) + '...',
         () => {
             if (location.protocol === 'file:') {
@@ -4293,7 +4310,7 @@ IDE_Morph.prototype.projectMenu = function () {
             this.importMedia('Sounds');
         },
         'Select a sound from the media library'
-    );
+    );*/
 
     if (this.scene.trash.length) {
         menu.addLine();
