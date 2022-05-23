@@ -9100,7 +9100,6 @@ ExampleImportDialogMorph.prototype.init = function (ide, examplesData) {
 
     this.handle = null;
     this.listField = null;
-    this.palette = null;
     this.notesText = null;
     this.notesField = null;
 
@@ -9182,7 +9181,6 @@ ExampleImportDialogMorph.prototype.installExamplesList = function () {
         if (this.hasCached(item.fileName)) {
             //this.displayBlocks(item.fileName);
         } else {
-            this.showMessage(localize('Loading') + '\n' + localize(item.name));
             this.ide.getURL(
                 this.ide.resourceURL('examples', item.fileName),
                 exampleXML => {
@@ -9319,12 +9317,6 @@ ExampleImportDialogMorph.prototype.importExample = function () { // +++ clean up
             }
         );
 //    }
-};
-
-ExampleImportDialogMorph.prototype.showMessage = function (msgText) {
-    var msg = new MenuMorph(null, msgText);
-    this.fixLayout();
-    msg.popUpCenteredInWorld(this.palette.contents);
 };
 
 // SpriteIconMorph ////////////////////////////////////////////////////
