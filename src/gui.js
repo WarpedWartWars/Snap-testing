@@ -7423,7 +7423,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     if (this.task === 'open' || this.task === 'add') {
         this.buildFilterField();
-        this.addSourceButton('examples', localize('Examples'), 'poster');
+        //this.addSourceButton('examples', localize('Examples'), 'poster');
         if (this.hasLocalProjects() || this.ide.world().currentKey === 16) {
             // shift- clicked
             this.addSourceButton('local', localize('Browser'), 'globe');
