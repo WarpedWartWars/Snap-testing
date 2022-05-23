@@ -9094,8 +9094,8 @@ ExampleImportDialogMorph.prototype.init = function (ide, examplesData) {
     this.examplesData = examplesData; // [{name: , fileName: , description:}]
 
     // I contain a cached version of the examples I have displayed,
-    // because users may choose to explore a example many times before
-    // importing.
+    // because users may choose to explore an example many times before
+    // opening.
     this.exampleCache = {}; // {fileName: project-XML}
 
     this.handle = null;
@@ -9178,17 +9178,14 @@ ExampleImportDialogMorph.prototype.installExamplesList = function () {
         this.notesText.rerender();
         this.notesField.contents.adjustBounds();
 
-        if (this.hasCached(item.fileName)) {
-            //this.displayBlocks(item.fileName);
-        } else {
+        if (!this.hasCached(item.fileName)) {
             this.ide.getURL(
-                this.ide.resourceURL('examples', item.fileName),
+                this.ide.resourceURL('Examples', item.fileName),
                 exampleXML => {
                     this.cacheExample(
                         item.fileName,
-                        this.ide.serializer.loadProject(exampleXML)
+                        exampleXML
                     );
-                    //this.displayBlocks(item.fileName);
                 }
             );
         }
@@ -9289,34 +9286,21 @@ ExampleImportDialogMorph.prototype.cachedExample = function (key) {
     return this.exampleCache[key];
 };
 
-ExampleImportDialogMorph.prototype.importExample = function () { // +++ clean up
+ExampleImportDialogMorph.prototype.importExample = function () {
     if (!this.listField.selected) {return; }
 
-    var // blocks,
-        ide = this.ide,
+    var ide = this.ide,
         selectedExample = this.listField.selected.fileName,
         exampleName = this.listField.selected.name;
 
-/*
-    if (this.hasCached(selectedExample)) {
-        blocks = this.cachedExample(selectedExample);
-        blocks.forEach(def => {
-            def.receiver = ide.stage;
-            ide.stage.globalBlocks.push(def);
-            ide.stage.replaceDoubleDefinitionsFor(def);
-        });
-        ide.showMessage(localize('Imported') + ' ' + localize(exampleName), 2);
-    } else {
-*/
         ide.showMessage(localize('Loading') + ' ' + localize(exampleName));
         ide.getURL(
-            ide.resourceURL('libraries', selectedExample),
+            ide.resourceURL('Examples', selectedExample),
             exampleText => {
                 ide.droppedText(exampleText, exampleName);
                 this.isLoadingExample = true;
             }
         );
-//    }
 };
 
 // SpriteIconMorph ////////////////////////////////////////////////////
