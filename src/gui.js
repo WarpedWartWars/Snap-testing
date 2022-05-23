@@ -4279,7 +4279,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 return;
             }
             this.getURL(
-                this.resourceURL('examples', 'EXAMPLES'),
+                this.resourceURL('Examples', 'EXAMPLES'),
                 txt => {
                     var examples = this.parseResourceFile(txt);
                     new ExampleImportDialogMorph(this, examples).popUp();
@@ -9323,7 +9323,6 @@ ExampleImportDialogMorph.prototype.importExample = function () { // +++ clean up
 
 ExampleImportDialogMorph.prototype.showMessage = function (msgText) {
     var msg = new MenuMorph(null, msgText);
-    this.initializePalette();
     this.fixLayout();
     msg.popUpCenteredInWorld(this.palette.contents);
 };
