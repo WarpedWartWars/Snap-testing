@@ -9061,6 +9061,277 @@ LibraryImportDialogMorph.prototype.showMessage = function (msgText) {
     msg.popUpCenteredInWorld(this.palette.contents);
 };
 
+// ExampleImportDialogMorph ///////////////////////////////////////////
+// I am preview dialog shown before importing a example.
+// I inherit from a DialogMorph but look similar to
+// ProjectDialogMorph, and BlockImportDialogMorph
+
+ExampleImportDialogMorph.prototype = new DialogBoxMorph();
+ExampleImportDialogMorph.prototype.constructor = ExampleImportDialogMorph;
+ExampleImportDialogMorph.uber = DialogBoxMorph.prototype;
+
+// ExampleImportDialogMorph instance creation:
+
+function ExampleImportDialogMorph(ide, examplesData) {
+    this.init(ide, examplesData);
+}
+
+ExampleImportDialogMorph.prototype.init = function (ide, examplesData) {
+    // additional properties
+    this.isLoadingExample = false;
+
+    // initialize inherited properties:
+    ExampleImportDialogMorph.uber.init.call(
+        this,
+        this, // target
+        null, // function
+        null  // environment
+    );
+
+    this.ide = ide;
+    this.key = 'importExample';
+    this.action = 'importExample';
+    this.examplesData = examplesData; // [{name: , fileName: , description:}]
+
+    // I contain a cached version of the examples I have displayed,
+    // because users may choose to explore a example many times before
+    // importing.
+    this.exampleCache = {}; // {fileName: project-XML}
+
+    this.handle = null;
+    this.listField = null;
+    this.palette = null;
+    this.notesText = null;
+    this.notesField = null;
+
+    this.labelString = 'Import example';
+    this.createLabel();
+
+    this.buildContents();
+};
+
+ExampleImportDialogMorph.prototype.buildContents = function () {
+    this.addBody(new Morph());
+    this.body.color = this.color;
+
+    //this.initializePalette();
+    this.initializeExampleDescription();
+    this.installExamplesList();
+
+    this.addButton('ok', 'Import');
+    this.addButton('cancel', 'Cancel');
+
+    this.setExtent(new Point(460, 455));
+    this.fixLayout();
+};
+
+ExampleImportDialogMorph.prototype.initializeExampleDescription = function () {
+    if (this.notesField) {this.notesField.destroy(); }
+
+    this.notesField = new ScrollFrameMorph();
+    this.notesField.fixLayout = nop;
+
+    this.notesField.edge = InputFieldMorph.prototype.edge;
+    this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
+    this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.notesField.contrast = InputFieldMorph.prototype.contrast;
+    this.notesField.render = InputFieldMorph.prototype.render;
+    this.notesField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    this.notesField.acceptsDrops = false;
+    this.notesField.contents.acceptsDrops = false;
+
+    this.notesText = new TextMorph('');
+
+    this.notesField.isTextLineWrapping = true;
+    this.notesField.padding = 3;
+    this.notesField.setContents(this.notesText);
+    this.notesField.setHeight(100);
+
+    this.body.add(this.notesField);
+};
+
+ExampleImportDialogMorph.prototype.installExamplesList = function () {
+    if (this.listField) {this.listField.destroy(); }
+
+    this.listField = new ListMorph(
+        this.examplesData,
+        element => element.name,
+        null,
+        () => this.importExample(),
+        '~' // separator
+    );
+
+    this.fixListFieldItemColors();
+
+    this.listField.fixLayout = nop;
+    this.listField.edge = InputFieldMorph.prototype.edge;
+    this.listField.fontSize = InputFieldMorph.prototype.fontSize;
+    this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.listField.contrast = InputFieldMorph.prototype.contrast;
+    this.listField.render = InputFieldMorph.prototype.render;
+    this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    this.listField.action = (item) => {
+        if (isNil(item)) {return; }
+
+        this.notesText.text = localize(item.description || '');
+        this.notesText.rerender();
+        this.notesField.contents.adjustBounds();
+
+        if (this.hasCached(item.fileName)) {
+            //this.displayBlocks(item.fileName);
+        } else {
+            this.showMessage(localize('Loading') + '\n' + localize(item.name));
+            this.ide.getURL(
+                this.ide.resourceURL('examples', item.fileName),
+                exampleXML => {
+                    this.cacheExample(
+                        item.fileName,
+                        this.ide.serializer.loadProject(exampleXML)
+                    );
+                    //this.displayBlocks(item.fileName);
+                }
+            );
+        }
+
+
+    };
+
+    this.listField.setWidth(200);
+    this.body.add(this.listField);
+
+    this.fixLayout();
+};
+
+ExampleImportDialogMorph.prototype.popUp = function () {
+    var world = this.ide.world();
+    if (world) {
+        ExampleImportDialogMorph.uber.popUp.call(this, world);
+        this.handle = new HandleMorph(
+            this,
+            300,
+            300,
+            this.corner,
+            this.corner
+        );
+    }
+};
+
+ExampleImportDialogMorph.prototype.fixListFieldItemColors =
+    ProjectDialogMorph.prototype.fixListFieldItemColors;
+
+ExampleImportDialogMorph.prototype.clearDetails =
+    ProjectDialogMorph.prototype.clearDetails;
+
+ExampleImportDialogMorph.prototype.fixLayout = function () {
+    var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+        thin = this.padding / 2;
+
+    if (this.body) {
+        this.body.setPosition(this.position().add(new Point(
+            this.padding,
+            titleHeight + this.padding
+        )));
+        this.body.setExtent(new Point(
+            this.width() - this.padding * 2,
+            this.height()
+                - this.padding * 3 // top, bottom and button padding.
+                - titleHeight
+                - this.buttons.height()
+        ));
+
+        this.listField.setExtent(new Point(
+            200,
+            this.body.height()
+        ));
+        this.notesField.setExtent(new Point(
+            this.body.width() - this.listField.width() - thin,
+            100
+        ));
+        this.palette.setExtent(new Point(
+            this.notesField.width(),
+            this.body.height() - this.notesField.height() - thin
+        ));
+        this.listField.contents.children[0].adjustWidths();
+
+        this.listField.setPosition(this.body.position());
+        this.palette.setPosition(this.listField.topRight().add(
+            new Point(thin, 0)
+        ));
+        this.notesField.setPosition(this.palette.bottomLeft().add(
+            new Point(0, thin)
+        ));
+    }
+
+    if (this.label) {
+        this.label.setCenter(this.center());
+        this.label.setTop(
+            this.top() + (titleHeight - this.label.height()) / 2
+        );
+    }
+
+    if (this.buttons) {
+        this.buttons.fixLayout();
+        this.buttons.setCenter(this.center());
+        this.buttons.setBottom(this.bottom() - this.padding);
+    }
+
+    // refresh shadow
+    this.removeShadow();
+    this.addShadow();
+};
+
+// Example Cache Utilities.
+ExampleImportDialogMorph.prototype.hasCached = function (key) {
+    return this.exampleCache.hasOwnProperty(key);
+};
+
+ExampleImportDialogMorph.prototype.cacheExample = function (key, proj) {
+    this.exampleCache[key] = proj;
+};
+
+ExampleImportDialogMorph.prototype.cachedExample = function (key) {
+    return this.exampleCache[key];
+};
+
+ExampleImportDialogMorph.prototype.importExample = function () { // +++ clean up
+    if (!this.listField.selected) {return; }
+
+    var // blocks,
+        ide = this.ide,
+        selectedExample = this.listField.selected.fileName,
+        exampleName = this.listField.selected.name;
+
+/*
+    if (this.hasCached(selectedExample)) {
+        blocks = this.cachedExample(selectedExample);
+        blocks.forEach(def => {
+            def.receiver = ide.stage;
+            ide.stage.globalBlocks.push(def);
+            ide.stage.replaceDoubleDefinitionsFor(def);
+        });
+        ide.showMessage(localize('Imported') + ' ' + localize(exampleName), 2);
+    } else {
+*/
+        ide.showMessage(localize('Loading') + ' ' + localize(exampleName));
+        ide.getURL(
+            ide.resourceURL('libraries', selectedExample),
+            exampleText => {
+                ide.droppedText(exampleText, exampleName);
+                this.isLoadingExample = true;
+            }
+        );
+//    }
+};
+
+ExampleImportDialogMorph.prototype.showMessage = function (msgText) {
+    var msg = new MenuMorph(null, msgText);
+    this.initializePalette();
+    this.fixLayout();
+    msg.popUpCenteredInWorld(this.palette.contents);
+};
+
 // SpriteIconMorph ////////////////////////////////////////////////////
 
 /*
