@@ -9249,19 +9249,15 @@ ExampleImportDialogMorph.prototype.fixLayout = function () {
             this.body.width() - this.listField.width() - thin,
             100
         ));
-        this.palette.setExtent(new Point(
-            this.notesField.width(),
-            this.body.height() - this.notesField.height() - thin
-        ));
         this.listField.contents.children[0].adjustWidths();
 
         this.listField.setPosition(this.body.position());
-        this.palette.setPosition(this.listField.topRight().add(
+        this.notesField.setPosition(this.listField.topRight().add(
             new Point(thin, 0)
         ));
-        this.notesField.setPosition(this.palette.bottomLeft().add(
+        /*this.notesField.setPosition(this.palette.bottomLeft().add(
             new Point(0, thin)
-        ));
+        ));*/
     }
 
     if (this.label) {
