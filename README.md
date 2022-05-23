@@ -3,26 +3,13 @@
 
 [https://snap.berkeley.edu][snap]
 
-**[Try Snap<em>!</em> Now](https://snap.berkeley.edu/snap/)**
-
 a visual, blocks based programming language
 inspired by Scratch
 
 written by Jens Mönig and Brian Harvey
 jens@moenig.org, bh@cs.berkeley.edu
 
-## Snap<em>!</em> Community
-
-This repository contains the source code for Snap<em>!</em> IDE. If you have
-questions about using Snap<em>!</em>, please [checkout the Snap! Forum][forum].
-
-We also maintain an active community at [snap.berkeley.edu][snap],
-where you can save and share your own projects. You can also
-[check out the code][snapcloud], if you're curous.
-
 [snap]: https://snap.berkeley.edu
-[snapcloud]: https://github.com/snap-cloud/snapCloud
-[forum]: https://forum.snap.berkeley.edu
 
 ## Security
 
