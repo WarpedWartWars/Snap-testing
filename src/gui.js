@@ -4279,7 +4279,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 return;
             }
             this.getURL(
-                this.resourceURL('examples', 'EXAMPLES'),
+                this.resourceURL('Examples', 'EXAMPLES'),
                 txt => {
                     var examples = this.parseResourceFile(txt);
                     new ExampleImportDialogMorph(this, examples).popUp();
@@ -9094,13 +9094,12 @@ ExampleImportDialogMorph.prototype.init = function (ide, examplesData) {
     this.examplesData = examplesData; // [{name: , fileName: , description:}]
 
     // I contain a cached version of the examples I have displayed,
-    // because users may choose to explore a example many times before
-    // importing.
+    // because users may choose to explore an example many times before
+    // opening.
     this.exampleCache = {}; // {fileName: project-XML}
 
     this.handle = null;
     this.listField = null;
-    this.palette = null;
     this.notesText = null;
     this.notesField = null;
 
@@ -9179,18 +9178,14 @@ ExampleImportDialogMorph.prototype.installExamplesList = function () {
         this.notesText.rerender();
         this.notesField.contents.adjustBounds();
 
-        if (this.hasCached(item.fileName)) {
-            //this.displayBlocks(item.fileName);
-        } else {
-            this.showMessage(localize('Loading') + '\n' + localize(item.name));
+        if (!this.hasCached(item.fileName)) {
             this.ide.getURL(
-                this.ide.resourceURL('examples', item.fileName),
+                this.ide.resourceURL('Examples', item.fileName),
                 exampleXML => {
                     this.cacheExample(
                         item.fileName,
-                        this.ide.serializer.loadProject(exampleXML)
+                        exampleXML
                     );
-                    //this.displayBlocks(item.fileName);
                 }
             );
         }
@@ -9249,19 +9244,15 @@ ExampleImportDialogMorph.prototype.fixLayout = function () {
             this.body.width() - this.listField.width() - thin,
             100
         ));
-        this.palette.setExtent(new Point(
-            this.notesField.width(),
-            this.body.height() - this.notesField.height() - thin
-        ));
         this.listField.contents.children[0].adjustWidths();
 
         this.listField.setPosition(this.body.position());
-        this.palette.setPosition(this.listField.topRight().add(
+        this.notesField.setPosition(this.listField.topRight().add(
             new Point(thin, 0)
         ));
-        this.notesField.setPosition(this.palette.bottomLeft().add(
+        /*this.notesField.setPosition(this.palette.bottomLeft().add(
             new Point(0, thin)
-        ));
+        ));*/
     }
 
     if (this.label) {
@@ -9295,41 +9286,21 @@ ExampleImportDialogMorph.prototype.cachedExample = function (key) {
     return this.exampleCache[key];
 };
 
-ExampleImportDialogMorph.prototype.importExample = function () { // +++ clean up
+ExampleImportDialogMorph.prototype.importExample = function () {
     if (!this.listField.selected) {return; }
 
-    var // blocks,
-        ide = this.ide,
+    var ide = this.ide,
         selectedExample = this.listField.selected.fileName,
         exampleName = this.listField.selected.name;
 
-/*
-    if (this.hasCached(selectedExample)) {
-        blocks = this.cachedExample(selectedExample);
-        blocks.forEach(def => {
-            def.receiver = ide.stage;
-            ide.stage.globalBlocks.push(def);
-            ide.stage.replaceDoubleDefinitionsFor(def);
-        });
-        ide.showMessage(localize('Imported') + ' ' + localize(exampleName), 2);
-    } else {
-*/
         ide.showMessage(localize('Loading') + ' ' + localize(exampleName));
         ide.getURL(
-            ide.resourceURL('libraries', selectedExample),
+            ide.resourceURL('Examples', selectedExample),
             exampleText => {
                 ide.droppedText(exampleText, exampleName);
                 this.isLoadingExample = true;
             }
         );
-//    }
-};
-
-ExampleImportDialogMorph.prototype.showMessage = function (msgText) {
-    var msg = new MenuMorph(null, msgText);
-    this.initializePalette();
-    this.fixLayout();
-    msg.popUpCenteredInWorld(this.palette.contents);
 };
 
 // SpriteIconMorph ////////////////////////////////////////////////////

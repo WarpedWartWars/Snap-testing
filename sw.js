@@ -1,6 +1,20 @@
 var cacheName = 'snap-pwa',
     filesToCache = [
+        'index.html',
         'snap.html',
+        'manifest.json',
+
+        // img
+        'snap-icon-72.png',
+        'snap-icon-96.png',
+        'snap-icon-120.png',
+        'snap-icon-128.png',
+        'snap-icon-144.png',
+        'snap-icon-152.png',
+        'snap-icon-192.png',
+        'snap-icon-256.png',
+        'snap-icon-384.png',
+        'snap-icon-512.png',
 
         // program
         'src/morphic.js',
